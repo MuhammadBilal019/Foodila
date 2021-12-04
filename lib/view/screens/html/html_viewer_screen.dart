@@ -40,7 +40,9 @@ class HtmlViewerScreen extends StatelessWidget {
       }catch(e) {}
     }
     return Scaffold(
-      appBar: CustomAppBar(title: htmlType == HtmlType.TERMS_AND_CONDITION ? 'terms_conditions'.tr
+      appBar: CustomAppBar(
+
+          title: htmlType == HtmlType.TERMS_AND_CONDITION ? 'terms_conditions'.tr
           : htmlType == HtmlType.ABOUT_US ? 'about_us'.tr : htmlType == HtmlType.PRIVACY_POLICY
           ? 'privacy_policy'.tr : 'no_data_found'.tr),
       body: Center(

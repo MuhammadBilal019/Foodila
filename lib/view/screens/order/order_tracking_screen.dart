@@ -97,6 +97,13 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
             },
           ),
 
+          Positioned(
+            top: 40,left: 30,
+            child: InkWell(
+            onTap: () => Get.back(),
+              child: Icon(Icons.arrow_back_ios,size: 25,)),
+          ),
+
           _isLoading ? Center(child: CircularProgressIndicator()) : SizedBox(),
 
           Positioned(

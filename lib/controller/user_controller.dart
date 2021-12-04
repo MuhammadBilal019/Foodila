@@ -97,6 +97,10 @@ class UserController extends GetxController implements GetxService {
     _pickedFile = await ImagePicker().getImage(source: ImageSource.gallery);
     update();
   }
+  void captureImage() async {
+    _pickedFile = await ImagePicker().getImage(source: ImageSource.camera);
+    update();
+  }
 
   void initData() {
     _pickedFile = null;

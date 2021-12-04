@@ -16,7 +16,8 @@ class CategoryScreen extends StatelessWidget {
     Get.find<CategoryController>().getCategoryList(false);
 
     return Scaffold(
-      appBar: CustomAppBar(title: 'categories'.tr),
+      backgroundColor: Colors.white,
+     appBar: CustomAppBar(title: 'categories'.tr),
       body: SafeArea(child: Scrollbar(child: SingleChildScrollView(child: Center(child: SizedBox(
         width: Dimensions.WEB_MAX_WIDTH,
         child: GetBuilder<CategoryController>(builder: (catController) {

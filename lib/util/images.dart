@@ -1,5 +1,6 @@
 class Images {
   static const String logo = 'assets/image/logo.png';
+  static const String icon = 'assets/image/icon.png';
   static const String logo_name = 'assets/image/logo_name.png';
   static const String baner = 'assets/image/baner.png';
   static const String splash = 'assets/image/splash.png';
@@ -7,6 +8,7 @@ class Images {
   static const String arabic = 'assets/image/arabic.png';
   static const String call = 'assets/image/call.png';
   static const String back = 'assets/image/back.png';
+
   static const String favorite_restaurant_backround = 'assets/image/favorite_restaurant_backround.png';
   static const String order_background = 'assets/image/order_background.png';
   static const String phone = 'assets/image/phone.png';
@@ -24,7 +26,11 @@ class Images {
   static const String english = 'assets/image/english.png';
   static const String location_marker = 'assets/image/location_marker.png';
   static const String lock = 'assets/image/lock.png';
+  static const String drawer = 'assets/image/drawer.png';
+  static const String theme = 'assets/image/theme.png';
+  static const String cart = 'assets/image/cart.png';
   static const String mail = 'assets/image/mail.png';
+  static const String search = 'assets/image/search.png';
   static const String map = 'assets/image/map.png';
   static const String map_icon = 'assets/image/mapicon.png';
   static const String onboard_1 = 'assets/image/onboard_1.png';

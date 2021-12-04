@@ -12,6 +12,7 @@ import 'package:efood_multivendor/view/base/not_logged_in_screen.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/notification/widget/notification_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class NotificationScreen extends StatelessWidget {
@@ -26,20 +27,28 @@ class NotificationScreen extends StatelessWidget {
     }
   }
 
+
+
+
   @override
   Widget build(BuildContext context) {
     _loadData();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness:Get.isDarkMode ?  Brightness.light: Brightness.dark,
+    statusBarColor:Get.isDarkMode ?  Colors.black : Colors.transparent
+    ));
 
     return Scaffold(
-      backgroundColor: ResponsiveHelper.isWeb()?null:Colors.white,
-      appBar: ResponsiveHelper.isWeb() ? WebMenuBar() :AppBar(
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
+       // backgroundColor: ResponsiveHelper.isWeb()?null:Colors.white,
+       appBar: ResponsiveHelper.isWeb() ? WebMenuBar() :AppBar(
         elevation: 0,
-        title: Text('notification'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor),),
+        title: Text('notifications'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 17),),
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Colors.white,
+        backgroundColor: Get.isDarkMode ? Colors.black : Colors.white,
         centerTitle: true,
         leading: InkWell(
-          child: Icon(Icons.arrow_back_ios,color: Colors.black87,),
+          child: Icon(Icons.arrow_back_ios,color:Get.isDarkMode ? Theme.of(context).primaryColor: Colors.black87,),
           onTap: () =>  Navigator.pop(context),
         ),
 

@@ -112,7 +112,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _setMarker() async {
     Uint8List destinationImageData = await convertAssetToUnit8List(
-      widget.fromRestaurant ? Images.restaurant_marker : Images.location_marker, width: 120,
+      widget.fromRestaurant ? Images.restaurant_marker : Images.pick_marker, width: 120,
     );
 
     _markers = Set.of([]);

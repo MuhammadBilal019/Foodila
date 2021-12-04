@@ -28,10 +28,16 @@ import 'package:efood_multivendor/view/screens/menu/menu_screen.dart';
 import 'package:efood_multivendor/view/screens/menu/drawer.dart';
 import 'package:efood_multivendor/view/screens/search/widget/filter_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
 
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   Future<void> _loadData(bool reload) async {
     await Get.find<BannerController>().getBannerList(reload);
     await Get.find<CategoryController>().getCategoryList(reload);
@@ -46,8 +52,11 @@ class HomeScreen extends StatelessWidget {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+
+
     bool filter=false;
     final ScrollController _scrollController = ScrollController();
     _loadData(false);
@@ -55,60 +64,68 @@ class HomeScreen extends StatelessWidget {
 
     return Scaffold(
       drawer: MyDrawer(),
-      appBar: ResponsiveHelper.isWeb() ? WebMenuBar() : AppBar(
+      appBar: GetPlatform.isDesktop  ? WebMenuBar() : AppBar(
+        // systemOverlayStyle: SystemUiOverlayStyle(
+        //   statusBarBrightness: Brightness.light,
+        //   //statusBarColor:Get.isDarkMode ? Colors.transparent : Colors.black
+        // ),
+        // backwardsCompatibility: Get.isDarkMode ?  true : false,
+        // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor:Colors.transparent),
         elevation: 0,
-        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Colors.white,
-        actions: [
-          Center(
-            child: Container(alignment:Alignment.center,width:250,child: InkWell(
+        title: GetBuilder<LocationController>(builder: (locationController) {
+          return Padding(
+            padding: const EdgeInsets.only(right:6.0),
+            child: GestureDetector(
               onTap: () => Get.toNamed(RouteHelper.getAccessLocationRoute('home')),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  top: Dimensions.PADDING_SIZE_SMALL,bottom: Dimensions.PADDING_SIZE_SMALL,
-                  left: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_SMALL : 0,
-                ),
-                child: GetBuilder<LocationController>(builder: (locationController) {
-                  return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Image.asset(Images.save_location,width: 15,),
-                      SizedBox(width: 10),
-                      Flexible(
-                        child: Text(
-                          locationController.getUserAddress().address,
-                          style: muliRegular.copyWith(
-                            color: Theme.of(context).textTheme.bodyText1.color, fontSize: Dimensions.fontSizeSmall,
-                          ),
-                          maxLines: 1, overflow: TextOverflow.ellipsis,
-                        ),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Image.asset(Images.save_location,width: 15,color: Theme.of(context).disabledColor),
+                  SizedBox(width: 10),
+                  Flexible(
+                    child: Text(
+                      locationController.getUserAddress().address,
+                      style: muliRegular.copyWith(
+                        color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall,
                       ),
-                      Icon(Icons.arrow_drop_down, color: Theme.of(context).textTheme.bodyText1.color),
-                    ],
-                  );
-                }),
+                      maxLines: 1, overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+                  InkWell(
+                      child: Icon(Icons.arrow_drop_down,size: 30, color:Colors.black),
+                    onTap: () => Get.toNamed(RouteHelper.getAccessLocationRoute('home')),
+                  ),
+                ],
               ),
-            )),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_SMALL,top: 5,right: 21),
-            child: InkWell(
-              child: Image.asset(Images.filter,width: 18,),
-              onTap: () {
-                filter=true;
-                Get.dialog(FilterWidget(maxValue: 1000, isRestaurant: true,isFilter: true,));
-                //Get.bottomSheet(MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
-              },
             ),
-          ),
-        ],
+          );
+        }),
+        centerTitle: true,
+        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
+        // actions: [
+        //   Padding(
+        //     padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_SMALL,top: 5,right: 21),
+        //     child: InkWell(
+        //       child: Image.asset(Images.filter,width: 18,),
+        //       onTap: () {
+        //         filter=true;
+        //         Get.dialog(FilterWidget(maxValue: 1000, isRestaurant: true,isFilter: true,));
+        //         //Get.bottomSheet(MenuScreen(), backgroundColor: Colors.transparent, isScrollControlled: true);
+        //       },
+        //     ),
+        //   ),
+        // ],
       ),
-      backgroundColor: ResponsiveHelper.isWeb() ? Theme.of(context).cardColor : Colors.white,
+      // backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
+      backgroundColor: ResponsiveHelper.isMobile(context) ||  ResponsiveHelper.isWeb()  ? Theme.of(context).cardColor : Colors.white,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {
             await _loadData(true);
           },
-          child: ResponsiveHelper.isWeb() ? WebHomeScreen(scrollController: _scrollController) : CustomScrollView(
+          child: GetPlatform.isDesktop ? WebHomeScreen(scrollController: _scrollController) : CustomScrollView(
             controller: _scrollController,
             physics: AlwaysScrollableScrollPhysics(),
             slivers: [
@@ -130,10 +147,11 @@ class HomeScreen extends StatelessWidget {
                         //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
                       ),
                       child: Row(children: [
-                        Icon(Icons.search, size: 25, color: Theme.of(context).hintColor),
+                        Image.asset(Images.search,width: 18,color: Theme.of(context).hintColor),
+                        //Icon(Icons.search, size: 25, color: Theme.of(context).hintColor),
                         SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                         Expanded(child: Text('search_food_or_restaurant'.tr, style: robotoRegular.copyWith(
-                          fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).hintColor,
+                          fontSize: Dimensions.fontSizeSmall-1, color: Theme.of(context).hintColor,
                         ))),
                       ]),
                     ),

@@ -116,19 +116,20 @@ class ProductBottomSheet extends StatelessWidget {
             ResponsiveHelper.isDesktop(context) ? InkWell(onTap: () => Get.back(), child: Icon(Icons.close)) : SizedBox(),
             Padding(
               padding: EdgeInsets.only(
-                right: Dimensions.PADDING_SIZE_DEFAULT, top: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_DEFAULT,
+                left: Dimensions.PADDING_SIZE_EXTRA_LARGE,bottom: Dimensions.PADDING_SIZE_DEFAULT,
+                right: Dimensions.PADDING_SIZE_EXTRA_LARGE, top: ResponsiveHelper.isDesktop(context) ? 0 : Dimensions.PADDING_SIZE_EXTRA_LARGE,
               ),
               child: Column(mainAxisAlignment: MainAxisAlignment.center, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 //Product
                 Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                   Stack(children: [
                     ClipRRect(
-                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                      borderRadius: BorderRadius.circular(10),
                       child: CustomImage(
                         image: '${isCampaign ? Get.find<SplashController>().configModel.baseUrls.campaignImageUrl
                             : Get.find<SplashController>().configModel.baseUrls.productImageUrl}/${product.image}',
                         width: ResponsiveHelper.isMobile(context) ? 100 : 140,
-                        height: ResponsiveHelper.isMobile(context) ? 100 : 140,
+                        height: ResponsiveHelper.isMobile(context) ? 90 : 140,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -158,7 +159,7 @@ class ProductBottomSheet extends StatelessWidget {
                           padding: EdgeInsets.fromLTRB(0, 5, 5, 5),
                           child: Text(
                             product.restaurantName,
-                            style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.black87),
+                            style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall,),
                           ),
                         ),
                       ),
@@ -182,7 +183,7 @@ class ProductBottomSheet extends StatelessWidget {
                       //RatingBar(rating: product.avgRating, size: 15, ratingCount: product.ratingCount),
                       Row(
                         children: [
-                          Icon(Icons.star,size: 20,color: Theme.of(context).primaryColor,),
+                          Icon(Icons.star,size: 16,color: Theme.of(context).primaryColor,),
                           Text(product.avgRating.toString(),style: muliRegular.copyWith(color: Theme.of(context).primaryColor),),
                           Text('(${product.ratingCount.toString()})',style: muliRegular.copyWith(color:Theme.of(context).disabledColor),),
                           Expanded(child: SizedBox()),
@@ -198,7 +199,7 @@ class ProductBottomSheet extends StatelessWidget {
                               },
                               child: Icon(
                                 wishList.wishProductIdList.contains(product.id) ? Icons.favorite : Icons.favorite_border,
-                                color: wishList.wishProductIdList.contains(product.id) ? Theme.of(context).primaryColor
+                                color: wishList.wishProductIdList.contains(product.id) ? ResponsiveHelper.isWeb()?Colors.red:Colors.amber
                                     : Theme.of(context).disabledColor,
                               ),
                             );
@@ -262,7 +263,7 @@ class ProductBottomSheet extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: muliBold.copyWith(
-                                  color:  Colors.black,
+                                    color: Get.isDarkMode?Colors.white:Colors.black,
                                 ),
                               ),
                             ),
@@ -299,7 +300,7 @@ class ProductBottomSheet extends StatelessWidget {
 
                 // Addons
                 product.addOns.length > 0 ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('addons'.tr, style: robotoMedium),
+                  Text('extra'.tr, style: robotoMedium),
                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                   GridView.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -334,16 +335,16 @@ class ProductBottomSheet extends StatelessWidget {
                                 Text(product.addOns[index].name,
                                   maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
                                   style: robotoMedium.copyWith(
-                                    color: productController.addOnActiveList[index] ? Colors.white : Colors.black,
+                                    color: productController.addOnActiveList[index] ? Colors.white : Get.isDarkMode?Colors.white:Colors.black,
                                     fontSize: Dimensions.fontSizeSmall,
                                   ),
                                 ),
-                                SizedBox(height: 5),
+                                //SizedBox(height: 5),
                                 Text(
                                   product.addOns[index].price > 0 ? PriceConverter.convertPrice(product.addOns[index].price) : 'free'.tr,
                                   maxLines: 1, overflow: TextOverflow.ellipsis,
                                   style: robotoRegular.copyWith(
-                                    color: productController.addOnActiveList[index] ? Colors.white : Colors.black,
+                                    color: productController.addOnActiveList[index] ? Colors.white : Get.isDarkMode?Colors.white:Colors.black,
                                     fontSize: Dimensions.fontSizeExtraSmall,
                                   ),
                                 ),
@@ -387,9 +388,9 @@ class ProductBottomSheet extends StatelessWidget {
                 ]) : SizedBox(),
 
                 Row(children: [
-                  Text('${'total_amount'.tr}', style: muliRegular),
+                  Text('${'total_amount'.tr}', style: muliBold),
                   SizedBox(width: 20,),
-                  Text(PriceConverter.convertPrice(priceWithAddons), style: muliRegular.copyWith(color: Theme.of(context).primaryColor)),
+                  Text(PriceConverter.convertPrice(priceWithAddons), style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
                 ]),
                 SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
@@ -424,7 +425,7 @@ class ProductBottomSheet extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                       minimumSize: Size(50, 50),
                       primary: Theme.of(context).cardColor, shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_DEFAULT), side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
                     ),
                     ),
                     onPressed: () {
@@ -438,6 +439,7 @@ class ProductBottomSheet extends StatelessWidget {
                   ),
                   SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
                   Expanded(child: CustomButton(
+                    radius: 10,
                     width: ResponsiveHelper.isDesktop(context) ? size.width / 2.0 : null,
                     /*buttonText: isCampaign ? 'order_now'.tr : isExistInCart ? 'already_added_in_cart'.tr : fromCart
                         ? 'update_in_cart'.tr : 'add_to_cart'.tr,*/

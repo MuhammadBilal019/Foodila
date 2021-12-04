@@ -133,11 +133,12 @@ class _PickMapScreenState extends State<PickMapScreen> {
                     Text("Address comes here",style: muliExtraBold.copyWith(color: Colors.black),),
                     SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                     Padding(
-                        padding: EdgeInsets.only(
-                            left: 50,right: 50,
+                      padding: EdgeInsets.only(
+                          left: 50,right: 50,
                           top: Dimensions.PADDING_SIZE_DEFAULT,bottom: Dimensions.PADDING_SIZE_DEFAULT
-                        ),
+                      ),
                       child: CustomButton(
+                        radius: 10,
                         buttonText: locationController.inZone ? widget.fromAddAddress ? 'OK'.tr : 'pick_location'.tr
                             : 'service_not_available_in_this_area'.tr,
                         onPressed: (locationController.buttonDisabled || locationController.loading) ? null : () {
@@ -173,7 +174,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Image.asset(Images.save_location,width: 20,),
+                          Image.asset(Images.save_location,width: 18,),
                           SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                           Text("Use saved address",style: muliRegular.copyWith(color: Theme.of(context).primaryColor),),

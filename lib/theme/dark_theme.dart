@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 ThemeData dark = ThemeData(
+   appBarTheme: AppBarTheme(
+    backwardsCompatibility: false,
+    systemOverlayStyle: SystemUiOverlayStyle(
+        statusBarIconBrightness:Get.isDarkMode ?  Brightness.dark: Brightness.light,
+     statusBarColor:Get.isDarkMode ?  Colors.transparent : Colors.black
+    ),
+  ),
   fontFamily: 'Muli',
   primaryColor: Color(0xFFffbd5c),
   secondaryHeaderColor: Color(0xFF009f67),

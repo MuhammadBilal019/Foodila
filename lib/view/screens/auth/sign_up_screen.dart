@@ -50,7 +50,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       body: SafeArea(child: Scrollbar(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
@@ -61,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
               padding: context.width > 700 ? EdgeInsets.all(Dimensions.PADDING_SIZE_DEFAULT) : null,
               decoration: context.width > 700 ? BoxDecoration(
                 color: Theme.of(context).cardColor, borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)],
+                //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)],
               ) : null,
               child: GetBuilder<AuthController>(builder: (authController) {
 
@@ -79,11 +79,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                      color: Theme.of(context).cardColor,
-                      boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
+                      color:Get.isDarkMode ? Colors.black : Theme.of(context).cardColor,
+                      //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
                     ),
-                    child: Column(children: [
-
+                    child: Column(
+                        children: [
                       CustomTextField(
                         hintText: 'first_name'.tr,
                         controller: _firstNameController,
@@ -94,7 +94,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         prefixIcon: Images.user,
                         divider: true,
                       ),
-                      Divider(height: 10,thickness: 10,color: Theme.of(context).backgroundColor,),
+                      Divider(height: 10,thickness: 10,color:Get.isDarkMode ? Colors.black : Colors.white,),
 
                       CustomTextField(
                         hintText: 'last_name'.tr,
@@ -106,7 +106,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         prefixIcon: Images.user,
                         divider: true,
                       ),
-                      Divider(height: 10,thickness: 10,color: Theme.of(context).backgroundColor,),
+                      Divider(height: 10,thickness: 10,color: Get.isDarkMode ? Colors.black : Colors.white),
 
                       CustomTextField(
                         hintText: 'email'.tr,
@@ -117,34 +117,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         prefixIcon: Images.mail,
                         divider: true,
                       ),
-                      Divider(height: 10,thickness: 10,color: Theme.of(context).backgroundColor,),
+                      Divider(height: 10,thickness: 10,color: Get.isDarkMode ? Colors.black : Colors.white),
 
-                      Row(children: [
-                        CodePickerWidget(
-                          onChanged: (CountryCode countryCode) {
-                            _countryDialCode = countryCode.dialCode;
-                          },
-                          initialSelection: _countryDialCode,
-                          favorite: [_countryDialCode],
-                          showDropDownButton: true,
-                          padding: EdgeInsets.zero,
-                          showFlagMain: true,
-                          textStyle: robotoRegular.copyWith(
-                            fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+                      Container(
+                       // color: Theme.of(context).disabledColor.withOpacity(0.1),
+                        child: Row(children: [
+                          Container(
+                            height:46,
+                            color: Theme.of(context).disabledColor.withOpacity(0.1),
+                            child: CodePickerWidget(
+                              onChanged: (CountryCode countryCode) {
+                                _countryDialCode = countryCode.dialCode;
+                              },
+                              initialSelection: _countryDialCode,
+                              favorite: [_countryDialCode],
+                              showDropDownButton: true,
+                              padding: EdgeInsets.zero,
+                              showFlagMain: true,
+                              dialogBackgroundColor:Get.isDarkMode ? Colors.black :Colors.white,
+                              textStyle: robotoRegular.copyWith(
+                                fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+                              ),
+                            ),
                           ),
-                        ),
-                        Expanded(child: CustomTextField(
-                          hintText: 'phone'.tr,
-                          controller: _phoneController,
-                          focusNode: _phoneFocus,
-                          nextFocus: _passwordFocus,
-                          inputType: TextInputType.phone,
-                          divider: false,
-                        )),
-                      ]),
-                      Padding(padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_LARGE), child: Divider(height: 1)),
 
-                      Divider(height: 10,thickness: 10,color: Theme.of(context).backgroundColor,),
+                          Expanded(
+                              child: CustomTextField(
+                            hintText: 'phone'.tr,
+                            controller: _phoneController,
+                            focusNode: _phoneFocus,
+                            nextFocus: _passwordFocus,
+                            inputType: TextInputType.phone,
+                            divider: false,
+                          )),
+                        ]),
+                      ),
+                      //Padding(padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_LARGE), child: Divider(height: 1)),
+
+                      Divider(height: 10,thickness: 10,color: Get.isDarkMode ? Colors.black : Colors.white),
 
                       CustomTextField(
                         hintText: 'password'.tr,
@@ -157,7 +167,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         divider: true,
                       ),
 
-                      Divider(height: 10,thickness: 10,color: Theme.of(context).backgroundColor,),
+                      Divider(height: 10,thickness: 10,color: Get.isDarkMode ? Colors.black : Colors.white),
 
                       CustomTextField(
                         hintText: 'confirm_password'.tr,
@@ -177,8 +187,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ConditionCheckBox(authController: authController),
                   SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-                  !authController.isLoading ? Row(children: [
-                    Expanded(child: CustomButton(
+                  !authController.isLoading ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                    Container(
+                        width: MediaQuery.of(context).size.width*0.8,
+                        child: CustomButton(
+                      radius: 10,
                       buttonText: 'sign_up'.tr,
                       onPressed: authController.acceptTerms ? () => _register(authController, _countryDialCode) : null,
                     )),
@@ -195,8 +210,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.signUp));
                     },
                     child: RichText(text: TextSpan(children: [
-                      TextSpan(text: '${'Already have an account? '.tr} ', style: muliBold.copyWith(color: Theme.of(context).textTheme.bodyText1.color)),
-                      TextSpan(text: 'Sign In'.tr, style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor)),
+                      TextSpan(text: 'already_have_account'.tr+' ', style: muliBold.copyWith(color: Theme.of(context).textTheme.bodyText1.color)),
+                      TextSpan(text: 'sign_in'.tr, style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor)),
                     ])),
                   ),
                 ]);

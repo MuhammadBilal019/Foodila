@@ -18,7 +18,8 @@ class ProfileBgWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(children: [
 
-      Stack(children: [
+      Stack(
+          children: [
 
         Container(
           child: SizedBox(
@@ -30,7 +31,10 @@ class ProfileBgWidget extends StatelessWidget {
         ),
 
         Positioned(
-          top: 200, left: 0, right: 0, bottom: 0,
+          top: 200,
+          left: 0,
+          right: 0,
+          bottom: 0,
           child: Center(
             child: Container(
               width: Dimensions.WEB_MAX_WIDTH,
@@ -41,15 +45,17 @@ class ProfileBgWidget extends StatelessWidget {
             ),
           ),
         ),
-
-
         Positioned(
-          top: 50, left: 0, right: isedit?0:160,
-          child: circularImage,
+          top: 50,
+          left: 0,
+          right: isedit ? 0: 160,
+          child: Container(
+              child: circularImage
+          ),
         ),
 
-        isedit?SizedBox():Positioned(
-          top: 75, left: 170, right: 0,
+        isedit ? SizedBox() : Positioned(
+          top: 75, left: MediaQuery.of(context).size.width*0.48, right: 0,
           child: GetBuilder<UserController>(builder: (userController){
             return Text(
               Get.find<AuthController>().isLoggedIn() ? '${userController.userInfoModel.fName} ${userController.userInfoModel.lName}' : 'guest'.tr,
@@ -57,31 +63,40 @@ class ProfileBgWidget extends StatelessWidget {
             );
           },),
         ),
-        isedit?SizedBox():Positioned(
-          top: 105, left: 170, right: 0,
+        isedit ?  SizedBox()
+            :
+           Positioned(
+          top: 105,
+             left: MediaQuery.of(context).size.width*0.48,
+             right: 0,
           child: GetBuilder<UserController>(builder: (userController){
             return Row(
               children: [
-                Image.asset(Images.mail,width: 15,),
-                SizedBox(width: 2,),
-                Text(
-                  Get.find<AuthController>().isLoggedIn() ? '${userController.userInfoModel.email}' : 'guest'.tr,
-                  style: muliRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
+                Image.asset(Images.mail,color:Get.isDarkMode?Colors.white:Colors.black,width: 15,),
+                SizedBox(width: 2),
+                Container(
+                  width:MediaQuery.of(context).size.width*0.46,
+                  height: 20,
+                  child: Text(
+                    Get.find<AuthController>().isLoggedIn() ? '${userController.userInfoModel.email}' : 'guest'.tr,
+                    style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+                  ),
                 ),
               ],
             );
           },),
         ),
         isedit?SizedBox():Positioned(
-          top: 130, left: 170, right: 0,
+          top: 130, left: MediaQuery.of(context).size.width*0.48, right: 0,
           child: GetBuilder<UserController>(builder: (userController){
             return Row(
               children: [
-                Image.asset(Images.phone,width: 15,),
-                SizedBox(width: 2,),
+                Image.asset(Images.phone,color:Get.isDarkMode?Colors.white:Colors.black,width: 15),
+                SizedBox(width: 2),
                 Text(
                   Get.find<AuthController>().isLoggedIn() ? '${userController.userInfoModel.phone}' : 'guest'.tr,
-                  style: muliRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
+                  overflow: TextOverflow.ellipsis,
+                  style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault),
                 ),
               ],
             );

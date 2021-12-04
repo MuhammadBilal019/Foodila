@@ -14,6 +14,7 @@ import 'package:efood_multivendor/util/messages.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:url_strategy/url_strategy.dart';
@@ -60,7 +61,17 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if(GetPlatform.isWeb) {
+    // localizationController.setLanguage(Locale(
+    //                 AppConstants.languages[localizationController.selectedIndex].languageCode,
+    //                 AppConstants.languages[localizationController.selectedIndex].countryCode,
+    //               ));
+
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarIconBrightness:Get.isDarkMode ?  Brightness.light: Brightness.dark,
+    // statusBarColor:Get.isDarkMode ?  Colors.black : Colors.transparent
+    // ));
+
+        if(GetPlatform.isWeb) {
       Get.find<SplashController>().initSharedData();
       Get.find<CartController>().getCartData();
       _route();
@@ -79,7 +90,7 @@ class MyApp extends StatelessWidget {
             theme: themeController.darkTheme ? dark : light,
             locale: localizeController.locale,
             translations: Messages(languages: languages),
-            fallbackLocale: Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode),
+            fallbackLocale: Locale(AppConstants.languages[1].languageCode, AppConstants.languages[1].countryCode),
             initialRoute: GetPlatform.isWeb ? RouteHelper.getInitialRoute() : RouteHelper.getSplashRoute(orderID),            getPages: RouteHelper.routes,
             defaultTransition: Transition.topLevel,
             transitionDuration: Duration(milliseconds: 500),

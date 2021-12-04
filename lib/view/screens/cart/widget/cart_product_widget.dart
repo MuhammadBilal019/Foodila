@@ -7,6 +7,7 @@ import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_image.dart';
+import 'package:efood_multivendor/view/base/not_available_widget.dart';
 import 'package:efood_multivendor/view/base/product_bottom_sheet.dart';
 import 'package:efood_multivendor/view/base/quantity_button.dart';
 import 'package:efood_multivendor/view/base/rating_bar.dart';
@@ -22,6 +23,9 @@ class CartProductWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    print('${Get.find<SplashController>().configModel.baseUrls.productImageUrl}/${cart.product.image}');
+
     String _addOnText = '';
     int _index = 0;
     List<int> _ids = [];
@@ -51,7 +55,8 @@ class CartProductWidget extends StatelessWidget {
       }
     }
 
-    return Padding(
+    return Container(
+      color:Get.isDarkMode ? Colors.black : Colors.white,
       padding: EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_DEFAULT),
       child: InkWell(
         onTap: () {
@@ -65,7 +70,9 @@ class CartProductWidget extends StatelessWidget {
           ));
         },
         child: Container(
-          decoration: BoxDecoration(color: Colors.red, borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL)),
+          decoration: BoxDecoration(
+
+              borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL)),
           child: Stack(children: [
             Positioned(
               top: 0, bottom: 0, right: 0, left: 0,
@@ -77,12 +84,8 @@ class CartProductWidget extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL, horizontal: Dimensions.PADDING_SIZE_SMALL),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).cardColor,
+                  color: Theme.of(context).backgroundColor,
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                  boxShadow: [BoxShadow(
-                    color: Colors.grey[Get.isDarkMode ? 800 : 200],
-                    blurRadius: 5, spreadRadius: 1,
-                  )],
                 ),
                 child: Column(
                   children: [
@@ -97,28 +100,22 @@ class CartProductWidget extends StatelessWidget {
                               height: 65, width: 70, fit: BoxFit.cover,
                             ),
                           ),
-                          isAvailable ? SizedBox() : Positioned(
-                            top: 0, left: 0, bottom: 0, right: 0,
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Theme.of(context).backgroundColor),
-                              child: Text('not_available_now_break'.tr, textAlign: TextAlign.center, style: robotoRegular.copyWith(
-                                color: Colors.white, fontSize: 8,
-                              )),
-                            ),
-                          ),
+                          isAvailable ?
+                          SizedBox() :
+                         NotAvailableWidget(isRestaurant: false)
                         ],
                       ),
                       SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
 
                       Expanded(
                         child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
+                          SizedBox(height: 2,),
                           Text(
                             cart.product.name,
-                            style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
-                            maxLines: 2, overflow: TextOverflow.ellipsis,
+                            style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall),
+                            maxLines: 1, overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: 2),
+                          SizedBox(height: 1.5),
                           Row(children: [
                             Icon(Icons.star, color: Theme.of(context).primaryColor, size: 10),
                             Icon(Icons.star, color: Theme.of(context).primaryColor, size: 10),
@@ -132,28 +129,29 @@ class CartProductWidget extends StatelessWidget {
                             ),
                           ]),
                           _addOnText.isNotEmpty ? Padding(
-                            padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                            padding: EdgeInsets.only(top: 2),
                             child: Row(children: [
-                              Text('${'addons'.tr}: ', style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Colors.black87)),
+                              Text('${'addons'.tr}: ', style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall,color: Get.isDarkMode?Colors.white:Colors.black,)),
                               Flexible(child: Text(
                                 _addOnText,
-                                style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                                style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
                               )),
                             ]),
                           ) : SizedBox(),
 
                           cart.product.variations.length > 0 ? Padding(
-                            padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                            padding: EdgeInsets.only(top: 2),
                             child: Row(children: [
-                              Text('${'variations'.tr}: ', style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Colors.black87)),
-                              Flexible(child: Text(
+                              Text('${'variations'.tr}: ', style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall,color: Get.isDarkMode?Colors.white:Colors.black,)),
+                              Expanded(child: Text(
                                 _variationText,
-                                style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                                maxLines: 1,
+                                style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
                               )),
                             ]),
                           ) : SizedBox(),
                           //RatingBar(rating: cart.product.avgRating, size: 12, ratingCount: cart.product.ratingCount),
-                          SizedBox(height: 5),
+                          //SizedBox(height: 2),
 
                         ]),
                       ),
@@ -162,7 +160,7 @@ class CartProductWidget extends StatelessWidget {
                         children: [
                           Text(
                             PriceConverter.convertPrice(cart.discountedPrice+cart.discountAmount),
-                            style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeDefault,color: Theme.of(context).primaryColor),
+                            style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeDefault,color: ResponsiveHelper.isWeb()?Colors.red:Theme.of(context).primaryColor),
                           ),
                           SizedBox(height: 10,),
                           Row(children: [

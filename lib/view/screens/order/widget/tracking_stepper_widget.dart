@@ -33,7 +33,7 @@ class TrackingStepperWidget extends StatelessWidget {
         borderRadius: BorderRadius.only(topLeft: Radius.circular(20),topRight: Radius.circular(20)),
       ),
       child: Column(children: [
-        Text('Tracking Order'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,),textAlign: TextAlign.center,),
+        Container(padding:EdgeInsets.only(right: MediaQuery.of(context).size.width*0.1),child: Text('Tracking Order'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,),)),
         CustomStepper(
           title: 'delivered'.tr, isActive: _status > 3, haveLeftBar: false, haveRightBar: true, rightActive: _status > 4,
         ),

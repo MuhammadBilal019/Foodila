@@ -1,4 +1,5 @@
 import 'package:efood_multivendor/controller/cart_controller.dart';
+import 'package:efood_multivendor/controller/splash_controller.dart';
 import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
@@ -13,25 +14,42 @@ import 'package:efood_multivendor/view/base/no_data_screen.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/cart/widget/cart_product_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class CartScreen extends StatelessWidget {
+class CartScreen extends StatefulWidget {
   final fromNav;
   CartScreen({@required this.fromNav});
 
   @override
+  State<CartScreen> createState() => _CartScreenState();
+}
+
+class _CartScreenState extends State<CartScreen> {
+
+
+
+
+
+
+
+  @override
   Widget build(BuildContext context) {
+
+
+    print(Get.find<SplashController>().configModel.baseUrls.productImageUrl);
+
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       appBar: ResponsiveHelper.isWeb() ? WebMenuBar() :AppBar(
         elevation: 0,
         foregroundColor: Colors.white,
         shadowColor: Colors.white,
         title: Text('my_cart'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Colors.white,
+        backgroundColor: Get.isDarkMode ? Colors.black : Colors.white,
         centerTitle: true,
-        leading: fromNav?SizedBox():InkWell(
+        leading: widget.fromNav?SizedBox():InkWell(
           child: Icon(Icons.arrow_back_ios,color: Colors.black87,),
           onTap: () =>  Navigator.pop(context),
         ),
@@ -90,7 +108,7 @@ class CartScreen extends StatelessWidget {
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
                               mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_LARGE : 0.01,
-                              childAspectRatio: ResponsiveHelper.isDesktop(context) ? 4 : 3.5,
+                              childAspectRatio: GetPlatform.isDesktop ? 3.6 : 4,
                               crossAxisCount: 3,
                             ),
                             physics: NeverScrollableScrollPhysics(),
@@ -98,7 +116,8 @@ class CartScreen extends StatelessWidget {
                             //padding: EdgeInsetsGeometry.infinity,
                             itemCount: cartController.cartList.length,
                             itemBuilder: (context, index) {
-                              return CartProductWidget(cart: cartController.cartList[index], cartIndex: index, addOns: _addOnsList[index], isAvailable: _availableList[index]);
+                              return CartProductWidget(cart: cartController.cartList[index],
+                                  cartIndex: index, addOns: _addOnsList[index], isAvailable: _availableList[index]);
                             },
                           ):
                           //Cart product for mobile
@@ -107,7 +126,9 @@ class CartScreen extends StatelessWidget {
                             shrinkWrap: true,
                             itemCount: cartController.cartList.length,
                             itemBuilder: (context, index) {
-                              return CartProductWidget(cart: cartController.cartList[index], cartIndex: index, addOns: _addOnsList[index], isAvailable: _availableList[index]);
+                              return CartProductWidget(cart: cartController.cartList[index],
+                                  cartIndex: index,
+                                  addOns: _addOnsList[index], isAvailable: _availableList[index]);
                             },
                           ),
 
@@ -122,7 +143,7 @@ class CartScreen extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: MediaQuery.of(context).size.width*0.9,
+                width: MediaQuery.of(context).size.width*0.81,
                 child: Column(
                   children: [
                     SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
@@ -135,31 +156,54 @@ class CartScreen extends StatelessWidget {
                     SizedBox(height: 10),
 
                     Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Text('addons'.tr, style: muliBold),
-                      Text('(+) ${PriceConverter.convertPrice(_addOns)}', style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
+                      Text('extra'.tr, style: muliBold),
+                      Text('${PriceConverter.convertPrice(_addOns)}', style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
+                    ]),
+                    SizedBox(height: 10),
+
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('delivery'.tr, style: muliBold),
+                      Text('free'.tr, style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
                     ]),
                     SizedBox(height: 20,),
 
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: MediaQuery.of(context).size.width*0.9,
+                child: Column(
+                  children: [
+                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+
+                    // Total
                     Container(
                       height: 60,
-                      padding: EdgeInsets.all(20),
+                      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
                       decoration: BoxDecoration(
                         color: Theme.of(context).backgroundColor,
                         borderRadius: BorderRadiusDirectional.circular(10),
                       ),
                       child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text('Total'.tr, style: robotoMedium),
-                        Text(PriceConverter.convertPrice(_subTotal), style: robotoMedium),
+                        Text('total'.tr, style: muliExtraBold.copyWith(fontSize: 18)),
+                        Text(PriceConverter.convertPrice(_subTotal), style: muliExtraBold.copyWith(fontSize: 18)),
                       ]),
                     ),
                   ],
                 ),
               ),
 
+              SizedBox(height: 5,),
               Container(
                 width: MediaQuery.of(context).size.width*0.8,
-                padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-                child: CustomButton(radius:15,buttonText: 'proceed_to_checkout'.tr, onPressed: () {
+                padding: ResponsiveHelper.isWeb()?EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL):EdgeInsets.symmetric(vertical:Dimensions.PADDING_SIZE_SMALL),
+                child: ResponsiveHelper.isWeb()?CustomButton(width:300,radius:15,buttonText: 'proceed_to_checkout'.tr, onPressed: () {
+                  if(!cartController.cartList.first.product.scheduleOrder && _availableList.contains(false)) {
+                    showCustomSnackBar('one_or_more_product_unavailable'.tr);
+                  } else {
+                    Get.toNamed(RouteHelper.getCheckoutRoute('cart'));
+                  }
+                }):CustomButton(radius:15,buttonText: 'proceed_to_checkout'.tr, onPressed: () {
                   if(!cartController.cartList.first.product.scheduleOrder && _availableList.contains(false)) {
                     showCustomSnackBar('one_or_more_product_unavailable'.tr);
                   } else {

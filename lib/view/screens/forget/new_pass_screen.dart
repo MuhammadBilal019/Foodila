@@ -11,6 +11,7 @@ import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/base/custom_snackbar.dart';
 import 'package:efood_multivendor/view/base/custom_text_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -36,7 +37,17 @@ class _NewPassScreenState extends State<NewPassScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: ''),
+      backgroundColor: Colors.white,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: Icon(Icons.arrow_back_ios,color: Colors.black,),
+        ),
+          backwardsCompatibility: false,
+          systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.white),
+        elevation: 0,
+          backgroundColor: Colors.white,
+          title: Text('')),
       body: SafeArea(child: Center(child: Scrollbar(child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
@@ -44,7 +55,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
 
           Image.asset(Images.logo, width: 200),
           SizedBox(height: 50),
-          Text('RESET PASSWORD'.tr.toUpperCase(), style: muliExtraBold.copyWith(fontSize: 25)),
+          Text('reset_password'.tr.toUpperCase(), style: muliExtraBold.copyWith(fontSize: 25)),
           SizedBox(height: 30),
           Text('enter_new_password'.tr, style: muliRegular, textAlign: TextAlign.center),
           SizedBox(height: 40),
@@ -52,8 +63,8 @@ class _NewPassScreenState extends State<NewPassScreen> {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-              color: Theme.of(context).cardColor,
-              boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
+              color: Colors.white,
+              //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
             ),
             child: Column(children: [
 
@@ -80,7 +91,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
                 isPassword: true,
                 divider: true,
               ),
-              Divider(height: 10,thickness: 10,color: Theme.of(context).backgroundColor,),
+              Divider(height: 10,thickness: 10,color: Colors.white,),
 
               CustomTextField(
                 hintText: 'confirm_password'.tr,
@@ -100,6 +111,7 @@ class _NewPassScreenState extends State<NewPassScreen> {
           GetBuilder<UserController>(builder: (userController) {
             return GetBuilder<AuthController>(builder: (authBuilder) {
               return (!authBuilder.isLoading && !userController.isLoading) ? CustomButton(
+                radius: 10,
                 buttonText: 'reset'.tr,
                 onPressed: () => _resetPassword(),
               ) : Center(child: CircularProgressIndicator());

@@ -1,4 +1,5 @@
 import 'package:efood_multivendor/controller/cart_controller.dart';
+import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,10 +13,7 @@ class CartWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Stack(clipBehavior: Clip.none, children: [
-      Icon(
-        Icons.shopping_cart, size: size,
-        color: color,
-      ),
+      Image.asset(Images.cart,width: size*0.9,color: color,),
       GetBuilder<CartController>(builder: (cartController) {
         return cartController.cartList.length > 0 ? Positioned(
           top: -5, right: -5,
@@ -34,7 +32,7 @@ class CartWidget extends StatelessWidget {
             ),
           ),
         ) : SizedBox();
-      }),
+      })
     ]);
   }
 }

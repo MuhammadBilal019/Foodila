@@ -19,7 +19,7 @@ class LanguageWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return InkWell(
+    return GestureDetector(
       onTap: () {
         localizationController.setLanguage(Locale(
           AppConstants.languages[index].languageCode,
@@ -28,20 +28,23 @@ class LanguageWidget extends StatelessWidget {
         localizationController.setSelectIndex(index);
       },
       child: Container(
-        height: 40,
         padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-        margin: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+        //margin: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+          color: Theme.of(context).disabledColor.withOpacity(0.2),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: localizationController.selectedIndex == index ?Theme.of(context).primaryColor:Get.isDarkMode?Colors.black:Colors.white,width: 2),
           //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], blurRadius: 5, spreadRadius: 1)],
         ),
-        child: Stack(children: [
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
 
-          Text(languageModel.languageName, style: muliRegular),
+          Text(languageModel.languageName, style: muliBold),
 
-          localizationController.selectedIndex == index ? Positioned(
-            top: 0, right: 0,
+          localizationController.selectedIndex == index ? Container(
+
             child: Icon(Icons.check_circle, color: Theme.of(context).primaryColor, size: 25),
           ) : SizedBox(),
 

@@ -20,6 +20,7 @@ import 'package:efood_multivendor/view/base/not_logged_in_screen.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/profile/widget/profile_bg_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class UpdateProfileScreen extends StatefulWidget {
@@ -52,11 +53,13 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() :
       AppBar(
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Theme.of(context).primaryColor),
         elevation: 0,
-        title: Text('edit_profile'.tr,style: muliExtraBold,),
+        title: Text('edit_profile'.tr,style: muliExtraBold.copyWith(color:Theme.of(context).backgroundColor,fontSize: 20),),
         iconTheme: IconThemeData(color: Theme.of(context).backgroundColor),
         backgroundColor: Theme.of(context).primaryColor,
         centerTitle: true,
@@ -77,37 +80,97 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
         return _isLoggedIn ? userController.userInfoModel != null ? ProfileBgWidget(
           backButton: true,
           isedit: true,
-          circularImage: Center(child: Stack(children: [
-            ClipRRect(borderRadius:BorderRadius.circular(20),child: userController.pickedFile != null ? GetPlatform.isWeb ? Image.network(
-              userController.pickedFile.path, width: 120, height: 120, fit: BoxFit.cover,
-            ) : Image.file(
-              File(userController.pickedFile.path), width: 120, height: 120, fit: BoxFit.cover,
-            ) : CustomImage(
-              image: '${Get.find<SplashController>().configModel.baseUrls.customerImageUrl}/${userController.userInfoModel.image}',
-              height: 120, width: 120, fit: BoxFit.cover,
-            )),
-            Positioned(
-              bottom: 0, right: 0, top: 0, left: 0,
-              child: InkWell(
-                onTap: () => userController.pickImage(),
-                child: Container(
+          circularImage: Center(
+            child: Column(
+              children: [
+                //SizedBox(height: 20),
+                Container(
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadiusDirectional.circular(20),
-                    color: Colors.black.withOpacity(0.3),
-                    //border: Border.all(width: 1, color: Theme.of(context).primaryColor),
-                  ),
-                  child: Container(
-                    margin: EdgeInsets.all(25),
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: Colors.white),
-                      shape: BoxShape.circle,
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 4,
                     ),
-                    child: Icon(Icons.camera_alt, color: Colors.white),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15)
+                    ),
                   ),
+
+                  child: Stack(
+                    children: [
+                      ClipRRect(borderRadius:BorderRadius.circular(10),child: userController.pickedFile != null ? GetPlatform.isWeb ? Image.network(
+                        userController.pickedFile.path, width: 120, height: 120, fit: BoxFit.cover,
+                      ) : Image.file(
+                        File(userController.pickedFile.path), width: 120, height: 120, fit: BoxFit.cover,
+                      ) : CustomImage(
+                        image: '${Get.find<SplashController>().configModel.baseUrls.customerImageUrl}/${userController.userInfoModel.image}',
+                        height: 120, width: 120, fit: BoxFit.cover,
+                      )),
+                      Positioned(
+                        bottom: 0, right: 0, top: 0, left: 0,
+                        child: InkWell(
+                          onTap: (){
+                            userController.pickImage();
+                            /*Get.dialog(Dialog(child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadiusDirectional.circular(20),
+                                ),
+                                padding: EdgeInsets.all(20),
+                                width: MediaQuery.of(context).size.width*0.5,
+                                height: MediaQuery.of(context).size.height*0.25,
+                                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+
+                                  InkWell(
+                                    onTap: ()=> userController.pickImage(),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Select from Gallery'.tr,
+                                          style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                        ),
+                                        SizedBox(width: 10,),
+                                        Icon(Icons.image,size: 25,),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 5),
+                                  InkWell(
+                                    onTap: ()=> userController.captureImage(),
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          'Select from Camera'.tr,
+                                          style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault),
+                                        ),
+                                        SizedBox(width: 10,),
+                                        Icon(Icons.camera,size: 25,),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(height: 3),
+
+                                ]))));*/
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadiusDirectional.circular(20),
+                              color: Colors.black.withOpacity(0.3),
+                              //border: Border.all(width: 1, color: Theme.of(context).primaryColor),
+                            ),
+                            child: Icon(Icons.camera_alt, color: Colors.white),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
                 ),
-              ),
+              ],
             ),
-          ])),
+          ),
           mainWidget: Column(children: [
 
             Expanded(child: Scrollbar(child: SingleChildScrollView(
@@ -185,11 +248,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                 Divider(height: 10,thickness: 10,color: Theme.of(context).cardColor,),
 
 
-                SizedBox(height: 20,),
+                SizedBox(height: 40,),
 
                 !userController.isLoading ? CustomButton(
+                  radius: 10,
                   onPressed: () => _updateProfile(userController),
-                  margin: EdgeInsets.all(40),
+                  //margin: EdgeInsets.symmetric(vertical: 40),
                   buttonText: 'save'.tr,
                 ) : Center(child: CircularProgressIndicator()),
 
@@ -234,3 +298,12 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
     }
   }
 }
+
+class SelectImage extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+
+  }
+}
+

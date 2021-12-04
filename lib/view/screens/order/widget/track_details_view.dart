@@ -37,7 +37,7 @@ class TrackDetailsView extends StatelessWidget {
       child: (!_takeAway && track.deliveryMan == null) ? Padding(
         padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
         child: Text(
-          'delivery_man_not_assigned'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor), textAlign: TextAlign.center,
+          'Order not assigned to delivery man yet'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor), textAlign: TextAlign.center,
         ),
       ) : Column(children: [
 

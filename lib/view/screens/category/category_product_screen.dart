@@ -3,8 +3,10 @@ import 'package:efood_multivendor/data/model/response/product_model.dart';
 import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
+import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/cart_widget.dart';
+import 'package:efood_multivendor/view/base/custom_text_field.dart';
 import 'package:efood_multivendor/view/base/product_view.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +55,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
           _products.addAll(catController.searchProductList);
         } else {
           _products.addAll(catController.categoryProductList);
+          print("bilal");
         }
       }
 
@@ -71,13 +74,13 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
               autofocus: true,
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
-                hintText: 'Search...',
+                hintText: 'search'.tr,
                 border: InputBorder.none,
               ),
               style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
               onSubmitted: (String query) => catController.searchData(query, widget.categoryID),
-            ) : Text(widget.categoryName, style: robotoRegular.copyWith(
-              fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+            ) : Text(widget.categoryName, style: muliExtraBold.copyWith(
+              fontSize: Dimensions.fontSizeExtraLarge, color: Theme.of(context).primaryColor,
             )),
             centerTitle: true,
             leading: IconButton(
@@ -91,19 +94,12 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
                 }
               },
             ),
-            backgroundColor: Theme.of(context).cardColor,
+            backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
             elevation: 0,
             actions: [
               IconButton(
-                onPressed: () => catController.toggleSearch(),
-                icon: Icon(
-                  catController.isSearching ? Icons.close_sharp : Icons.search,
-                  color: Theme.of(context).textTheme.bodyText1.color,
-                ),
-              ),
-              IconButton(
                 onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
-                icon: CartWidget(color: Theme.of(context).textTheme.bodyText1.color, size: 25),
+                icon: CartWidget(color: Theme.of(context).textTheme.bodyText1.color, size: 20),
               ),
             ],
           ),
@@ -111,10 +107,42 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
             width: Dimensions.WEB_MAX_WIDTH,
             child: Column(children: [
 
+              Center(child: Container(
+                height: 50, width: MediaQuery.of(context).size.width*0.9,
+                //color: Theme.of(context).backgroundColor,
+                //padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_SMALL,right: Dimensions.PADDING_SIZE_SMALL,top: Dimensions.PADDING_SIZE_SMALL),
+                child: InkWell(
+                  onTap: () => Get.toNamed(RouteHelper.getSearchRoute()),
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).disabledColor.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_DEFAULT),
+                      //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
+                    ),
+                    child: Row(children: [
+                      Image.asset(Images.search,width: 18,color: Theme.of(context).hintColor),
+                      //Icon(Icons.search, size: 25, color: Theme.of(context).hintColor),
+                      SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                      Expanded(child: TextField(
+                        autofocus: true,
+                        textInputAction: TextInputAction.search,
+                        decoration: InputDecoration(
+                          hintText: 'search'.tr,
+                          border: InputBorder.none,
+                        ),
+                        style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge),
+                        onSubmitted: (String query) => catController.searchData(query, widget.categoryID),
+                      )),
+                    ]),
+                  ),
+                ),
+              )),
+
               (catController.subCategoryList != null && !catController.isSearching) ? Center(child: Container(
                 height: 50, width: Dimensions.WEB_MAX_WIDTH, color: Theme.of(context).cardColor,
                 padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                child: ListView.builder(
+                child:ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: catController.subCategoryList.length,
                   padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_SMALL),

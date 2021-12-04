@@ -7,6 +7,7 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/custom_button.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class OnBoardingScreen extends StatelessWidget {
@@ -14,6 +15,10 @@ class OnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarColor:  Colors.transparent,
+      statusBarIconBrightness: Brightness.dark// status bar color
+    ));
     Get.find<OnBoardingController>().getOnBoardingList();
 
     return Scaffold(

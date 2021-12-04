@@ -32,7 +32,7 @@ class RestaurantScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       body: GetBuilder<RestaurantController>(builder: (restController) {
         return GetBuilder<CategoryController>(builder: (categoryController) {
           List<CategoryProduct> _categoryProducts = [];
@@ -66,9 +66,9 @@ class RestaurantScreen extends StatelessWidget {
             slivers: [
 
               SliverAppBar(
-                expandedHeight: 230, toolbarHeight: 50,
+                expandedHeight: 180, toolbarHeight: 50,
                 pinned: true, floating: false,
-                backgroundColor: Theme.of(context).primaryColor,
+                backgroundColor: Colors.white,
                 leading: InkWell(
                   child: Icon(Icons.arrow_back_ios),
                   onTap: () =>  Navigator.pop(context),
@@ -79,19 +79,22 @@ class RestaurantScreen extends StatelessWidget {
                       borderRadius: BorderRadiusDirectional.only(bottomStart: Radius.circular(10),bottomEnd: Radius.circular(10)),
                       color: Theme.of(context).cardColor,
                     ),
-                    child: CustomImage(
-                      fit: BoxFit.cover, placeholder: Images.restaurant_cover,
-                      image: '${Get.find<SplashController>().configModel.baseUrls.restaurantCoverPhotoUrl}/${_restaurant.coverPhoto}',
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(15),bottomRight: Radius.circular(15)),
+                      child: CustomImage(
+                        fit: BoxFit.cover, placeholder: Images.restaurant_cover,
+                        image: '${Get.find<SplashController>().configModel.baseUrls.restaurantCoverPhotoUrl}/${_restaurant.coverPhoto}',
+                      ),
                     ),
                   )
                 ),
                 actions: [IconButton(
                   onPressed: () => Get.toNamed(RouteHelper.getCartRoute()),
                   icon: Container(
-                    height: 50, width: 50,
+                    height: 60, width: 60,
                     decoration: BoxDecoration(shape: BoxShape.circle, color: Theme.of(context).primaryColor),
                     alignment: Alignment.center,
-                    child: CartWidget(color: Theme.of(context).cardColor, size: 15, fromRestaurant: true),
+                    child: CartWidget(color: Theme.of(context).cardColor, size: 20, fromRestaurant: true),
                   ),
                 )],
               ),
@@ -165,7 +168,7 @@ class RestaurantScreen extends StatelessWidget {
                             Text(
                               _categoryProducts[index].category.name,
                               style: index == restController.categoryIndex
-                                  ? muliBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.black)
+                                  ? muliBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Get.isDarkMode?Colors.white:Colors.black,)
                                   : muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
                             ),
                           ]),
@@ -175,6 +178,8 @@ class RestaurantScreen extends StatelessWidget {
                   ),
                 ))),
               ) : SliverToBoxAdapter(child: SizedBox()),
+
+              SliverToBoxAdapter(child: SizedBox(height: 15,),),
 
               SliverToBoxAdapter(child: Center(child: Container(
                 width: MediaQuery.of(context).size.width*0.9,

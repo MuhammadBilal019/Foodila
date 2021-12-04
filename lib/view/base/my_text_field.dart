@@ -2,6 +2,8 @@ import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 
 class MyTextField extends StatefulWidget {
   final String hintText;
@@ -53,7 +55,7 @@ class _MyTextFieldState extends State<MyTextField> {
       maxLines: widget.maxLines,
       controller: widget.controller,
       focusNode: widget.focusNode,
-      style: robotoRegular,
+      style: robotoRegular.copyWith(color: Get.isDarkMode?Colors.white:Colors.black),
       textInputAction: widget.inputAction,
       keyboardType: widget.inputType,
       cursorColor: Theme.of(context).primaryColor,

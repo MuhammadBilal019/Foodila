@@ -10,6 +10,7 @@ import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/menu/drawer.dart';
 import 'package:efood_multivendor/view/screens/support/widget/support_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -17,30 +18,33 @@ class SupportScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ResponsiveHelper.isWeb()?null:Colors.white,
+       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
+     // backgroundColor: ResponsiveHelper.isWeb()?null:Colors.white,
       drawer: MyDrawer(),
       appBar: ResponsiveHelper.isWeb()?WebMenuBar():AppBar(
+        // backwardsCompatibility: false,
+        // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.white),
         elevation: 0,
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Colors.white,
-        title: Text("Help & Support",style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor),textAlign: TextAlign.center,),
+        backgroundColor: Get.isDarkMode ? Colors.black : Colors.white,
+        title: Text("help_support".tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 16),textAlign: TextAlign.center,),
         centerTitle: true,
       ),
       body: Scrollbar(child: SingleChildScrollView(
         //padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
         physics: BouncingScrollPhysics(),
-        child: Center(child: ResponsiveHelper.isWeb()?SizedBox(width: MediaQuery.of(context).size.width, child:
+        child: Center(child:
+        ResponsiveHelper.isWeb()?
+        SizedBox(width: Dimensions.WEB_MAX_WIDTH, child:
         Column(children: [
           //SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
           //Image.asset(Images.support_image, height: 120),
-
-
           Container(
               height: 100,
               color: Theme.of(context).primaryColor,
               child: Center(
-                child: Text('Contact us',style: muliExtraBold.copyWith(fontSize: 30),),
+                child: Text('contact_us',style: muliExtraBold.copyWith(fontSize: 30),),
               )
           ),
 
@@ -60,7 +64,7 @@ class SupportScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    width: MediaQuery.of(context).size.width*0.4,
+                    width: Dimensions.WEB_MAX_WIDTH/3,
                     child: Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, "
                         "sed diam nonumy eirmod tempor invidunt ut labore et dolore "
                         "magna aliquyam erat, sed diam voluptua. At vero eos et accusam "
@@ -77,7 +81,7 @@ class SupportScreen extends StatelessWidget {
                       Image.asset(Images.user,width: 20,color: Theme.of(context).primaryColor,),
                       //Icon(Icons.person,color: Colors.black,),
                       SizedBox(width:30),
-                      Text("Foodila Support",style: muliRegular.copyWith(color: Colors.black),),
+                      Text("Foodila Support",style: muliBold.copyWith(color: Colors.black),),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -86,7 +90,7 @@ class SupportScreen extends StatelessWidget {
                       Image.asset(Images.phone,width: 20,color: Theme.of(context).primaryColor),
                       //Icon(Icons.call,color: Colors.black,),
                       SizedBox(width:30),
-                      Text("0850 550 33 34",style: muliRegular.copyWith(color: Colors.black),),
+                      Text("0850 550 33 34",style: muliBold.copyWith(color: Colors.black),),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -95,7 +99,7 @@ class SupportScreen extends StatelessWidget {
                       Image.asset(Images.mail,width: 20,color: Theme.of(context).primaryColor),
                       //Icon(Icons.email,color: Colors.black,),
                       SizedBox(width:30),
-                      Text("info@foodila.com",style: muliRegular.copyWith(color: Colors.black),),
+                      Text("info@foodila.com",style: muliBold.copyWith(color: Colors.black),),
                     ],
                   ),
                   SizedBox(height: 20,),
@@ -155,43 +159,52 @@ class SupportScreen extends StatelessWidget {
 
           SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-          Padding(padding: EdgeInsets.all(30),
+          Padding(
+            padding: EdgeInsets.all(30),
             child: Container(
               padding: EdgeInsets.all(20),
               decoration: BoxDecoration(
-                color: Theme.of(context).cardColor,
+                  color:Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                      spreadRadius: 3,
+                      blurRadius: 4,
+                      offset: Offset(0, 3),
+                  )
+                ],
                 borderRadius: BorderRadius.circular(Dimensions.PADDING_SIZE_SMALL),
               ),
               child: Column(
                 children: [
                   Row(
                     children: [
-                      Image.asset(Images.user,width: 20,),
+                      Image.asset(Images.user,width: 20,color:Colors.black),
                       //Icon(Icons.person,color: Colors.black,),
                       SizedBox(width:30),
-                      Text("Foodila Support",style: muliRegular.copyWith(),),
+                      Text("foodila_support".tr,style: muliBold.copyWith(color:Colors.black)),
                     ],
                   ),
                   SizedBox(height: 20,),
                   Row(
                     children: [
-                      Image.asset(Images.phone,width: 20,),
+                      Image.asset(Images.phone,width: 20,color: Colors.black),
                       //Icon(Icons.call,color: Colors.black,),
                       SizedBox(width:30),
-                      Text("0850 550 33 34",style: muliRegular.copyWith(),),
+                      Text("0850 550 33 34",style: muliBold.copyWith(color:Colors.black),),
                     ],
                   ),
                   SizedBox(height: 20,),
                   Row(
                     children: [
-                      Image.asset(Images.mail,width: 20,),
+                      Image.asset(Images.mail,width: 20,color: Colors.black),
                       //Icon(Icons.email,color: Colors.black,),
                       SizedBox(width:30),
-                      Text("info@foodila.com",style: muliRegular.copyWith(),),
+                      Text("info@foodila.com",style: muliBold.copyWith(color:Colors.black),),
                     ],
                   ),
                   SizedBox(height: 20,),
-                  Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy",style: muliRegular.copyWith(),),
+                  Text("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy",style: muliBold.copyWith(color:Colors.black),),
                   SizedBox(height: 20,),
                   /*SupportButton(
                     icon: Icons.location_on, title: 'address'.tr, color: Colors.blue,

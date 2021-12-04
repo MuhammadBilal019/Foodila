@@ -6,6 +6,7 @@ import 'package:efood_multivendor/data/model/response/order_details_model.dart';
 import 'package:efood_multivendor/data/model/response/order_model.dart';
 import 'package:efood_multivendor/helper/date_converter.dart';
 import 'package:efood_multivendor/helper/price_converter.dart';
+import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
@@ -64,7 +65,20 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'order_details'.tr),
+      backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
+      appBar: ResponsiveHelper.isWeb()?CustomAppBar(title: 'order_details'.tr,):AppBar(
+        elevation: 0,
+        title: Text('order_details'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
+        iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
+        backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
+        //shadowColor: Colors.white,
+        centerTitle: true,
+        leading: InkWell(
+          child: Icon(Icons.arrow_back_ios,color: Colors.black87,),
+          onTap: () =>  Navigator.pop(context),
+        ),
+
+      ),
       body: GetBuilder<OrderController>(builder: (orderController) {
         double _deliveryCharge = 0;
         double _itemsPrice = 0;
@@ -95,22 +109,22 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
           Expanded(child: Scrollbar(child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-            child: Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.9, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child: Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.9, child: Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
 
               Row(children: [
-                Text('${'order_id'.tr}: #', style: muliBold),
+                Text('${'order_id'.tr}: #', style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
                 //SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                Text(_order.id.toString(), style: muliBold),
+                Text(_order.id.toString(), style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault)),
                 SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                 Expanded(child: SizedBox()),
                 //Icon(Icons.watch_later, size: 17),
                 SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                 Text(
                   DateConverter.dateTimeStringToDateTime(_order.createdAt),
-                  style: muliRegular.copyWith(color: Theme.of(context).primaryColor),
+                  style: muliBold.copyWith(color: Theme.of(context).primaryColor,fontSize: Dimensions.fontSizeSmall),
                 ),
               ]),
-              SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+              SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
               _order.scheduled == 1 ? Row(children: [
                 Text('${'scheduled_at'.tr}:', style: muliRegular),
@@ -119,24 +133,24 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               ]) : SizedBox(),
               SizedBox(height: _order.scheduled == 1 ? Dimensions.PADDING_SIZE_SMALL : 0),
 
-              Get.find<SplashController>().configModel.orderDeliveryVerification ? Row(children: [
+              /*et.find<SplashController>().configModel.orderDeliveryVerification ? Row(children: [
                 Text('${'delivery_verification_code'.tr}:', style: robotoRegular),
                 SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                 Text(_order.otp, style: robotoMedium),
-              ]) : SizedBox(),
-              SizedBox(height: Get.find<SplashController>().configModel.orderDeliveryVerification ? 10 : 0),
+              ]) : SizedBox(),*/
+              //SizedBox(height: Get.find<SplashController>().configModel.orderDeliveryVerification ? 10 : 0),
 
               Row(children: [
                 Text(_order.orderType.tr, style: muliBold),
                 Expanded(child: SizedBox()),
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                  padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_DEFAULT, vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.black87, borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                   ),
                   child: Text(
                     _order.paymentMethod == 'cash_on_delivery' ? 'cash_on_delivery'.tr : 'digital_payment'.tr,
-                    style: muliRegular.copyWith(color: Theme.of(context).cardColor, fontSize: Dimensions.fontSizeExtraSmall),
+                    style: muliRegular.copyWith(color:Colors.white, fontSize: Dimensions.fontSizeExtraSmall),
                   ),
                 ),
               ]),
@@ -153,10 +167,10 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   Expanded(child: SizedBox()),
                   SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                   Container(
-                    padding: EdgeInsets.all(5),
+                    padding: EdgeInsets.only(top: 5,bottom: 5,left: 20,right: 20),
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadiusDirectional.circular(5),
+                      borderRadius: BorderRadiusDirectional.circular(8),
                     ),
                     child: Text(
                       _order.orderStatus == 'delivered' ? '${'delivered_at'.tr} ${DateConverter.dateTimeStringToDateTime(_order.delivered)}'
@@ -171,29 +185,35 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 child: Container(
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width*0.5,
-                  child: Column( children: [
+                  child: Column(
+                      children: [
                     Container(
                       padding: EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: Theme.of(context).cardColor,
                         borderRadius: BorderRadiusDirectional.circular(10),
+                        //border: Border.all(width: 1,color: Theme.of(context).disabledColor),
                       ),
                       child: Column(
                         children: [
-                          ClipOval(child: CustomImage(
+                          ClipRRect(
+                              borderRadius: BorderRadius.circular(5),
+                              child: CustomImage(
                             image: '${Get.find<SplashController>().configModel.baseUrls.restaurantImageUrl}/${_order.restaurant.logo}',
-                            height: 40, width: 40, fit: BoxFit.cover,
+                            height: 50, width: 60, fit: BoxFit.cover,
                           )),
-                          Text(
+                          /*Text(
                             _order.restaurant.name, maxLines: 1, overflow: TextOverflow.ellipsis,
                             style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall),
-                          ),
+                          ),*/
                         ],
                       ),
                     ),
                     Row(children: [
 
-                      Icon(Icons.location_on),
+                      Image.asset(Images.save_location,width: 15,color: Theme.of(context).disabledColor),
+                      //Icon(Icons.location_on),
+                      SizedBox(width: 7,),
                       Expanded(
                         child: Text(
                           _order.restaurant.address, maxLines: 1, overflow: TextOverflow.ellipsis,
@@ -216,7 +236,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 },
               ),
 
-              (_order.orderNote  != null && _order.orderNote.isNotEmpty) ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              /*(_order.orderNote  != null && _order.orderNote.isNotEmpty) ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text('additional_note'.tr, style: robotoRegular),
                 SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                 Container(
@@ -232,74 +252,84 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                   ),
                 ),
                 SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-              ]) : SizedBox(),
+              ]) : SizedBox(),*/
 
               SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
               // Total
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('item_price'.tr, style: muliBold),
-                Text(PriceConverter.convertPrice(_itemsPrice), style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-              ]),
-              SizedBox(height: 10),
+              Container(
+                width: MediaQuery.of(context).size.width*0.8,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('item_price'.tr, style: muliBold),
+                      Text(PriceConverter.convertPrice(_itemsPrice), style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
+                    SizedBox(height: 10),
 
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('extra'.tr, style: muliBold),
-                Text('(+) ${PriceConverter.convertPrice(_addOns)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-              ]),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('extr'.tr, style: muliBold),
+                      Text('(+) ${PriceConverter.convertPrice(_addOns)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
 
-              SizedBox(height: 10),
+                    SizedBox(height: 10),
 
-              /*Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('subtotal'.tr, style: robotoMedium),
-                Text(PriceConverter.convertPrice(_subTotal), style: robotoMedium),
-              ]),
-              SizedBox(height: 10),*/
+                    /*Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                  Text('subtotal'.tr, style: robotoMedium),
+                  Text(PriceConverter.convertPrice(_subTotal), style: robotoMedium),
+                ]),
+                SizedBox(height: 10),*/
 
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('discount'.tr, style: muliBold),
-                Text('(-) ${PriceConverter.convertPrice(_discount)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-              ]),
-              SizedBox(height: 10),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('discount'.tr, style: muliBold),
+                      Text('(-) ${PriceConverter.convertPrice(_discount)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
+                    SizedBox(height: 10),
 
-              _couponDiscount > 0 ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('coupon_discount'.tr, style: muliBold),
-                Text(
-                  '(-) ${PriceConverter.convertPrice(_couponDiscount)}',
-                  style: muliBold.copyWith(color: Theme.of(context).primaryColor),
+                    _couponDiscount > 0 ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('coupon_discount'.tr, style: muliBold),
+                      Text(
+                        '(-) ${PriceConverter.convertPrice(_couponDiscount)}',
+                        style: muliBold.copyWith(color: Theme.of(context).primaryColor),
+                      ),
+                    ]) : SizedBox(),
+                    SizedBox(height: _couponDiscount > 0 ? 10 : 0),
+
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('vat_tax'.tr, style: muliBold),
+                      Text('(+) ${PriceConverter.convertPrice(_tax)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
+                    SizedBox(height: 10),
+
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('delivery'.tr, style: muliBold),
+                      _deliveryCharge > 0 ? Text(
+                        '(+) ${PriceConverter.convertPrice(_deliveryCharge)}', style: robotoRegular,
+                      ) : Text('free'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
+
+                    SizedBox(height: 20),
+                  ],
                 ),
-              ]) : SizedBox(),
-              SizedBox(height: _couponDiscount > 0 ? 10 : 0),
+              ),
 
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('vat_tax'.tr, style: muliBold),
-                Text('(+) ${PriceConverter.convertPrice(_tax)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-              ]),
-              SizedBox(height: 10),
-
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                Text('delivery_fee'.tr, style: muliBold),
-                _deliveryCharge > 0 ? Text(
-                  '(+) ${PriceConverter.convertPrice(_deliveryCharge)}', style: robotoRegular,
-                ) : Text('free'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-              ]),
-
-              SizedBox(height: 20),
 
               Container(
                 height: 60,
-                padding: EdgeInsets.all(20),
+                padding: ResponsiveHelper.isWeb()?EdgeInsets.all(20):EdgeInsets.symmetric(vertical: 20,horizontal: 17),
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
                   borderRadius: BorderRadiusDirectional.circular(10),
                 ),
                 child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                  Text('Total'.tr, style: muliExtraBold.copyWith(
-                    fontSize: Dimensions.fontSizeLarge, color: Colors.black87,
+                  Text('total'.tr, style: muliExtraBold.copyWith(
+                    fontSize: Dimensions.fontSizeLarge,
                   )),
                   Text(
                     PriceConverter.convertPrice(_total),
-                    style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.black87),
+                    style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeLarge),
                   ),
                 ]),
               ),
@@ -312,7 +342,11 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                         || _order.orderStatus == 'processing' || _order.orderStatus == 'handover'|| _order.orderStatus == 'picked_up') ?
                     Container(
                       width: MediaQuery.of(context).size.width*0.85,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                       child: CustomButton(
+                        radius: 10,
                         buttonText: 'track_order'.tr,
                         margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                         onPressed: () {
@@ -326,7 +360,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                       child: TextButton(
                         style: TextButton.styleFrom(minimumSize: Size(1, 50), shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                          borderRadius: BorderRadius.circular(10), side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
                         )),
                         onPressed: () {
                           Get.dialog(ConfirmationDialog(

@@ -82,10 +82,19 @@ class _SignInScreenState extends State<SignInScreen> {
         }
       },
       child: Scaffold(
-        appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : !widget.exitFromApp ? AppBar(leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: Icon(Icons.arrow_back_ios_rounded, color: Theme.of(context).textTheme.bodyText1.color),
-        ), elevation: 0, backgroundColor: Colors.transparent) : null,
+        backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
+        appBar: AppBar(
+          elevation: 0.0,
+          backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
+        ),
+        // appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : !widget.exitFromApp ? AppBar(
+        //     backwardsCompatibility: false,
+        //     systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.white),
+        //
+        //     leading: IconButton(
+        //   onPressed: () => Get.back(),
+        //   icon: Icon(Icons.arrow_back_ios_rounded, color: Theme.of(context).textTheme.bodyText1.color),
+        // ), elevation: 0, backgroundColor: Colors.white) : null,
         body: SafeArea(child: Center(
           child: Scrollbar(
             child: SingleChildScrollView(
@@ -104,7 +113,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     return Column(children: [
 
                       Image.asset(Images.logo, width: 150),
-                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                      SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
                       //Image.asset(Images.logo_name, width: 100),
                       SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
 
@@ -116,50 +125,60 @@ class _SignInScreenState extends State<SignInScreen> {
                         //padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_EXTRA_LARGE),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                          color: Theme.of(context).cardColor,
-                          boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
+                          color:Get.isDarkMode ? Colors.black : Colors.white,
+                          //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
                         ),
                         child: Column(children: [
 
-                          Row(
-                              children: [
-                            CodePickerWidget(
-                              onChanged: (CountryCode countryCode) {
-                                _countryDialCode = countryCode.dialCode;
-                              },
-                              initialSelection: _countryDialCode != null ? _countryDialCode : Get.find<LocalizationController>().locale.countryCode,
-                              favorite: [_countryDialCode],
-                              showDropDownButton: true,
-                              padding: EdgeInsets.zero,
-                              showFlagMain: true,
-                              flagWidth: 30,
-                              backgroundColor: Color(0XF7F7F7),
-                              textStyle: muliRegular.copyWith(
-                                fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+                          Container(
+                           // color: Theme.of(context).disabledColor.withOpacity(0.1),
+                            child: Row(children: [
+                              Container(
+                                height:46,
+                                color: Theme.of(context).disabledColor.withOpacity(0.1),
+                                child: CodePickerWidget(
+                                  onChanged: (CountryCode countryCode) {
+                                    _countryDialCode = countryCode.dialCode;
+                                  },
+                                  initialSelection: _countryDialCode,
+                                  favorite: [_countryDialCode],
+                                  showDropDownButton: true,
+                                  padding: EdgeInsets.zero,
+                                  showFlagMain: true,
+                                  dialogBackgroundColor: Get.isDarkMode ? Colors.black :Colors.white,
+                                  textStyle: robotoRegular.copyWith(
+                                    fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+                                  ),
+                                ),
                               ),
-                            ),
-                            Expanded(flex: 1, child: CustomTextField(
-                              hintText: 'phone'.tr,
-                              controller: _phoneController,
-                              focusNode: _phoneFocus,
-                              nextFocus: _passwordFocus,
-                              inputType: TextInputType.phone,
-                              divider: false,
-                            )),
-                          ]),
+
+                              Expanded(
+                                  child:
+                                  CustomTextField(
+                                hintText: 'phone'.tr,
+                                controller: _phoneController,
+                                focusNode: _phoneFocus,
+                                nextFocus: _passwordFocus,
+                                inputType: TextInputType.phone,
+                                divider: false,
+                              )),
+                            ]),
+                          ),
                           //Padding(padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_LARGE), child: Divider(height: 1)),
 
-                          Divider(height: 10,thickness: 10,color: Theme.of(context).backgroundColor,),
-                          CustomTextField(
-                            hintText: 'password'.tr,
-                            controller: _passwordController,
-                            focusNode: _passwordFocus,
-                            inputAction: TextInputAction.done,
-                            inputType: TextInputType.visiblePassword,
-                            prefixIcon: Images.lock,
-                            isPassword: true,
-                            onSubmit: (text) => (GetPlatform.isWeb && authController.acceptTerms)
-                                ? _login(authController, _countryDialCode) : null,
+                          Divider(height: 10,thickness: 10,color:Get.isDarkMode ? Colors.black : Colors.white),
+                          Container(
+                            child: CustomTextField(
+                              hintText: 'password'.tr,
+                              controller: _passwordController,
+                              focusNode: _passwordFocus,
+                              inputAction: TextInputAction.done,
+                              inputType: TextInputType.visiblePassword,
+                              prefixIcon: Images.lock,
+                              isPassword: true,
+                              onSubmit: (text) => (GetPlatform.isWeb && authController.acceptTerms)
+                                  ? _login(authController, _countryDialCode) : null,
+                            ),
                           ),
 
                         ]),
@@ -189,19 +208,23 @@ class _SignInScreenState extends State<SignInScreen> {
                       ]),
                       SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
-                      ConditionCheckBox(authController: authController),
-                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-                      !authController.isLoading ? Row(children: [
-                        Expanded(child: CustomButton(
-                          buttonText: 'sign_in'.tr,
+                      !authController.isLoading ? Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                        Container(child: CustomButton(
+                          width: MediaQuery.of(context).size.width*0.78,
+                          radius: 10,
+                          buttonText: 'log_in'.tr,
                           onPressed: authController.acceptTerms ? () => _login(authController, _countryDialCode) : null,
                         )),
                       ]) : Center(child: CircularProgressIndicator()),
-                      SizedBox(height: 30),
+                      SizedBox(height: 15),
 
                       GuestButton(),
 
+                      SizedBox(height: 40),
                       TextButton(
                         style: TextButton.styleFrom(
                           minimumSize: Size(1, 40),
@@ -210,8 +233,8 @@ class _SignInScreenState extends State<SignInScreen> {
                           Get.toNamed(RouteHelper.getSignUpRoute());
                         },
                         child: RichText(text: TextSpan(children: [
-                          TextSpan(text: '${'Don''t have an account? '.tr} ', style: muliBold.copyWith(color: Theme.of(context).textTheme.bodyText1.color)),
-                          TextSpan(text: 'Signup'.tr, style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor)),
+                          TextSpan(text: 'do_not_have_account'.tr+' ', style: muliBold.copyWith(color: Theme.of(context).textTheme.bodyText1.color)),
+                          TextSpan(text: 'sign_up'.tr, style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor)),
                         ])),
                       ),
 

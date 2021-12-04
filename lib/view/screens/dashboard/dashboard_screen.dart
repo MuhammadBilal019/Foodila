@@ -4,6 +4,7 @@ import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
+import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/cart_widget.dart';
 import 'package:efood_multivendor/view/screens/cart/cart_screen.dart';
 import 'package:efood_multivendor/view/screens/menu/drawer.dart';
@@ -83,31 +84,55 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        floatingActionButton: ResponsiveHelper.isWeb() ? null : FloatingActionButton(
-          elevation: 5,
-          backgroundColor: _pageIndex == 2 ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
-          onPressed: () => _setPage(2),
-          child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).disabledColor, size: 30),
+        floatingActionButton: ResponsiveHelper.isWeb() ? null : Container(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            //color: Colors.white,
+              boxShadow: [BoxShadow(
+                color: Colors.grey,
+                blurRadius: 5,
+                spreadRadius: 2,
+              )]
+          ),
+          child: FloatingActionButton(
+            elevation: 0.0,
+            backgroundColor: _pageIndex == 2 ? Theme.of(context).cardColor : Theme.of(context).cardColor,
+            onPressed: () => _setPage(2),
+            child: CartWidget(color: _pageIndex == 2 ? Theme.of(context).primaryColor : Theme.of(context).disabledColor, size: 30),
+          ),
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
-        bottomNavigationBar: ResponsiveHelper.isWeb() ? SizedBox() : BottomAppBar(
-          elevation: 5,
-          notchMargin: 5,
-          clipBehavior: Clip.antiAlias,
-          shape: CircularNotchedRectangle(),
+        bottomNavigationBar: GetPlatform.isDesktop ? SizedBox() : Container(
+          decoration: BoxDecoration(
+            //color: Colors.white,
+            boxShadow: [BoxShadow(
+              color: Colors.grey,
+              blurRadius: 5,
+              spreadRadius: 2,
+            )]
+          ),
+          child:
 
-          child: Padding(
-            padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
-            child: Row(children: [
-              BottomNavItem(title:'home'.tr,iconData: Images.home, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
-              BottomNavItem(title:'favourite'.tr,iconData: Images.favorite, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),
-              Expanded(child: SizedBox()),
-              BottomNavItem(title:'My Order'.tr,iconData: Images.bag, isSelected: _pageIndex == 3, onTap: () => _setPage(3)),
-              BottomNavItem(title:'notification'.tr,iconData: Images.notification, isSelected: _pageIndex == 4, onTap: () {
-                Get.toNamed(RouteHelper.getNotificationRoute());
-              }),
-            ]),
+
+          BottomAppBar(
+            //elevation: 0.0,
+            //notchMargin: 2,
+            //clipBehavior: Clip.antiAlias,
+            //shape: CircularNotchedRectangle(),
+            child: Padding(
+              padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+              child: Row(
+                  children: [
+                BottomNavItem(title:'home'.tr,iconData: Images.home, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
+                BottomNavItem(title:'favourite'.tr,iconData: Images.favorite, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),
+                Expanded(child: SizedBox()),
+                BottomNavItem(title:'my_order'.tr,iconData: Images.bag, isSelected: _pageIndex == 3, onTap: () => _setPage(3)),
+                BottomNavItem(title:'notification'.tr,iconData: Images.notification, isSelected: _pageIndex == 4, onTap: () {
+                  Get.toNamed(RouteHelper.getNotificationRoute());
+                }),
+              ]),
+            ),
           ),
         ),
         body: PageView.builder(

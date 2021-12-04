@@ -20,11 +20,13 @@ class ChooseLanguageScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Get.isDarkMode ?Colors.black : Colors.white,
       drawer: MyDrawer(),
       appBar: ResponsiveHelper.isDesktop(context) ? CustomAppBar(title: 'language'.tr, isBackButtonExist: true) :fromMenu?
       AppBar(
+        elevation: 0,
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Get.isDarkMode ?Colors.black : Colors.white,
         title: Text('select_language'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor),textAlign: TextAlign.center,),
         centerTitle: true,
       ):null,
@@ -43,13 +45,14 @@ class ChooseLanguageScreen extends StatelessWidget {
 
 
                       //Center(child: Text(AppConstants.APP_NAME, style: robotoMedium.copyWith(fontSize: Dimensions.FONT_SIZE_LARGE))),
-                      SizedBox(height: 30),
+                      SizedBox(height: 10),
 
 
                       GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: ResponsiveHelper.isDesktop(context) ? 4 : ResponsiveHelper.isTab(context) ? 3 : 1,
-                          childAspectRatio: (6/1),
+                          childAspectRatio: (6/1.25),
+                          mainAxisSpacing: 10
                         ),
                         itemCount: localizationController.languages.length,
                         physics: NeverScrollableScrollPhysics(),
@@ -68,8 +71,9 @@ class ChooseLanguageScreen extends StatelessWidget {
             )),
 
             CustomButton(
+              radius: 10,
               buttonText: 'save'.tr,
-              margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+              margin: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_LARGE),
               onPressed: () {
                 if(localizationController.languages.length > 0 && localizationController.selectedIndex != -1) {
                   localizationController.setLanguage(Locale(

@@ -14,15 +14,24 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:phone_number/phone_number.dart';
 
-class ForgetPassScreen extends StatelessWidget {
+class ForgetPassScreen extends StatefulWidget {
+  @override
+  State<ForgetPassScreen> createState() => _ForgetPassScreenState();
+}
+
+class _ForgetPassScreenState extends State<ForgetPassScreen> {
   final TextEditingController _numberController = TextEditingController();
+
+//   String _countryDialCode;
+
 
   @override
   Widget build(BuildContext context) {
+   //String _countryDialCode;
     String _countryDialCode = CountryCode.fromCountryCode(Get.find<SplashController>().configModel.country).dialCode;
-
     return Scaffold(
-      appBar: CustomAppBar(title: ''),
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
+      //appBar: CustomAppBar(title: ''),
       body: SafeArea(child: Center(child: Scrollbar(child: SingleChildScrollView(
         physics: BouncingScrollPhysics(),
         padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
@@ -30,7 +39,7 @@ class ForgetPassScreen extends StatelessWidget {
             child: Container(width: MediaQuery.of(context).size.width*0.8, child: Column(children: [
 
           Image.asset(Images.logo, height: 150),
-              Text('FORGOT PASSWORD'.tr.toUpperCase(), style: muliExtraBold.copyWith(fontSize: 22)),
+              Text('forgot_password'.tr.toUpperCase(), style: muliExtraBold.copyWith(fontSize: 22)),
           Padding(
             padding: EdgeInsets.all(30),
             child: Text('please_enter_mobile'.tr, style: muliRegular, textAlign: TextAlign.center),
@@ -38,22 +47,31 @@ class ForgetPassScreen extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-              color: Theme.of(context).cardColor,
+              color: Theme.of(context).disabledColor.withOpacity(0.1),
             ),
             child: Row(children: [
-              CodePickerWidget(
-                onChanged: (CountryCode countryCode) {
-                  _countryDialCode = countryCode.dialCode;
-                },
-                initialSelection: _countryDialCode,
-                favorite: [_countryDialCode],
-                showDropDownButton: true,
-                padding: EdgeInsets.zero,
-                showFlagMain: true,
-                textStyle: robotoRegular.copyWith(
-                  fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+
+              Container(
+                height:52,
+                color: Theme.of(context).disabledColor.withOpacity(0.1),
+                child: CodePickerWidget(
+                  onChanged: (CountryCode countryCode) {
+                    setState(() {
+                      _countryDialCode = countryCode.dialCode;
+                    });
+                    print(_countryDialCode);
+                  },
+                  initialSelection: _countryDialCode,
+                  favorite: [_countryDialCode],
+                  showDropDownButton: true,
+                  padding: EdgeInsets.zero,
+                  showFlagMain: true,
+                  textStyle: robotoRegular.copyWith(
+                    fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color,
+                  ),
                 ),
               ),
+
               Expanded(child: CustomTextField(
                 controller: _numberController,
                 inputType: TextInputType.phone,
@@ -67,6 +85,7 @@ class ForgetPassScreen extends StatelessWidget {
 
               GetBuilder<AuthController>(builder: (authController) {
                 return !authController.isLoading ? CustomButton(
+                  radius: 10,
                   buttonText: 'next'.tr,
                   onPressed: () => _forgetPass(_countryDialCode),
                 ) : Center(child: CircularProgressIndicator());
@@ -80,9 +99,15 @@ class ForgetPassScreen extends StatelessWidget {
   }
 
   void _forgetPass(String countryCode) async {
+
+    print(countryCode);
+
     String _phone = _numberController.text.trim();
 
     String _numberWithCountryCode = countryCode+_phone;
+
+    print(_numberWithCountryCode);
+
     bool _isValid = GetPlatform.isWeb ? true : false;
     if(!GetPlatform.isWeb) {
       try {

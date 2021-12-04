@@ -2,6 +2,7 @@ import 'package:efood_multivendor/controller/auth_controller.dart';
 import 'package:efood_multivendor/controller/location_controller.dart';
 import 'package:efood_multivendor/data/model/response/address_model.dart';
 import 'package:efood_multivendor/data/model/response/response_model.dart';
+import 'package:efood_multivendor/helper/responsive_helper.dart';
 import 'package:efood_multivendor/helper/route_helper.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
@@ -46,7 +47,7 @@ class AccessLocationScreen extends StatelessWidget {
           return _isLoggedIn ? Column(mainAxisAlignment: MainAxisAlignment.center, children: [
 
             SizedBox(height: 30),
-            Text('Set Location', style: muliExtraBold.copyWith(fontSize: 20,color: Theme.of(context).primaryColor)),
+            Text('set_location'.tr, style: muliExtraBold.copyWith(fontSize: 20,color: Theme.of(context).primaryColor)),
             SizedBox(height: 30),
 
             locationController.addressList != null ? locationController.addressList.length > 0 ? Expanded(
@@ -69,12 +70,13 @@ class AccessLocationScreen extends StatelessWidget {
             SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
             BottomButton(locationController: locationController, fromSignUp: fromSignUp, route: route),
+            SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
           ]) : Center(child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Center(child: SizedBox(width: 700, child: Column(children: [
               SizedBox(height: 30),
-              Text('Set Location', style: muliExtraBold.copyWith(fontSize: 20,color: Theme.of(context).primaryColor)),
+              Text('set_location'.tr, style: muliExtraBold.copyWith(fontSize: 20,color: Theme.of(context).primaryColor)),
               SizedBox(height: 400),
               SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
               BottomButton(locationController: locationController, fromSignUp: fromSignUp, route: route),
@@ -97,7 +99,9 @@ class BottomButton extends StatelessWidget {
     return Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.8, child: Column(children: [
 
       CustomButton(
-        buttonText: 'Use My Current Location'.tr,
+        radius: 10,
+        buttonText: 'user_current_location'.tr,
+        fontSize: 14,
         onPressed: () async {
           _checkPermission(() async {
             Get.dialog(CustomLoader(), barrierDismissible: false);
@@ -116,11 +120,11 @@ class BottomButton extends StatelessWidget {
       ),
       SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-      TextButton(
+      ResponsiveHelper.isWeb()?SizedBox():TextButton(
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(
             side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
-            borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+            borderRadius: BorderRadius.circular(10),
           ),
           minimumSize: Size(Dimensions.WEB_MAX_WIDTH, 50),
           padding: EdgeInsets.zero,
@@ -128,10 +132,10 @@ class BottomButton extends StatelessWidget {
         onPressed: () => Get.toNamed(RouteHelper.getPickMapRoute(
           route == null ? fromSignUp ? RouteHelper.signUp : RouteHelper.accessLocation : route, route != null,
         )),
-        child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+        child: Row(mainAxisAlignment: ResponsiveHelper.isWeb()?MainAxisAlignment.center:MainAxisAlignment.start, children: [
           Padding(
-            padding: EdgeInsets.only(right: Dimensions.PADDING_SIZE_EXTRA_LARGE),
-            child: Icon(Icons.map, color: Theme.of(context).primaryColor),
+            padding: EdgeInsets.only(left: 40,right: 40),
+            child: Image.asset(Images.map_icon,width:20,color: Theme.of(context).primaryColor,),
           ),
           Text('set_from_map'.tr, textAlign: TextAlign.center, style: robotoBold.copyWith(
             color: Theme.of(context).primaryColor,

@@ -21,6 +21,7 @@ class OrderView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       body: ResponsiveHelper.isWeb()?GetBuilder<OrderController>(builder: (orderController) {
         List<OrderModel> orderList;
         if(orderController.runningOrderList != null) {
@@ -39,9 +40,9 @@ class OrderView extends StatelessWidget {
                 key: UniqueKey(),
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
-                  mainAxisSpacing:  Dimensions.PADDING_SIZE_LARGE,
-                  childAspectRatio: 3.6,
-                  crossAxisCount: 3,
+                  //mainAxisSpacing:  Dimensions.PADDING_SIZE_LARGE,
+                  childAspectRatio: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3.6: MediaQuery.of(context).size.width>=650?3:4.3:3.6,
+                  crossAxisCount: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3: MediaQuery.of(context).size.width>=650?2:1:3,
                 ),
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -61,10 +62,11 @@ class OrderView extends StatelessWidget {
                           padding: ResponsiveHelper.isDesktop(context) ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL) : EdgeInsets.all(10),
                           margin: ResponsiveHelper.isDesktop(context) ? EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_SMALL) : null,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).backgroundColor, borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                            color: Theme.of(context).backgroundColor, borderRadius: BorderRadius.circular(10),
                             //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)],
                           ),
-                          child: Column(children: [
+                          child: Column(
+                              children: [
 
                             Row(children: [
 
@@ -73,7 +75,7 @@ class OrderView extends StatelessWidget {
                                 child: CustomImage(
                                   image: '${Get.find<SplashController>().configModel.baseUrls.restaurantImageUrl}'
                                       '/${orderList[index].restaurant.logo}',
-                                  height: 80, width: 80, fit: BoxFit.cover,
+                                  height: 80, width: 90, fit: BoxFit.cover,
                                 ),
                               ),
                               SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
@@ -81,26 +83,35 @@ class OrderView extends StatelessWidget {
                               Expanded(
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                   Row(children: [
-                                    Text('${'order_id'.tr}:', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                                    Text('${'order_id'.tr}:', style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall)),
                                     SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                    Text('#${orderList[index].id}', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                                    Text('#${orderList[index].id}', style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall)),
                                   ]),
                                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                   Text(
                                     DateConverter.dateTimeStringToDateTime(orderList[index].createdAt),
-                                    style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+                                    style: muliRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
                                   ),
                                   ResponsiveHelper.isWeb()?SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL):SizedBox(),
-                                  ResponsiveHelper.isWeb()?Text(
-                                    orderList[index].restaurant.name,
-                                    style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+                                  ResponsiveHelper.isWeb()?Row(
+                                    children: [
+                                      Text(
+                                        'restaurant'.tr,
+                                        style: robotoRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
+                                      ),
+                                      SizedBox(width: 5,),
+                                      Text(
+                                        orderList[index].restaurant.name,
+                                        style: robotoRegular.copyWith(color: Colors.black, fontSize: Dimensions.fontSizeSmall),
+                                      ),
+                                    ],
                                   ):SizedBox(),
                                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                    padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_LARGE, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                                      color: Theme.of(context).primaryColor,
+                                      color: ResponsiveHelper.isWeb()?isRunning?Colors.red:Theme.of(context).primaryColor:Theme.of(context).primaryColor,
                                     ),
                                     child: Text(orderList[index].orderStatus.tr, style: robotoMedium.copyWith(
                                       fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).cardColor,
@@ -117,27 +128,28 @@ class OrderView extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                     decoration: BoxDecoration(
-                                      color: Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                                      border: Border.all(width: 1, color: Theme.of(context).primaryColor),
+                                      color: ResponsiveHelper.isWeb()?Theme.of(context).backgroundColor:Theme.of(context).primaryColor,
+                                      borderRadius: BorderRadius.circular(8),
+                                      //border: Border.all(width: 1, color: Theme.of(context).primaryColor),
                                     ),
                                     child: Column(children: [
-                                      Image.asset(Images.trace, height: 30, width: 30,),
+                                      Image.asset(Images.trace, height: 30, width: 30,color: ResponsiveHelper.isWeb()?Theme.of(context).primaryColor:Colors.white,),
                                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                      Text('Track'.tr, style: muliRegular.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).cardColor,
+                                      Text('track'.tr, style: muliRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall, color: ResponsiveHelper.isWeb()?Colors.black:Theme.of(context).cardColor,
                                       )),
                                     ]),
                                   ),
                                 ) : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       '${orderList[index].detailsCount}',
-                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall),
                                     ),
                                     Text(
                                       '${orderList[index].detailsCount > 1 ? 'items'.tr : 'item'.tr}',
-                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall),
                                     ),
                                   ],
                                 ),
@@ -198,7 +210,7 @@ class OrderView extends StatelessWidget {
                           padding: ResponsiveHelper.isDesktop(context) ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL) : EdgeInsets.all(10),
                           margin: ResponsiveHelper.isDesktop(context) ? EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_SMALL) : null,
                           decoration: BoxDecoration(
-                            color: Theme.of(context).backgroundColor, borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                            color: Theme.of(context).backgroundColor, borderRadius: BorderRadius.circular(10),
                             //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)],
                           ),
                           child: Column(children: [
@@ -210,7 +222,7 @@ class OrderView extends StatelessWidget {
                                 child: CustomImage(
                                   image: '${Get.find<SplashController>().configModel.baseUrls.restaurantImageUrl}'
                                       '/${orderList[index].restaurant.logo}',
-                                  height: 60, width: 60, fit: BoxFit.cover,
+                                  height: 60, width: 70, fit: BoxFit.cover,
                                 ),
                               ),
                               SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
@@ -218,9 +230,9 @@ class OrderView extends StatelessWidget {
                               Expanded(
                                 child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
                                   Row(children: [
-                                    Text('${'order_id'.tr}:', style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall)),
-                                    SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                    Text('#${orderList[index].id}', style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall)),
+                                    Text('${'order_id'.tr}:', style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall-1.5)),
+                                    SizedBox(width: 2),
+                                    Text('#${orderList[index].id}', style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall-1.5)),
                                   ]),
                                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                   Text(
@@ -229,9 +241,9 @@ class OrderView extends StatelessWidget {
                                   ),
                                   SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                   Container(
-                                    padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                    padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_LARGE, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                                      borderRadius: BorderRadius.circular(8),
                                       color: Theme.of(context).primaryColor,
                                     ),
                                     child: Text(orderList[index].orderStatus.tr, style: robotoMedium.copyWith(
@@ -247,29 +259,30 @@ class OrderView extends StatelessWidget {
                                 isRunning ? InkWell(
                                   onTap: () => Get.toNamed(RouteHelper.getOrderTrackingRoute(orderList[index].id)),
                                   child: Container(
-                                    padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
+                                    padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL-2, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                     decoration: BoxDecoration(
                                       color: Theme.of(context).primaryColor,
-                                      borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                                      borderRadius: BorderRadius.circular(10),
                                       border: Border.all(width: 1, color: Theme.of(context).primaryColor),
                                     ),
                                     child: Column(children: [
                                       Image.asset(Images.trace, height: 30, width: 30,),
                                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                                      Text('Track'.tr, style: muliRegular.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).cardColor,
+                                      Text('track'.tr, style: muliRegular.copyWith(
+                                        fontSize: Dimensions.fontSizeExtraSmall-2, color: Theme.of(context).cardColor,
                                       )),
                                     ]),
                                   ),
                                 ) : Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
                                       '${orderList[index].detailsCount}',
-                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall),
                                     ),
                                     Text(
                                       '${orderList[index].detailsCount > 1 ? 'items'.tr : 'item'.tr}',
-                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeExtraSmall),
+                                      style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall),
                                     ),
                                   ],
                                 ),
@@ -280,14 +293,14 @@ class OrderView extends StatelessWidget {
                             (index == orderList.length-1 || ResponsiveHelper.isDesktop(context)) ? SizedBox() : Padding(
                               padding: EdgeInsets.only(left: 70),
                               child: ResponsiveHelper.isDesktop(context)?Divider(
-                                color: Theme.of(context).disabledColor, height: Dimensions.PADDING_SIZE_LARGE,
+                                color: Colors.white, height: Dimensions.PADDING_SIZE_LARGE,
                               ):null,
                             ),
 
                           ]),
                         ),
                       ),
-                      Divider(height: 10,),
+                      Divider(height: 10,color: Colors.white,),
                     ],
                   );
                 },

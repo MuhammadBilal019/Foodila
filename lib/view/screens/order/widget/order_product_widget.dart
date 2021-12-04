@@ -47,7 +47,7 @@ class OrderProductWidget extends StatelessWidget {
               ClipRRect(
                 borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                 child: CustomImage(
-                  height: 60, width: 60, fit: BoxFit.cover,
+                  height: 60, width: 70, fit: BoxFit.cover,
                   image: '${Get.find<SplashController>().configModel.baseUrls.productImageUrl}/'
                       '${orderDetails.foodDetails.image}',
                 ),
@@ -86,7 +86,7 @@ class OrderProductWidget extends StatelessWidget {
                   orderDetails.foodDetails.variations.length > 0 ? Padding(
                     padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     child: Row(children: [
-                      Text('${'variations'.tr}: ', style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Colors.black87)),
+                      Text('${'variations'.tr}: ', style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall,color: Theme.of(context).disabledColor)),
                       Flexible(child: Text(
                           _variationText,
                           style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor,

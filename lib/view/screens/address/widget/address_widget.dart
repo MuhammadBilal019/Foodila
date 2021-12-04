@@ -25,15 +25,15 @@ class AddressWidget extends StatelessWidget {
           padding: EdgeInsets.all(ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_DEFAULT
               : Dimensions.PADDING_SIZE_SMALL),
           decoration: BoxDecoration(
-            color: fromCheckout ? Theme.of(context).backgroundColor : Theme.of(context).cardColor,
+            color: fromCheckout ? Theme.of(context).backgroundColor : Theme.of(context).disabledColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
             //border: fromCheckout ? Border.all(color: Theme.of(context).disabledColor, width: 1) : null,
-            boxShadow: fromCheckout ? null : [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], blurRadius: 5, spreadRadius: 1)],
+            //boxShadow: fromCheckout ? null : [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], blurRadius: 5, spreadRadius: 1)],
           ),
           child: Row(children: [
-            Image.asset(address.addressType == 'home' ? Images.home : address.addressType == 'office'
-                    ? Images.office : Images.other,
-                  width: ResponsiveHelper.isDesktop(context) ? 50 : 30, color: Colors.black,),
+            SizedBox(width: 10,),
+            Image.asset(address.addressType=="home"?Images.home:address.addressType=="office"?Images.office:Images.other,
+                  width: ResponsiveHelper.isDesktop(context) ? 50 : fromCheckout?25:30, color:Get.isDarkMode? Colors.white: Colors.black),
             SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -49,10 +49,10 @@ class AddressWidget extends StatelessWidget {
                 ),
               ]),
             ),
-            /*fromAddress ? IconButton(
+            fromAddress ? IconButton(
               icon: Icon(Icons.delete, color: Colors.red, size: ResponsiveHelper.isDesktop(context) ? 35 : 25),
               onPressed: onRemovePressed,
-            ) : SizedBox(),*/
+            ) : SizedBox(),
           ]),
         ),
       ),

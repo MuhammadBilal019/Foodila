@@ -34,9 +34,20 @@ final muliRegular = TextStyle(
   fontWeight: FontWeight.w400,
   fontSize: Dimensions.fontSizeDefault,
 );
+
+
+
 final muliBold = TextStyle(
   fontFamily: 'Muli',
   fontWeight: FontWeight.w700,
   fontSize: Dimensions.fontSizeDefault,
 );
+
+final helveticaBold = TextStyle(
+  fontFamily: 'Helvetica',
+  fontWeight: FontWeight.w400,
+  fontSize: Dimensions.fontSizeDefault,
+);
+
+
 final divider = Divider(height: 10,thickness: 10);

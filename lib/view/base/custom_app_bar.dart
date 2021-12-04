@@ -4,6 +4,7 @@ import 'package:efood_multivendor/util/styles.dart';
 import 'package:efood_multivendor/view/base/cart_widget.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:get/get_utils/get_utils.dart';
 
@@ -17,6 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return GetPlatform.isDesktop ? WebMenuBar() : AppBar(
+      // backwardsCompatibility: false,
+      // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.white),
       title: Text(title, style: robotoRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).textTheme.bodyText1.color)),
       centerTitle: true,
       leading: isBackButtonExist ? IconButton(

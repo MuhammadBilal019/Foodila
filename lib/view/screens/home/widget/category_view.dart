@@ -19,14 +19,14 @@ class CategoryView extends StatelessWidget {
   Widget build(BuildContext context) {
     ScrollController _scrollController = ScrollController();
 
-    return ResponsiveHelper.isWeb()?Column(
+    return GetPlatform.isDesktop?Column(
       children: [
         SizedBox(height: 20,),
         Row(
           children: [
             Expanded(
               child: SizedBox(
-                height: 120,
+                height: 160,
                 child: categoryController.categoryList != null ? ListView.builder(
                   controller: _scrollController,
                   itemCount: categoryController.categoryList.length > 15 ? 15 : categoryController.categoryList.length,
@@ -41,10 +41,12 @@ class CategoryView extends StatelessWidget {
                           categoryController.categoryList[index].id, categoryController.categoryList[index].name,
                         )),
                         child: SizedBox(
-                          width: 120,
-                          child: Column(children: [
+                          width: 220,
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
                             Container(
-                              height: 100, width: 100,
+                              height: 130, width: 200,
                               margin: EdgeInsets.only(
                                 left: index == 0 ? 0 : Dimensions.PADDING_SIZE_EXTRA_SMALL,
                                 right: Dimensions.PADDING_SIZE_EXTRA_SMALL,
@@ -53,17 +55,17 @@ class CategoryView extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                                 child: CustomImage(
                                   image: '${Get.find<SplashController>().configModel.baseUrls.categoryImageUrl}/${categoryController.categoryList[index].image}',
-                                  height: 100, width: 100, fit: BoxFit.cover,
+                                  height: 130, width: 200, fit: BoxFit.cover,
                                 ),
                               ),
                             ),
                             SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
                             Padding(
-                              padding: EdgeInsets.only(right: index == 0 ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0),
+                              padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_EXTRA_SMALL ),
                               child: Text(
                                 categoryController.categoryList[index].name,
-                                style: robotoMedium.copyWith(fontSize: 11),
+                                style: muliBold.copyWith(fontSize: 18),
                                 maxLines: 2, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
                               ),
                             ),
@@ -81,16 +83,10 @@ class CategoryView extends StatelessWidget {
         ),
 
       ],
-    ):Column(
+    ):
+    Column(
       children: [
-        Row(
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(20, 10, 10, 10),
-              child: Text('categories'.tr,style: muliBold,),
-            ),
-          ],
-        ),
+        SizedBox(height: 15,),
         Padding(
           padding: EdgeInsets.only(left: 20),
           child: Container(
@@ -111,29 +107,57 @@ class CategoryView extends StatelessWidget {
                         physics: BouncingScrollPhysics(),
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 1),
-                            child: InkWell(
-                              onTap: () => Get.toNamed(RouteHelper.getCategoryProductRoute(
-                                categoryController.categoryList[index].id, categoryController.categoryList[index].name,
-                              )),
-                              child: SizedBox(
-                                width: 60,
-                                child: Column(children: [
-                                  SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                          return Row(
+                            children: [
+                              index==0?Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 1),
+                                child: InkWell(
+                                  onTap: () {
 
-                                  Padding(
-                                    padding: EdgeInsets.only(right: index == 0 ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0),
-                                    child: Text(
-                                      categoryController.categoryList[index].name,
-                                      style: muliBold.copyWith(fontSize: 11),
-                                      maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
-                                    ),
+                          },
+                                  child: SizedBox(
+                                    width: 60,
+                                    child: Column(children: [
+                                      index==0?SizedBox(height: Dimensions.PADDING_SIZE_SMALL):SizedBox(),
+                                      index==0?Padding(
+                                        padding: EdgeInsets.only(right: index == 0 ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0),
+                                        child: Text(
+                                          'all'.tr,
+                                          style: muliBold.copyWith(fontSize: 11),
+                                          maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
+                                        ),
+                                      ):SizedBox(),
+                                    ]),
                                   ),
+                                ),
+                              ):SizedBox(),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 1),
+                                child: InkWell(
+                                  onTap: () => Get.toNamed(RouteHelper.getCategoryProductRoute(
+                                    categoryController.categoryList[index].id, categoryController.categoryList[index].name,
+                                  )),
+                                  child: SizedBox(
+                                    width: 60,
+                                    child: Column(children: [
 
-                                ]),
+                                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+
+
+                                      Padding(
+                                        padding: EdgeInsets.only(right: 0),
+                                        child: Text(
+                                          categoryController.categoryList[index].name,
+                                          style: muliBold.copyWith(color:Colors.grey,fontSize: 11),
+                                          maxLines: 1, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
+                                        ),
+                                      ),
+
+                                    ]),
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           );
                         },
                       ) : CategoryShimmer(categoryController: categoryController),

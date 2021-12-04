@@ -11,7 +11,7 @@ class QuantityButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: 22, width: 22,
+        height: 20, width: 20,
         margin: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
         decoration: BoxDecoration(
           borderRadius: BorderRadiusDirectional.circular(5),

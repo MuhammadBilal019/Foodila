@@ -11,7 +11,7 @@ class LocalizationController extends GetxController implements GetxService {
     loadCurrentLanguage();
   }
 
-  Locale _locale = Locale(AppConstants.languages[0].languageCode, AppConstants.languages[0].countryCode);
+  Locale _locale = Locale(AppConstants.languages[1].languageCode, AppConstants.languages[1].countryCode);
   bool _isLtr = true;
   List<LanguageModel> _languages = [];
 
@@ -22,7 +22,7 @@ class LocalizationController extends GetxController implements GetxService {
   void setLanguage(Locale locale) {
     Get.updateLocale(locale);
     _locale = locale;
-    if(_locale.languageCode == 'ar') {
+    if(_locale.languageCode == 'de') {
       _isLtr = false;
     }else {
       _isLtr = true;
@@ -32,9 +32,9 @@ class LocalizationController extends GetxController implements GetxService {
   }
 
   void loadCurrentLanguage() async {
-    _locale = Locale(sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? AppConstants.languages[0].languageCode,
-        sharedPreferences.getString(AppConstants.COUNTRY_CODE) ?? AppConstants.languages[0].countryCode);
-    _isLtr = _locale.languageCode != 'ar';
+    _locale = Locale(sharedPreferences.getString(AppConstants.LANGUAGE_CODE) ?? AppConstants.languages[1].languageCode,
+        sharedPreferences.getString(AppConstants.COUNTRY_CODE) ?? AppConstants.languages[1].countryCode);
+    _isLtr = _locale.languageCode != 'de';
     for(int index = 0; index<AppConstants.languages.length; index++) {
       if(AppConstants.languages[index].languageCode == _locale.languageCode) {
         _selectedIndex = index;

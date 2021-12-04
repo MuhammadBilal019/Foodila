@@ -10,6 +10,7 @@ import 'package:efood_multivendor/view/base/not_logged_in_screen.dart';
 import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/order/widget/order_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class OrderScreen extends StatefulWidget {
@@ -34,8 +35,12 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
 
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    //   statusBarIconBrightness:Get.isDarkMode ?  Brightness.light: Brightness.dark,
+    // statusBarColor:Get.isDarkMode ?  Colors.black : Colors.transparent
+    // ));
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       appBar: ResponsiveHelper.isWeb() ? WebMenuBar() :null,
       body: _isLoggedIn ? GetBuilder<OrderController>(
         builder: (orderController) {
@@ -43,7 +48,7 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
 
 
             ResponsiveHelper.isWeb()?SizedBox():SizedBox(height: 60,),
-            ResponsiveHelper.isWeb()?SizedBox():Text('my_orders'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
+            ResponsiveHelper.isWeb()?SizedBox():Text('my_order'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
 
             ResponsiveHelper.isWeb()?Stack(
               children: [
@@ -60,7 +65,26 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
 
 
             SizedBox(height: 30,),
-            SizedBox(
+            ResponsiveHelper.isWeb()?Center(
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width*0.3,
+                color: Theme.of(context).cardColor,
+                child: TabBar(
+                  controller: _tabController,
+                  indicatorColor: Theme.of(context).primaryColor,
+                  indicatorWeight: 3,
+                  labelColor: Colors.black,
+                  unselectedLabelColor: Theme.of(context).disabledColor,
+                  unselectedLabelStyle: muliExtraBold.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeDefault),
+                  labelStyle: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.black),
+                  tabs: [
+                    Tab(text: 'on_comming'.tr,),
+                    Tab(text: 'history'.tr),
+                  ],
+                ),
+              ),
+            ):SizedBox(
               height: 50,
               width: MediaQuery.of(context).size.width*0.75,
               child: Container(
@@ -78,12 +102,12 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
                   ),
                   indicatorColor: Theme.of(context).primaryColor,
                   indicatorWeight: 3,
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.black,
+                  labelColor:Get.isDarkMode? Colors.white: Colors.black,
+                  unselectedLabelColor: Get.isDarkMode? Colors.white: Colors.black,
                   unselectedLabelStyle: muliBold.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
                   labelStyle: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                   tabs: [
-                    Tab(text: 'On Comming'.tr,),
+                    Tab(text: 'on_comming'.tr,),
                     Tab(text: 'history'.tr),
                   ],
                 ),

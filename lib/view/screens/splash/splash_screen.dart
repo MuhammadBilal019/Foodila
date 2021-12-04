@@ -11,6 +11,7 @@ import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -28,6 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor:  Colors.transparent, // status bar color
+    ));
 
     bool _firstTime = true;
     _onConnectivityChanged = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
@@ -104,6 +108,14 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _globalKey,
+      /* appBar: AppBar(
+        elevation: 0.0,
+        backgroundColor: Colors.amber,
+        backwardsCompatibility: false,
+        systemOverlayStyle: SystemUiOverlayStyle(
+     statusBarColor:  Colors.transparent
+    ),
+      ),*/
       body: Image.asset(Images.splash,fit: BoxFit.cover,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,),

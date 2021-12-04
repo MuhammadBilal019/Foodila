@@ -90,7 +90,7 @@ class WebHomeScreen extends StatelessWidget {
                       );
                     }),
                     SizedBox(height: 20,),
-                    Text("FIND THE RESTAURANTS",style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 30),),
+                    Text("find_restaurant".tr.toUpperCase(),style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 30),),
                     SizedBox(height: 20,),
                     /*Container(
                       height: 180,
@@ -158,7 +158,7 @@ class WebHomeScreen extends StatelessWidget {
         ),
         SliverToBoxAdapter(
           child: Center(child: Container(
-            height: 50, width: MediaQuery.of(context).size.width*0.3,
+            height: 50, width: Dimensions.WEB_MAX_WIDTH/3,
             //color: Theme.of(context).backgroundColor,
             padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_SMALL,right: Dimensions.PADDING_SIZE_SMALL,top: Dimensions.PADDING_SIZE_SMALL),
             child: InkWell(
@@ -166,14 +166,15 @@ class WebHomeScreen extends StatelessWidget {
               child: Container(
                 padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).disabledColor.withOpacity(0.2),
+                  color: Theme.of(context).disabledColor.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_DEFAULT),
                   //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
                 ),
                 child: Row(children: [
-                  Icon(Icons.search, size: 25, color: Theme.of(context).hintColor),
+                  Image.asset(Images.search,width: 18,),
+                  //Icon(Icons.search, size: 25, color: Theme.of(context).hintColor),
                   SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
-                  Container(child: Text('search_food_or_restaurant'.tr, style: robotoRegular.copyWith(
+                  Container(child: Text('Search for a restaurant'.tr, style: robotoRegular.copyWith(
                     fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).hintColor,
                   ))),
                 ]),
@@ -182,217 +183,18 @@ class WebHomeScreen extends StatelessWidget {
           )),
         ),
 
+        SliverToBoxAdapter(child: Center(
+          child: SizedBox(height: 60,child: Container(padding: EdgeInsets.all(20),child:
+          Text('Search Results',style: muliExtraBold.copyWith(fontSize: 20),),
+          ),),
+        ),),
+
 
         SliverToBoxAdapter(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(width: MediaQuery.of(context).size.width*0.02,),
-              Container(
-                width: MediaQuery.of(context).size.width*0.25,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(width: 2,color: Theme.of(context).disabledColor)
-                ),
-                padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-                child: GetBuilder<SearchController>(builder: (searchController) {
-                  return SingleChildScrollView(
-                    child: Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text('filter'.tr, style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeLarge,color: Theme.of(context).primaryColor)),
-                        SizedBox(),
-                        /*CustomButton(
-                  onPressed: () {
-                    searchController.resetFilter();
-                  },
-                  buttonText: 'reset'.tr, transparent: true, width: 65,
-                ),*/
-                      ]),
-                      SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-                      Text('sort_by'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                      GridView.builder(
-                        itemCount: searchController.sortList.length,
-                        physics: NeverScrollableScrollPhysics(),
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: ResponsiveHelper.isDesktop(context) ? 4 : ResponsiveHelper.isTab(context) ? 3 : 2,
-                          childAspectRatio: 3, crossAxisSpacing: 10, mainAxisSpacing: 10,
-                        ),
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              searchController.setSortIndex(index);
-                            },
-                            child: Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                                color: searchController.sortIndex == index ? Theme.of(context).primaryColor
-                                    : Theme.of(context).disabledColor.withOpacity(0.1),
-                              ),
-                              child: Text(
-                                searchController.sortList[index],
-                                textAlign: TextAlign.center,
-                                style: robotoMedium.copyWith(
-                                  color: searchController.sortIndex == index ? Colors.white : Theme.of(context).hintColor,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-                      Text('rating'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                      SizedBox(height: 10,),
-                      Container(
-                        height: 30, alignment: Alignment.center,
-                        child: ListView.builder(
-                          itemCount: 5,
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () => searchController.setRating(index + 1),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadiusDirectional.circular(5),
-                                      //border: Border.all(width: 1),
-                                      color: searchController.rating == (index + 1) ?Theme.of(context).primaryColor:Theme.of(context).disabledColor.withOpacity(0.1),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        SizedBox(width: 10,),
-                                        Text((index+1).toString(),style: muliBold.copyWith(color: searchController.rating == (index + 1) ? Theme.of(context).cardColor
-                                            : Theme.of(context).primaryColor),),
-                                        SizedBox(height: 25,width: 1,),
-                                        Icon(
-                                          Icons.star,
-                                          size: 20,
-                                          color: searchController.rating == (index + 1) ? Theme.of(context).cardColor
-                                              : Theme.of(context).primaryColor,
-                                        ),
-                                        SizedBox(width: 10,),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 5,),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-
-                      SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-                      Text('filter_by'.tr, style: muliBold.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                      CustomCheckBox(
-                        title: isRestaurant ? 'currently_opened_restaurants'.tr : 'currently_available_foods'.tr,
-                        value: searchController.isAvailableFoods,
-                        onClick: () {
-                          searchController.toggleAvailableFoods();
-                        },
-                      ),
-                      CustomCheckBox(
-                        title: isRestaurant ? 'discounted_restaurants'.tr : 'discounted_foods'.tr,
-                        value: searchController.isDiscountedFoods,
-                        onClick: () {
-                          searchController.toggleDiscountedFoods();
-                        },
-                      ),
-                      SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-                      /*isRestaurant ? SizedBox() : Column(children: [
-                Text('price'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),
-                RangeSlider(
-                  values: RangeValues(searchController.lowerValue, searchController.upperValue),
-                  max: maxValue.toInt().toDouble(),
-                  min: 0,
-                  divisions: maxValue.toInt(),
-                  activeColor: Theme.of(context).primaryColor,
-                  inactiveColor: Theme.of(context).primaryColor.withOpacity(0.3),
-                  labels: RangeLabels(searchController.lowerValue.toString(), searchController.upperValue.toString()),
-                  onChanged: (RangeValues rangeValues) {
-                    searchController.setLowerAndUpperValue(rangeValues.start, rangeValues.end);
-                  },
-                ),
-                SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-              ]),
-              SizedBox(height: 30),*/
-
-                      Container(
-                        padding: EdgeInsets.all(10),
-                        child: CustomButton(
-                          buttonText: 'apply_filters'.tr,
-                          onPressed: () {
-                            isFilter?Get.back():null;
-                            if(isRestaurant) {
-                              searchController.sortRestSearchList();
-                            }else {
-                              searchController.sortFoodSearchList();
-                            }
-                            Get.back();
-
-                          },
-                        ),
-                      ),
-
-                    ]),
-                  );
-                }),
-              ),
-              SizedBox(width: MediaQuery.of(context).size.width*0.03,),
-              Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.5, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-
-                Padding(
-                  padding: EdgeInsets.fromLTRB(10, 20, 0, 5),
-                  child: GetBuilder<RestaurantController>(builder: (restaurantController) {
-                    return Row(children: [
-                      Expanded(child: Text('all_restaurants'.tr, style: robotoMedium.copyWith(fontSize: 24))),
-                      restaurantController.restaurantList != null ? PopupMenuButton(
-                        itemBuilder: (context) {
-                          return [
-                            PopupMenuItem(value: 'all', child: Text('all'.tr), textStyle: robotoMedium.copyWith(
-                              color: restaurantController.restaurantType == 'all'
-                                  ? Theme.of(context).textTheme.bodyText1.color : Theme.of(context).disabledColor,
-                            )),
-                            PopupMenuItem(value: 'take_away', child: Text('take_away'.tr), textStyle: robotoMedium.copyWith(
-                              color: restaurantController.restaurantType == 'take_away'
-                                  ? Theme.of(context).textTheme.bodyText1.color : Theme.of(context).disabledColor,
-                            )),
-                            PopupMenuItem(value: 'delivery', child: Text('delivery'.tr), textStyle: robotoMedium.copyWith(
-                              color: restaurantController.restaurantType == 'delivery'
-                                  ? Theme.of(context).textTheme.bodyText1.color : Theme.of(context).disabledColor,
-                            )),
-                          ];
-                        },
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL)),
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
-                          child: Icon(Icons.filter_list),
-                        ),
-                        onSelected: (value) => restaurantController.setRestaurantType(value),
-                      ) : SizedBox(),
-                    ]);
-                  }),
-                ),
-                RestaurantView(scrollController: scrollController),
-
-
-
-
-
-              ]))),
-            ],
-          ),
+          child: Center(
+              child: SizedBox(
+                  width: Dimensions.WEB_MAX_WIDTH/2,
+                  child: RestaurantView(scrollController: scrollController))),
         ),
       ],
     );

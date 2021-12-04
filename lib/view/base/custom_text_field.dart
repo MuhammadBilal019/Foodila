@@ -2,6 +2,10 @@ import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
+
 
 class CustomTextField extends StatefulWidget {
   final String hintText;
@@ -51,7 +55,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           maxLines: widget.maxLines,
           controller: widget.controller,
           focusNode: widget.focusNode,
-          style: muliRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
+          style: helveticaBold.copyWith(fontSize: Dimensions.fontSizeDefault),
           textInputAction: widget.inputAction,
           keyboardType: widget.inputType,
           cursorColor: Theme.of(context).primaryColor,
@@ -59,7 +63,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           enabled: widget.isEnabled,
           autofocus: false,
           obscureText: widget.isPassword ? _obscureText : false,
-          inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))] : null,
+          inputFormatters: widget.inputType == TextInputType.phone ? <TextInputFormatter>[FilteringTextInputFormatter.allow(RegExp('[0-9]'))] :null,
           decoration: InputDecoration(
             focusColor: Color(0XF7F7F7),
             hoverColor: Color(0XF7F7F7),
@@ -69,16 +73,17 @@ class _CustomTextFieldState extends State<CustomTextField> {
             ),
             isDense: true,
             hintText: widget.hintText,
-            fillColor: Color(0XF7F7F7),
-            hintStyle: muliRegular.copyWith(fontSize: Dimensions.fontSizeLarge, color: Theme.of(context).hintColor),
+            fillColor: Theme.of(context).disabledColor.withOpacity(0.1),
+            hintStyle: helveticaBold.copyWith(fontSize: Dimensions.fontSizeDefault),
             filled: true,
+
             prefixIcon: widget.prefixIcon != null ? Padding(
               padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
-              child: Image.asset(widget.prefixIcon, height: 20, width: 20),
+              child: Image.asset(widget.prefixIcon, height: 20, width: 20,color: Get.isDarkMode ? Colors.white : Colors.black),
             ) : null,
-            suffixIcon: widget.isPassword ? IconButton(
-              icon: Icon(_obscureText ? Icons.visibility_off : Icons.visibility, color: Theme.of(context).hintColor.withOpacity(0.3)),
-              onPressed: _toggle,
+            suffixIcon: widget.isPassword ? GestureDetector(
+              child: Icon(_obscureText ? Icons.visibility_off : Icons.visibility,size: 20, color: Theme.of(context).hintColor.withOpacity(0.3)),
+              onTap: _toggle,
             ) : null,
           ),
           onSubmitted: (text) => widget.nextFocus != null ? FocusScope.of(context).requestFocus(widget.nextFocus)

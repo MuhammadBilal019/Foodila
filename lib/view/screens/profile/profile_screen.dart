@@ -24,10 +24,13 @@ import 'package:efood_multivendor/view/screens/address/widget/address_widget.dar
 import 'package:efood_multivendor/view/screens/location/pick_map_screen.dart';
 import 'package:efood_multivendor/view/screens/location/widget/permission_dialog.dart';
 import 'package:efood_multivendor/view/screens/menu/drawer.dart';
+import 'package:efood_multivendor/view/screens/profile/test.dart';
 import 'package:efood_multivendor/view/screens/profile/widget/profile_bg_widget.dart';
 import 'package:efood_multivendor/view/screens/profile/widget/profile_button.dart';
 import 'package:efood_multivendor/view/screens/profile/widget/profile_card.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:geolocator/geolocator.dart';
 import 'dart:io';
 import 'package:get/get.dart';
@@ -44,9 +47,11 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       drawer: MyDrawer(),
       appBar: ResponsiveHelper.isWeb() ? WebMenuBar() : AppBar(
+        // backwardsCompatibility: false,
+        // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Theme.of(context).primaryColor),
         iconTheme: IconThemeData(color: Theme.of(context).backgroundColor),
         backgroundColor: Theme.of(context).primaryColor,
-        title: Text('profile'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).backgroundColor),textAlign: TextAlign.center,),
+        title: Text('profile'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).backgroundColor,fontSize: 20),textAlign: TextAlign.center,),
         centerTitle: true,
         shadowColor: null,
         elevation: 0,
@@ -62,75 +67,81 @@ class ProfileScreen extends StatelessWidget {
           )
         ],
       ),
-      backgroundColor: Theme.of(context).cardColor,
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       body: GetBuilder<UserController>(builder: (userController) {
         return (_isLoggedIn && userController.userInfoModel == null) ? Center(child: CircularProgressIndicator()) :
         ResponsiveHelper.isWeb()?
         Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
                 height: 100,
                 color: Theme.of(context).primaryColor,
                 child: Center(
-                  child: Text('profile'.tr,style: muliExtraBold.copyWith(fontSize: 30),),
+                  child: Text('my_profile'.tr,style: muliExtraBold.copyWith(fontSize: 30),),
                 )
             ),
             Expanded(
               //flex: 1,
               child: SizedBox(
-                width: MediaQuery.of(context).size.width*0.8,
+                width: Dimensions.WEB_MAX_WIDTH,
                 child: Center(
                   child: Container(
                     padding: EdgeInsets.only(top: Dimensions.PADDING_SIZE_EXTRA_LARGE),
                     child: ListView(
                       children: [
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
                               children: [
                                 Stack(children: [
-                                  ClipRRect(borderRadius:BorderRadius.circular(10),child: userController.pickedFile != null ? GetPlatform.isWeb ? Image.network(
-                                    userController.pickedFile.path, width: 150, height: 150, fit: BoxFit.cover,
-                                  ) : Image.file(
-                                    File(userController.pickedFile.path), width: 150, height: 150, fit: BoxFit.cover,
-                                  ) : CustomImage(
-                                    image: '${Get.find<SplashController>().configModel.baseUrls.customerImageUrl}/${userController.userInfoModel.image}',
-                                    height: 150, width: 150, fit: BoxFit.cover,
-                                  )),
-                                  Positioned(
-                                    bottom: 0, right: 0, top: 0, left: 0,
-                                    child: InkWell(
-                                      onTap: () => userController.pickImage(),
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadiusDirectional.circular(20),
-                                          color: Colors.black.withOpacity(0.3),
-                                          //border: Border.all(width: 1, color: Theme.of(context).primaryColor),
-                                        ),
-                                        child: Container(
-                                          margin: EdgeInsets.all(25),
+                                  Center(
+                                    child: Column(
+                                      children: [
+                                        Container(
                                           decoration: BoxDecoration(
-                                            //border: Border.all(width: 2, color: Colors.white),
-                                            shape: BoxShape.circle,
+                                            border: Border.all(
+                                              color: Colors.white,
+                                              width: 2,
+                                            ),
+                                            color: Colors.black,
+                                            borderRadius: BorderRadius.only(
+                                                topLeft: Radius.circular(15),
+                                                topRight: Radius.circular(15),
+                                                bottomLeft: Radius.circular(15),
+                                                bottomRight: Radius.circular(15)
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: Colors.grey.withOpacity(0.5),
+                                                spreadRadius: 2,
+                                                blurRadius: 3,
+                                                offset: Offset(0, 3), // changes position of shadow
+                                              ),
+                                            ],
                                           ),
-                                          child: Icon(Icons.camera_alt, color: Colors.white),
+
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(10.0),
+                                            child: CustomImage(
+                                              image: '${Get.find<SplashController>().configModel.baseUrls.customerImageUrl}'
+                                                  '/${(userController.userInfoModel != null && _isLoggedIn) ? userController.userInfoModel.image : ''}',
+                                              height: 150, width: 150, fit: BoxFit.cover,
+                                            ),
+                                          ),
+
                                         ),
-                                      ),
+                                      ],
                                     ),
                                   ),
-                                ]),
-                                Container(
-                                  width: 140,
-                                  child: TextButton(
-                                    child: Text('Update Image'.tr,style: muliBold.copyWith(color: Theme.of(context).primaryColor),),
-                                    onPressed: (){
 
-                                    },
-                                  ),
-                                ),
+                                ]),
                               ],
                             ),
-                            SizedBox(width: 20,),
+                            SizedBox(width: MediaQuery.of(context).size.width>800?20:5,),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -148,6 +159,7 @@ class ProfileScreen extends StatelessWidget {
                                       SizedBox(width: 2,),
                                       Text(
                                         Get.find<AuthController>().isLoggedIn() ? '${userController.userInfoModel.email}' : 'guest'.tr,
+                                        overflow: TextOverflow.ellipsis,
                                         style: muliRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
                                       ),
                                     ],
@@ -169,57 +181,57 @@ class ProfileScreen extends StatelessWidget {
 
                               ],
                             ),
-                            SizedBox(width: MediaQuery.of(context).size.width*0.1,),
+                            SizedBox(width: MediaQuery.of(context).size.width>800?MediaQuery.of(context).size.width*0.1:5,),
                             Column(children: [
                               Container(
                                 width: MediaQuery.of(context).size.width*0.3,
-                                height: 60,
+                                height: 50,
                                 padding: EdgeInsets.symmetric(
                                   horizontal: Dimensions.PADDING_SIZE_SMALL,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                                  color: Theme.of(context).disabledColor.withOpacity(0.05),
+                                  borderRadius: BorderRadius.circular(10),
                                   boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
                                 ),
                                 child: Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,children: [
                                   //Image.asset(Images.calendar,width: 25,),
                                   Row(
                                     children: [
-                                      Icon(Icons.wysiwyg, size: 25),
+                                      Image.asset(Images.calendar,width: 20,color: Colors.black,),
                                       SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-                                      Container(child: Text('since_joining'.tr, style: muliRegular)),
+                                      Container(child: Text('since_joining'.tr, style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall))),
                                     ],
                                   ),
 
                                   _isLoggedIn?Text('${userController.userInfoModel.memberSinceDays} ${'days'.tr}',
-                                    style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor),
+                                    style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeSmall,color: Theme.of(context).primaryColor),
                                   ):SizedBox(),
                                 ]),
                               ),
                               SizedBox(height: _isLoggedIn ? 10 : 0),
                               Container(
                                 width: MediaQuery.of(context).size.width*0.3,
-                                height: 60,
+                                height: 50,
                                 padding: EdgeInsets.symmetric(
                                   horizontal: Dimensions.PADDING_SIZE_SMALL,
                                 ),
                                 decoration: BoxDecoration(
-                                  color: Theme.of(context).cardColor,
-                                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                                  color: Theme.of(context).disabledColor.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(10),
                                   boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
                                 ),
                                 child: Row(mainAxisAlignment:MainAxisAlignment.spaceBetween,children: [
                                   Row(
                                     children: [
-                                      Image.asset(Images.logo,width: 50,),
+                                      Image.asset(Images.icon,width: 25,color: Colors.black,),
                                       SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-                                      Container(child: Text('total_order'.tr, style: muliRegular)),
+                                      Container(child: Text('total_order'.tr, style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall))),
                                     ],
                                   ),
                                   //Icon(Icons.agriculture, size: 25),
                                   _isLoggedIn?Text(userController.userInfoModel.orderCount.toString(),
-                                    style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor),
+                                    style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeSmall,color: Theme.of(context).primaryColor),
                                   ):SizedBox(),
                                 ]),
                               ),
@@ -231,30 +243,37 @@ class ProfileScreen extends StatelessWidget {
                         ),
                         SizedBox(height: 30,),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'my_address'.tr,
-                                  style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault,),
-                                ),
-                                SizedBox(height: 10,),
-                                Row(
-                                  children: [
-                                    Container(
-                                      width: MediaQuery.of(context).size.width*0.35,
-                                        child: AddresScreen(fromMenu: true,)
-                                    ),
-                                  ],
-                                ),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width>800?Dimensions.WEB_MAX_WIDTH/1.5:null,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'my_address'.tr,
+                                    style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault,),
+                                  ),
+                                  SizedBox(height: 10,),
+                                  Row(
+                                    children: [
+                                      Container(
+                                        width: Dimensions.WEB_MAX_WIDTH/3,
+                                          child: AddresScreen(fromMenu: true,)
+                                      ),
+                                    ],
+                                  ),
 
-                              ],
+                                ],
+                              ),
                             )
                           ],
                         ),
                         SizedBox(height: 30,),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,21 +305,44 @@ class ProfileScreen extends StatelessWidget {
         ProfileBgWidget(
           backButton: true,
           isedit: false,
-          circularImage: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadiusDirectional.circular(20),
-              //border: Border.all(width: 2, color: Theme.of(context).cardColor),
-              //shape: BoxShape.circle,
-            ),
-            alignment: Alignment.center,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20),
-                child: CustomImage(
-                  image: '${Get.find<SplashController>().configModel.baseUrls.customerImageUrl}'
-                      '/${(userController.userInfoModel != null && _isLoggedIn) ? userController.userInfoModel.image : ''}',
-                  height: 120, width: 120, fit: BoxFit.cover,
+          circularImage: Center(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 4,
+                    ),
+                    color: Colors.black,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                        bottomLeft: Radius.circular(15),
+                        bottomRight: Radius.circular(15)
+                    ),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 2,
+                        blurRadius: 3,
+                        offset: Offset(0, 3), // changes position of shadow
+                      ),
+                    ],
+                  ),
+
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(10.0),
+                    child: CustomImage(
+                      image: '${Get.find<SplashController>().configModel.baseUrls.customerImageUrl}'
+                          '/${(userController.userInfoModel != null && _isLoggedIn) ? userController.userInfoModel.image : ''}',
+                      height: 110, width: 110, fit: BoxFit.cover,
+                    ),
+                  ),
+
                 ),
-              ),
+              ],
+            ),
           ),
           mainWidget: SingleChildScrollView(physics: BouncingScrollPhysics(), child: Center(child: Container(
             width: MediaQuery.of(context).size.width*0.8, color: Theme.of(context).cardColor,
@@ -310,18 +352,18 @@ class ProfileScreen extends StatelessWidget {
               Container(
                 height: 60,
                 padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.PADDING_SIZE_SMALL,
+                  horizontal: 16,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).disabledColor.withOpacity(0.1),
+                  color: Theme.of(context).disabledColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                  boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
+                  //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
                 ),
                 child: Row(children: [
-                  //Image.asset(Images.calendar,width: 25,),
-                  Icon(Icons.wysiwyg, size: 25),
+                  Image.asset(Images.calendar,color:Get.isDarkMode?Colors.white:Colors.black,width: 20,),
+                  //Icon(Icons.wysiwyg, size: 25),
                   SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-                  Expanded(child: Text('since_joining'.tr, style: muliRegular)),
+                  Expanded(child: Text('since_joining'.tr, style: muliBold)),
                   _isLoggedIn?Text('${userController.userInfoModel.memberSinceDays} ${'days'.tr}',
                     style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor),
                   ):SizedBox(),
@@ -331,19 +373,20 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: _isLoggedIn ? 10 : 0),
               Container(
                 height: 60,
-                padding: EdgeInsets.symmetric(
-                  horizontal: Dimensions.PADDING_SIZE_SMALL,
+                padding: EdgeInsets.only(
+                  right: Dimensions.PADDING_SIZE_LARGE,
+                  //left: 2,
                 ),
                 decoration: BoxDecoration(
-                  color: Theme.of(context).disabledColor.withOpacity(0.1),
+                  color: Theme.of(context).disabledColor.withOpacity(0.2),
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                  boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
+                  //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
                 ),
                 child: Row(children: [
-                  Image.asset(Images.logo,width: 25,),
+                  Image.asset(Images.icon,color:Get.isDarkMode?Colors.white:Colors.black,width: 35,),
                   //Icon(Icons.agriculture, size: 25),
                   SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-                  Expanded(child: Text('total_order'.tr, style: muliRegular)),
+                  Expanded(child: Text('total_order'.tr, style: muliBold)),
                   _isLoggedIn?Text(userController.userInfoModel.orderCount.toString(),
                     style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor),
                   ):SizedBox(),
@@ -355,27 +398,80 @@ class ProfileScreen extends StatelessWidget {
 
 
 
+
               _isLoggedIn ? GetBuilder<AuthController>(builder: (authController) {
-                return ProfileButton(
-                  isProfile: true,
-                  icon: Icons.notifications, title: 'notification'.tr,
-                  isButtonActive: authController.notification, onTap: () {
-                  authController.setNotificationActive(!authController.notification);
-                },
+                return Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: Dimensions.PADDING_SIZE_SMALL,
+                    vertical: authController.notification != null ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_DEFAULT,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).disabledColor.withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                    //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
+                  ),
+                  child: Row(children: [
+                    Image.asset(Images.notification,color:Get.isDarkMode?Colors.white:Colors.black,width: 21,),
+                    SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+                    Expanded(child: Text('notification'.tr, style: muliBold)),
+                    authController.notification != null ? Padding(
+                      padding: EdgeInsets.all(11),
+                      child: FlutterSwitch(
+                        height: 25.0,
+                        width: 38.0,
+                        padding: 2.0,
+                        toggleSize: 25.0,
+                        borderRadius: 15.0,
+                        value: authController.notification,
+                        activeColor: Theme.of(context).primaryColor,
+                        onToggle: (bool isActive) {
+                          authController.setNotificationActive(!authController.notification);
+                        },
+                      ),
+                    ): SizedBox(),
+                  ]),
                 );
               }) : SizedBox(),
               SizedBox(height: _isLoggedIn ? Dimensions.PADDING_SIZE_SMALL : 0),
 
-              ProfileButton(isProfile:true,icon: Icons.dark_mode, title: 'dark_mode'.tr, isButtonActive: Get.isDarkMode, onTap: () {
-                Get.find<ThemeController>().toggleTheme();
-              }),
+              Container(
+                padding: EdgeInsets.symmetric(
+                  horizontal: Dimensions.PADDING_SIZE_SMALL,
+                  vertical: Get.isDarkMode != null ? Dimensions.PADDING_SIZE_EXTRA_SMALL : Dimensions.PADDING_SIZE_DEFAULT,
+                ),
+                decoration: BoxDecoration(
+                  color: true?Theme.of(context).disabledColor.withOpacity(0.2):Theme.of(context).cardColor,
+                  borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
+                  //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1,)],
+                ),
+                child: Row(children: [
+                  Image.asset(Images.theme,color:Get.isDarkMode?Colors.white:Colors.black,width: 21,),
+                  SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
+                  Expanded(child: Text('dark_mode'.tr, style: muliBold)),
+                  Get.isDarkMode != null ? Padding(
+                    padding: EdgeInsets.all(11),
+                    child: FlutterSwitch(
+                      height: 25.0,
+                      width: 38.0,
+                      padding: 2.0,
+                      toggleSize: 25.0,
+                      borderRadius: 15.0,
+                      value: Get.isDarkMode,
+                      activeColor: Theme.of(context).primaryColor,
+                      onToggle: (bool isActive) {
+                        Get.find<ThemeController>().toggleTheme();
+                      },
+                    ),
+                  ): SizedBox(),
+                ]),
+              ),
+
               SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-              _isLoggedIn ? ProfileButton(isProfile:true,icon: Icons.lock, title: 'change_password'.tr, onTap: () {
+              _isLoggedIn ? ProfileButton(isimage:true,image:Images.lock,isProfile:true,icon: Icons.lock, title: 'change_password'.tr, onTap: () {
                 Get.toNamed(RouteHelper.getResetPasswordRoute('', '', 'password-change'));
               }) : SizedBox(),
               SizedBox(height: _isLoggedIn ? Dimensions.PADDING_SIZE_SMALL : 0),
-
             ]),
           ))),
         );
@@ -419,7 +515,7 @@ class _AddresScreenState extends State<AddresScreen> {
             Scrollbar(child: SingleChildScrollView(
               physics: AlwaysScrollableScrollPhysics(),
               child: Center(child: SizedBox(
-                width: ResponsiveHelper.isWeb()?MediaQuery.of(context).size.width*0.3:Dimensions.WEB_MAX_WIDTH,
+                width: Dimensions.WEB_MAX_WIDTH/3.3,
                 child: ListView.builder(
                   padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                   itemCount: locationController.addressList.length,
@@ -438,7 +534,7 @@ class _AddresScreenState extends State<AddresScreen> {
                       child: AddressWidget(
                         address: locationController.addressList[index], fromAddress: true,
                         onTap: () {
-                          //Get.toNamed(RouteHelper.getMapRoute(locationController.addressList[index], 'address',));
+                          Get.toNamed(RouteHelper.getMapRoute(locationController.addressList[index], 'address',));
                         },
                         onRemovePressed: () {
                           Get.dialog(CustomLoader(), barrierDismissible: false);
@@ -551,8 +647,8 @@ class _NewPasScreenState extends State<NewPasScreen> {
         Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-            color: Theme.of(context).cardColor,
-            boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
+            //color: Colors.white,
+            //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
           ),
           child: Row(children: [
 
@@ -579,16 +675,7 @@ class _NewPasScreenState extends State<NewPasScreen> {
               isPassword: true,
               divider: true,
             ),),
-            Container(
-              width: 20,
-              child: Expanded(
-                child: Container(
-
-                  height: 45,
-                  color: Theme.of(context).backgroundColor,
-                ),
-              ),
-            ),
+            SizedBox(width: 20,),
             //Divider(height: 10, thickness: 10,color: Theme.of(context).backgroundColor,),
 
             Expanded(
@@ -613,6 +700,8 @@ class _NewPasScreenState extends State<NewPasScreen> {
             return (!authBuilder.isLoading && !userController.isLoading) ? Container(
               width: MediaQuery.of(context).size.width*0.3,
               child: CustomButton(
+                radius: 10,
+                webAuth: true,
                 buttonText: 'update'.tr,
                 onPressed: () => _resetPassword(),
               ),
@@ -675,7 +764,9 @@ class _AddAddresScreenState extends State<AddAddresScreen> {
   final FocusNode _addressNode = FocusNode();
   final FocusNode _nameNode = FocusNode();
   final FocusNode _numberNode = FocusNode();
+  final TextEditingController _myaddressController = TextEditingController();
   bool _isLoggedIn;
+  bool _isChange=false;
   CameraPosition _cameraPosition;
   LatLng _initialPosition;
 
@@ -707,6 +798,8 @@ class _AddAddresScreenState extends State<AddAddresScreen> {
           return GetBuilder<LocationController>(builder: (locationController) {
             _addressController.text = '${locationController.placeMark.name ?? ''} ${locationController.placeMark.locality ?? ''} '
                 '${locationController.placeMark.postalCode ?? ''} ${locationController.placeMark.country ?? ''}';
+            print("This is city ---------");
+            print(locationController.placeMark.locality);
 
             return Column(children: [
 
@@ -717,7 +810,7 @@ class _AddAddresScreenState extends State<AddAddresScreen> {
 
                   Container(
                     height: MediaQuery.of(context).size.height*0.9,
-                    width: MediaQuery.of(context).size.width*0.6,
+                    width: MediaQuery.of(context).size.width/2,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                       border: Border.all(width: 2, color: Theme.of(context).primaryColor),
@@ -785,31 +878,43 @@ class _AddAddresScreenState extends State<AddAddresScreen> {
                   ),
                   SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                   Container(
-                    height: 280,
-                    width: 300,
-                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    height: 400,
+                    width: MediaQuery.of(context).size.width/2.5,
+                    padding: EdgeInsets.only(left: 80),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Add a new address'.tr,
-                          style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Colors.black87),
+                        Center(
+                          child: Text(
+                            'add_new_address'.tr,
+                            style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeExtraLarge, color: Colors.black87),
+                          ),
                         ),
-                        SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                        MyTextField(
-                          hintText: 'Address comes here'.tr,
+                        SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_LARGE),
+                        CustomTextField(
+                          hintText: 'address_come_here'.tr,
                           inputType: TextInputType.streetAddress,
                           focusNode: _addressNode,
-                          nextFocus: _nameNode,
-                          controller: _addressController,
+                          onChanged: (value){
+                            if(!_isChange){
+                              setState(() {
+                                _myaddressController.text=_addressController.text;
+                                _isChange=true;
+                              });
+                            }
+
+                            //_addressController.selection= TextSelection.fromPosition(TextPosition(offset: _addressController.text.length));
+                          },
+                          controller: _isChange?_myaddressController:_addressController,
                         ),
+                        SizedBox(height: 20,),
 
                         Text(
-                          'Add a label'.tr,
-                          style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                          'add_label'.tr,
+                          style: muliBold.copyWith(fontSize: Dimensions.fontSizeLarge, color: Colors.black),
                         ),
                         SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                        SizedBox(height: 75, child: ListView.builder(
+                        SizedBox(height: 100, child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.horizontal,
                           itemCount: locationController.addressTypeList.length,
@@ -818,59 +923,62 @@ class _AddAddresScreenState extends State<AddAddresScreen> {
                               locationController.setAddressTypeIndex(index);
                             },
                             child: Container(
-                              padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_EXTRA_SMALL, vertical: Dimensions.PADDING_SIZE_SMALL),
+                              padding: EdgeInsets.symmetric(horizontal: 0, vertical: Dimensions.PADDING_SIZE_SMALL),
                               margin: EdgeInsets.only(right: Dimensions.PADDING_SIZE_SMALL),
                               child: Column(children: [
                                 Container(
-                                  height: 30,
+                                  height: 40,
                                   padding: EdgeInsets.all(5),
                                   decoration: BoxDecoration(
                                     border: Border.all(width: 2,color: locationController.addressTypeIndex == index?Theme.of(context).primaryColor:Theme.of(context).cardColor),
                                     borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), color: Theme.of(context).cardColor,
                                   ),
-                                  child: Image.asset(index == 0 ? Images.home : index == 1 ? Images.office : Images.other,width: 20,color: Theme.of(context).disabledColor),
+                                  child: Image.asset(index == 0 ? Images.home : index == 1 ? Images.office : Images.other,width: 30,height: 30,color: Colors.black),
                                 ),
                                 SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                 Text(
                                   locationController.addressTypeList[index].tr,
-                                  style: muliRegular.copyWith(color: Theme.of(context).textTheme.bodyText1.color ),
+                                  style: muliBold.copyWith(color: Colors.black ),
                                 ),
                               ]),
                             ),
                           ),
                         )),
 
-                        SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+                        SizedBox(height: 50),
 
-                        Container(
-                          height: 50,
-                          width: 150,
-                          //width: MediaQuery.of(context).size.width*0.9,
-                          padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-                          child: !locationController.isLoading ? CustomButton(
-                            width: 130,
-                            height: 40,
-                            buttonText: 'save_location'.tr,
-                            onPressed: locationController.loading ? null : () {
-                              print("Address is "+_addressController.text.toString());
-                              AddressModel _addressModel = AddressModel(
-                                addressType: locationController.addressTypeList[locationController.addressTypeIndex],
-                                contactPersonName: _contactPersonNameController.text ?? '',
-                                contactPersonNumber: _contactPersonNumberController.text ?? '',
-                                address: _addressController.text ?? '',
-                                latitude: locationController.position.latitude.toString() ?? '',
-                                longitude: locationController.position.longitude.toString() ?? '',
-                              );
-                              locationController.addAddress(_addressModel).then((response) {
-                                if(response.isSuccess) {
-                                  Get.back();
-                                  showCustomSnackBar('new_address_added_successfully'.tr, isError: false);
-                                }else {
-                                  showCustomSnackBar(response.message);
-                                }
-                              });
-                            },
-                          ) : Center(child: CircularProgressIndicator()),
+                        Center(
+                          child: Container(
+                            height: 70,
+                            width: 180,
+                            //width: MediaQuery.of(context).size.width*0.9,
+                            padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+                            child: !locationController.isLoading ? CustomButton(
+                              webAuth: true,
+                              width: 160,
+                              height: 50,
+                              buttonText: 'save'.tr,
+                              onPressed: locationController.loading ? null : () {
+                                print("Address is "+_addressController.text.toString());
+                                AddressModel _addressModel = AddressModel(
+                                  addressType: locationController.addressTypeList[locationController.addressTypeIndex],
+                                  contactPersonName: _contactPersonNameController.text ?? '',
+                                  contactPersonNumber: _contactPersonNumberController.text ?? '',
+                                  address: _isChange?_myaddressController.text??'':_addressController.text ?? '',
+                                  latitude: locationController.position.latitude.toString() ?? '',
+                                  longitude: locationController.position.longitude.toString() ?? '',
+                                );
+                                locationController.addAddress(_addressModel).then((response) {
+                                  if(response.isSuccess) {
+                                    Get.back();
+                                    showCustomSnackBar('new_address_added_successfully'.tr, isError: false);
+                                  }else {
+                                    showCustomSnackBar(response.message);
+                                  }
+                                });
+                              },
+                            ) : Center(child: CircularProgressIndicator()),
+                          ),
                         ),
                       ],
                     ),

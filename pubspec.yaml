@@ -40,6 +40,8 @@ dependencies:
   pointer_interceptor: ^0.9.0+1
   phone_number: ^0.11.0+2
   country_code_picker: ^2.0.2
+  custom_switch: ^0.0.1
+  flutter_switch: ^0.0.2
 
 dev_dependencies:
   flutter_test:
@@ -73,3 +75,8 @@ flutter:
           weight: 500
         - asset: assets/font/Muli-Bold.ttf
           weight: 700
+    - family: Helvetica
+      fonts:
+        - asset: assets/font/Helvetica.ttf
+          weight: 400
+

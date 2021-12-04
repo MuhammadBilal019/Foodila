@@ -69,13 +69,13 @@ class _VerificationScreenState extends State<VerificationScreen> {
 
             Image.asset(Images.logo, width: 200),
             SizedBox(height: 50),
-            Text('enter otp'.tr.toUpperCase(), style: muliExtraBold.copyWith(fontSize: 28)),
+            Text('enter_otp'.tr.toUpperCase(), style: muliExtraBold.copyWith(fontSize: 28)),
             SizedBox(height: 50),
 
             Get.find<SplashController>().configModel.demo ? Text(
               'Please enter 4 digit code you received on +1 928215****'.tr, style: muliRegular,
             ) : RichText(text: TextSpan(children: [
-              TextSpan(text: 'Please enter 4 digit code you received on +1 928215****', style: muliRegular.copyWith(color: Theme.of(context).disabledColor)),
+              TextSpan(text: 'Please enter 4 digit code you received on ', style: muliRegular.copyWith(color: Theme.of(context).disabledColor)),
               TextSpan(text: ' $_number', style: robotoMedium.copyWith(color: Theme.of(context).textTheme.bodyText1.color)),
             ])),
 
@@ -139,6 +139,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
             ]),
 
             authController.verificationCode.length == 4 ? !authController.isLoading ? CustomButton(
+              radius: 10,
               buttonText: 'next'.tr,
               onPressed: () {
                 if(widget.fromSignUp) {

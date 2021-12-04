@@ -27,6 +27,7 @@ import 'package:efood_multivendor/view/base/custom_text_field.dart';
 import 'package:efood_multivendor/view/base/not_logged_in_screen.dart';
 import 'package:efood_multivendor/view/screens/address/widget/address_widget.dart';
 import 'package:efood_multivendor/view/screens/cart/widget/delivery_option_button.dart';
+import 'package:efood_multivendor/view/screens/checkout/order_successful_screen.dart';
 import 'package:efood_multivendor/view/screens/checkout/widget/payment_button.dart';
 import 'package:efood_multivendor/view/screens/checkout/widget/slot_widget.dart';
 import 'package:get/get.dart';
@@ -74,16 +75,16 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     double _taxPercent = 0;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       appBar: AppBar(
         elevation: 0,
         title: Text('checkout'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
-        backgroundColor: Colors.white,
+        backgroundColor: Get.isDarkMode ? Colors.black : Colors.white,
         shadowColor: Colors.white,
         centerTitle: true,
         leading: InkWell(
-          child: Icon(Icons.arrow_back_ios,color: Colors.black87,),
+          child: Icon(Icons.arrow_back_ios,color:Get.isDarkMode ? Colors.white: Colors.black87),
           onTap: () =>  Navigator.pop(context),
         ),
 
@@ -185,312 +186,380 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               children: [
 
                 Expanded(
-                  child: Scrollbar(child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
+                  child: SingleChildScrollView(
+                    physics: ClampingScrollPhysics(),
                     padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                     child: Center(child: SizedBox(
-                      width: MediaQuery.of(context).size.width*0.9,
-                      child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                  width: MediaQuery.of(context).size.width*0.9,
+                  child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
-                        // Order type
-                        Text('delivery_option'.tr, style: muliBold),
-                        SizedBox(height: 10,),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,children: [
-                          restController.restaurant.delivery?GetBuilder<OrderController>(
-                            builder: (orderController) {
-                              return InkWell(
-                                onTap: () {
-                                  orderController.setOrderType('delivery');
+                    // Order type
+                    Text('delivery_option'.tr, style: muliBold),
+                    SizedBox(height: 10,),
+                    Row(mainAxisAlignment: MainAxisAlignment.start,children: [
+                      restController.restaurant.delivery?
+                      GetBuilder<OrderController>(
+                        builder: (orderController) {
+                          return InkWell(
+                            onTap: () {
+                              orderController.setOrderType('delivery');
 
-                                },
-                                child: Container(
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadiusDirectional.circular(10),
-                                    color: orderController.orderType=='delivery'?Theme.of(context).primaryColor:Theme.of(context).backgroundColor,
-                                  ),
-                                  child: Row(
-                                    children: [
-
-                                      SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-
-                                      Text('home_delivery'.tr, style: muliBold),
-                                      SizedBox(width: 5),
-
-                                      Text(
-                                        '(${restController.restaurant.deliveryCharge==0 ? 'Free'.tr : PriceConverter.convertPrice(_charge)})',
-                                        style: muliBold,
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-                              );
                             },
-                          ):SizedBox(),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*0.45-5,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadiusDirectional.circular(5),
+                                color: orderController.orderType=='delivery'?Theme.of(context).primaryColor:Theme.of(context).backgroundColor,
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
 
-                          restController.restaurant.takeAway?GetBuilder<OrderController>(
-                            builder: (orderController) {
-                              return InkWell(
-                                onTap: () {
-                                  orderController.setOrderType('take_away');
 
-                                },
-                                child: Container(
-                                  height: 30,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadiusDirectional.circular(10),
-                                    color: orderController.orderType=='take_away'?Theme.of(context).primaryColor:Theme.of(context).backgroundColor,
+                                  Text('home_delivery'.tr, style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall-1)),
+                                  SizedBox(width: 3),
+
+                                  Text(
+                                    '(${restController.restaurant.deliveryCharge==0 ? 'free'.tr : PriceConverter.convertPrice(_charge)})',
+                                    style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall-1),
                                   ),
-                                  child: Row(
-                                    children: [
 
-                                      SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
-
-                                      Text('take_away'.tr, style: muliBold),
-                                      SizedBox(width: 5),
-
-                                      Text(
-                                        '(Free)'.tr,
-                                        style: muliBold,
-                                      ),
-
-                                    ],
-                                  ),
-                                ),
-                              );
-                            },
-                          ):SizedBox(),
-                        ],),
-
-                        SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-                        orderController.orderType != 'take_away' ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('deliver_to'.tr, style: robotoMedium),
-                          SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                          AddressWidget(
-                            address: Get.find<LocationController>().getUserAddress(),
-                            fromAddress: false, fromCheckout: true,
-                          ),
-                        ]) : SizedBox(),
-
-                        // Time Slot restController.restaurant.scheduleOrder ?
-                        Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                          Text('preference_time'.tr, style: muliBold),
-                          SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                          SizedBox(
-                            height: 35,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: 2,
-                              itemBuilder: (context, index) {
-                                return SlotWidget(
-                                  title: index == 0 ? 'today'.tr : 'tomorrow'.tr,
-                                  isSelected: orderController.selectedDateSlot == index,
-                                  onTap: () => orderController.updateDateSlot(index),
-                                );
-                              },
+                                ],
+                              ),
                             ),
-                          ),
-                          SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                          SizedBox(
-                            height: 30,
-                            child: ((orderController.selectedDateSlot == 0 && _todayClosed)
-                                || (orderController.selectedDateSlot == 1 && _tomorrowClosed))
-                                ? Center(child: Text('restaurant_is_closed'.tr)) : orderController.timeSlots != null
-                            ? orderController.timeSlots.length > 0 ? ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              physics: BouncingScrollPhysics(),
-                              itemCount: orderController.timeSlots.length,
-                              itemBuilder: (context, index) {
-                                return SlotWidget(
-                                  title: (index == 0 && orderController.selectedDateSlot == 0
-                                      && DateConverter.isAvailable(
-                                        restController.restaurant.openingTime, restController.restaurant.closeingTime,
-                                      )) ? 'now'.tr
-                                      : '${DateConverter.dateToTimeOnly(orderController.timeSlots[index].startTime)} '
-                                      '- ${DateConverter.dateToTimeOnly(orderController.timeSlots[index].endTime)}',
-                                  isSelected: orderController.selectedTimeSlot == index,
-                                  onTap: () => orderController.updateTimeSlot(index),
-                                );
-                              },
-                            ) : Center(child: Text('no_slot_available'.tr)) : Center(child: CircularProgressIndicator()),
-                          ),
-                          SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-                        ]),
+                          );
+                        },
+                      ):SizedBox(),
 
-                        // Coupon
-                        GetBuilder<CouponController>(
-                          builder: (couponController) {
-                            return Row(children: [
-                              Expanded(
-                                child: SizedBox(
-                                  height: 50,
-                                  child: TextField(
-                                    controller: _couponController,
-                                    style: muliRegular.copyWith(height: ResponsiveHelper.isMobile(context) ? null : 2),
-                                    decoration: InputDecoration(
-                                      prefixIcon: Image.asset(Images.promo,width: 10,height: 15,),
-                                      hintText: 'enter_promo_code'.tr,
-                                      hintStyle: muliRegular.copyWith(color: Theme.of(context).hintColor),
-                                      isDense: true,
-                                      filled: true,
-                                      enabled: couponController.discount == 0,
-                                      fillColor: Theme.of(context).backgroundColor,
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(
-                                          10,
-                                        ),
-                                        borderSide: BorderSide.none,
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                      SizedBox(width: 10,),
+                      restController.restaurant.takeAway?GetBuilder<OrderController>(
+                        builder: (orderController) {
+                          return InkWell(
+                            onTap: () {
+                              orderController.setOrderType('take_away');
+
+                            },
+                            child: Container(
+                              width: MediaQuery.of(context).size.width*0.45-5,
+                              height: 30,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadiusDirectional.circular(5),
+                                color: orderController.orderType=='take_away'?Theme.of(context).primaryColor:Theme.of(context).backgroundColor,
                               ),
-                              SizedBox(width: 10,),
-                              InkWell(
-                                onTap: () {
-                                  String _couponCode = _couponController.text.trim();
-                                  if(_couponCode.isNotEmpty && !couponController.isLoading) {
-                                    if(couponController.discount < 1) {
-                                      couponController.applyCoupon(_couponCode, (_price-_discount)+_addOns, _deliveryCharge, restController.restaurant.id).then((discount) {
-                                        if (discount > 0) {
-                                          showCustomSnackBar(
-                                            '${'you_got_discount_of'.tr} ${PriceConverter.convertPrice(discount)}',
-                                            isError: false,
-                                          );
-                                        }
-                                      });
-                                    } else {
-                                      couponController.removeCouponData(true);
-                                    }
-                                  } else if(_couponCode.isEmpty) {
-                                    showCustomSnackBar('enter_a_coupon_code'.tr);
-                                  }
-                                },
-                                child: Container(
-                                  height: 50, width: 100,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context).primaryColor,
-                                    boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
-                                    borderRadius: BorderRadius.circular(
-                                      10
-                                    ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+
+
+                                  Text('take_away'.tr, style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall-1)),
+                                  SizedBox(width: 3),
+
+                                  Text(
+                                    '('+'free'.tr+')',
+                                    style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall-1),
                                   ),
-                                  child: couponController.discount <= 0 ? !couponController.isLoading ? Text(
-                                    'apply'.tr,
-                                    style: robotoMedium.copyWith(color: Theme.of(context).cardColor),
-                                  ) : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
-                                      : Icon(Icons.clear, color: Colors.white),
-                                ),
+
+                                ],
                               ),
-                            ]);
+                            ),
+                          );
+                        },
+                      ):SizedBox(),
+                    ],),
+
+                    SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+
+                    orderController.orderType != 'take_away' ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text('deliver_to'.tr, style: robotoMedium),
+                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                      AddressWidget(
+                        address: Get.find<LocationController>().getUserAddress(),
+                        fromAddress: false, fromCheckout: true,
+                      ),
+                    ]) : SizedBox(),
+
+                    // Time Slot restController.restaurant.scheduleOrder ?
+                    Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                      Text('preference_time'.tr, style: muliBold),
+                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                      SizedBox(
+                        height: 35,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          physics: BouncingScrollPhysics(),
+                          itemCount: 3,
+                          itemBuilder: (context, index) {
+                            return SlotWidget(
+                              title: index == 1 ? 'today'.tr : index==2?'tomorrow'.tr:'now'.tr,
+                              isSelected: orderController.selectedDateSlot == index,
+                              onTap: () => orderController.updateDateSlot(index),
+                            );
                           },
                         ),
-                        SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+                      ),
+                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                      SizedBox(
+                        height: 32,
+                        child: ((orderController.selectedDateSlot == 0 && _todayClosed)
+                            || (orderController.selectedDateSlot == 1 && _tomorrowClosed))
+                            ? Center(child: Text('restaurant_is_closed'.tr)) : orderController.timeSlots != null
+                        ? orderController.timeSlots.length > 0 ? ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
+                          physics: ClampingScrollPhysics(),
+                          itemCount: orderController.timeSlots.length,
+                          itemBuilder: (context, index) {
+                            return SlotWidget(
+                              title: '${DateConverter.dateToTimeOnly(orderController.timeSlots[index].startTime)} '
+                                  '- ${DateConverter.dateToTimeOnly(orderController.timeSlots[index].endTime)}',
+                              isSelected: orderController.selectedTimeSlot == index,
+                              onTap: () => orderController.updateTimeSlot(index),
+                            );
+                          },
+                        ) : Center(child: Text('no_slot_available'.tr)) : Center(child: CircularProgressIndicator()),
+                      ),
+                      SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+                    ]),
 
-                        Text('choose_payment_method'.tr, style: robotoMedium),
-                        SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                        _isCashOnDeliveryActive ? PaymentButton(
-                          icon: Images.cash,
-                          title: 'cash_on_delivery'.tr,
-                          subtitle: 'pay_your_payment_after_getting_food'.tr,
-                          index: 0,
-                        ) : SizedBox(),
-                        _isDigitalPaymentActive ? PaymentButton(
-                          icon: Images.digital,
-                          title: 'digital_payment'.tr,
-                          subtitle: 'faster_and_safe_way'.tr,
-                          index: _isCashOnDeliveryActive ? 1 : 0,
-                        ) : SizedBox(),
-                        SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                    // Coupon
+                    GetBuilder<CouponController>(
+                      builder: (couponController) {
+                        return Row(children: [
+                          Expanded(
+                            child: SizedBox(
+                              height: 50,
+                              child: TextField(
+                                controller: _couponController,
+                                style: muliRegular.copyWith(height: ResponsiveHelper.isMobile(context) ? null : 2),
+                                decoration: InputDecoration(
+                                  prefixIcon: Image.asset(Images.promo,width: 10,height: 15,color: Get.isDarkMode?Colors.white:Colors.black,),
+                                  hintText: 'enter_promo_code'.tr,
+                                  hintStyle: muliRegular.copyWith(color: Theme.of(context).hintColor),
+                                  isDense: true,
+                                  filled: true,
+                                  enabled: couponController.discount == 0,
+                                  fillColor: Theme.of(context).backgroundColor,
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(
+                                      10,
+                                    ),
+                                    borderSide: BorderSide.none,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 10,),
+                          InkWell(
+                            onTap: () {
+                              String _couponCode = _couponController.text.trim();
+                              if(_couponCode.isNotEmpty && !couponController.isLoading) {
+                                if(couponController.discount < 1) {
+                                  couponController.applyCoupon(_couponCode, (_price-_discount)+_addOns, _deliveryCharge, restController.restaurant.id).then((discount) {
+                                    if (discount > 0) {
+                                      showCustomSnackBar(
+                                        '${'you_got_discount_of'.tr} ${PriceConverter.convertPrice(discount)}',
+                                        isError: false,
+                                      );
+                                    }
+                                  });
+                                } else {
+                                  couponController.removeCouponData(true);
+                                }
+                              } else if(_couponCode.isEmpty) {
+                                showCustomSnackBar('enter_a_coupon_code'.tr);
+                              }
+                            },
+                            child: Container(
+                              height: 50, width: 100,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: Theme.of(context).primaryColor,
+                                boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
+                                borderRadius: BorderRadius.circular(
+                                  10
+                                ),
+                              ),
+                              child: couponController.discount <= 0 ? !couponController.isLoading ? Text(
+                                'apply'.tr,
+                                style: muliBold.copyWith(color: Theme.of(context).cardColor,fontSize: 16),
+                              ) : CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Colors.white))
+                                  : Icon(Icons.clear, color: Colors.white),
+                            ),
+                          ),
+                        ]);
+                      },
+                    ),
+                    SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
 
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).backgroundColor,
-                            borderRadius: BorderRadiusDirectional.circular(10),
-                          ),
-                          child: CustomTextField(
-                            //prefixIcon: Images.note,
-                            controller: _noteController,
-                            hintText: 'additional_note'.tr,
-                            maxLines: 3,
-                            inputType: TextInputType.multiline,
-                            inputAction: TextInputAction.newline,
-                            capitalization: TextCapitalization.sentences,
-                          ),
+                    Text('choose_payment_method'.tr, style: robotoMedium),
+                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                    _isCashOnDeliveryActive ? PaymentButton(
+                      icon: Images.cash,
+                      title: 'cash_on_delivery'.tr,
+                      subtitle: 'pay_your_payment_after_getting_food'.tr,
+                      index: 0,
+                    ) : SizedBox(),
+                    _isDigitalPaymentActive ? PaymentButton(
+                      icon: Images.digital,
+                      title: 'digital_payment'.tr,
+                      subtitle: 'faster_and_safe_way'.tr,
+                      index: _isCashOnDeliveryActive ? 1 : 0,
+                    ) : SizedBox(),
+                    SizedBox(height: 3),
+
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).backgroundColor,
+                        borderRadius: BorderRadiusDirectional.circular(10),
+                      ),
+                      child: CustomTextField(
+                        //prefixIcon: Images.note,
+                        controller: _noteController,
+                        hintText: 'additional_note'.tr,
+                        maxLines: 4,
+                        inputType: TextInputType.multiline,
+                        inputAction: TextInputAction.newline,
+                        capitalization: TextCapitalization.sentences,
+                      ),
+                    ),
+                    SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
+
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('item_price'.tr, style: muliBold),
+                      Text(PriceConverter.convertPrice(_subTotal), style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
+                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('discount'.tr, style: muliBold),
+                      Text('(-) ${PriceConverter.convertPrice(_discount)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
+                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                    (couponController.discount > 0 || couponController.freeDelivery) ? Column(children: [
+                      Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text('coupon_discount'.tr, style: muliBold),
+                        (couponController.coupon != null && couponController.coupon.couponType == 'free_delivery') ? Text(
+                          'free_delivery'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor),
+                        ) : Text(
+                          '(-) ${PriceConverter.convertPrice(couponController.discount)}',
+                          style: muliBold.copyWith(color: Theme.of(context).primaryColor),
                         ),
-                        SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
-
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text('item_price'.tr, style: muliBold),
-                          Text(PriceConverter.convertPrice(_subTotal), style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-                        ]),
-                        SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text('discount'.tr, style: muliBold),
-                          Text('(-) ${PriceConverter.convertPrice(_discount)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-                        ]),
-                        SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                        (couponController.discount > 0 || couponController.freeDelivery) ? Column(children: [
-                          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            Text('coupon_discount'.tr, style: muliBold),
-                            (couponController.coupon != null && couponController.coupon.couponType == 'free_delivery') ? Text(
-                              'free_delivery'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor),
-                            ) : Text(
-                              '(-) ${PriceConverter.convertPrice(couponController.discount)}',
-                              style: muliBold.copyWith(color: Theme.of(context).primaryColor),
-                            ),
-                          ]),
-                          SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                        ]) : SizedBox(),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text('vat_tax'.tr, style: muliBold),
-                          Text('(+) ${PriceConverter.convertPrice(_tax)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
-                        ]),
-                        SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-                        Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                          Text('delivery_fee'.tr, style: muliBold),
-                          (_deliveryCharge == 0 || (couponController.coupon != null && couponController.coupon.couponType == 'free_delivery')) ? Text(
-                            'free'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor),
-                          ) : Text(
-                            '(+) ${PriceConverter.convertPrice(_deliveryCharge)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor),
-                          ),
-                        ]),
-                        SizedBox(height: 20,),
-                        Container(
-                          height: 60,
-                          padding: EdgeInsets.all(20),
-                          decoration: BoxDecoration(
-                            color: Theme.of(context).backgroundColor,
-                            borderRadius: BorderRadiusDirectional.circular(10),
-                          ),
-                          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                            Text(
-                              'total_amount'.tr,
-                              style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeLarge),
-                            ),
-                            Text(
-                              PriceConverter.convertPrice(_total),
-                              style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeLarge),
-                            ),
-                          ]),
-                        ),
-
                       ]),
+                      SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                    ]) : SizedBox(),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('vat_tax'.tr, style: muliBold),
+                      Text('(+) ${PriceConverter.convertPrice(_tax)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor)),
+                    ]),
+                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Text('delivery'.tr, style: muliBold),
+                      (_deliveryCharge == 0 || (couponController.coupon != null && couponController.coupon.couponType == 'free_delivery')) ? Text(
+                        'free'.tr, style: muliBold.copyWith(color: Theme.of(context).primaryColor),
+                      ) : Text(
+                        '(+) ${PriceConverter.convertPrice(_deliveryCharge)}', style: muliBold.copyWith(color: Theme.of(context).primaryColor),
+                      ),
+                    ]),
+                    SizedBox(height: 20,),
+                    Container(
+                      height: 60,
+                      padding: EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).backgroundColor,
+                        borderRadius: BorderRadiusDirectional.circular(10),
+                      ),
+                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                        Text(
+                          'total'.tr,
+                          style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeLarge),
+                        ),
+                        Text(
+                          PriceConverter.convertPrice(_total),
+                          style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeLarge),
+                        ),
+                      ]),
+                    ),
+
+                  ]),
                     )),
-                  )),
+                  ),
                 ),
 
                 Container(
                   width: MediaQuery.of(context).size.width*0.8,
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-                  child: !orderController.isLoading ? CustomButton(radius:10,buttonText: 'Confirm'.tr, onPressed: () {
+                  child: !orderController.isLoading ? ResponsiveHelper.isWeb()?CustomButton(width:300,radius:10,buttonText: 'Confirm'.tr, onPressed: () {
+                    bool _isAvailable = true;
+                    DateTime _scheduleDate = DateTime.now();
+                    if(orderController.timeSlots == null || orderController.timeSlots.length == 0) {
+                      _isAvailable = false;
+                    }else {
+                      DateTime _date = orderController.selectedDateSlot == 0 ? DateTime.now() : DateTime.now().add(Duration(days: 1));
+                      DateTime _time = orderController.timeSlots[orderController.selectedTimeSlot].startTime;
+                      _scheduleDate = DateTime(_date.year, _date.month, _date.day, _time.hour, _time.minute+1);
+                      for (CartModel cart in _cartList) {
+                        if (!DateConverter.isAvailable(
+                          cart.product.availableTimeStarts, cart.product.availableTimeEnds,
+                          time: restController.restaurant.scheduleOrder ? _scheduleDate : null,
+                        )) {
+                          _isAvailable = false;
+                          break;
+                        }
+                      }
+                    }
+                    if(_orderAmount < restController.restaurant.minimumOrder) {
+                      showCustomSnackBar('${'minimum_order_amount_is'.tr} ${restController.restaurant.minimumOrder}');
+                    }else if((orderController.selectedDateSlot == 0 && _todayClosed) || (orderController.selectedDateSlot == 1 && _tomorrowClosed)) {
+                      showCustomSnackBar('restaurant_is_closed'.tr);
+                    }else if (orderController.timeSlots == null || orderController.timeSlots.length == 0) {
+                      if(restController.restaurant.scheduleOrder) {
+                        showCustomSnackBar('select_a_time'.tr);
+                      }else {
+                        showCustomSnackBar('restaurant_is_closed'.tr);
+                      }
+                    }else if (!_isAvailable) {
+                      showCustomSnackBar('one_or_more_products_are_not_available_for_this_selected_time'.tr);
+                    }else {
+                      List<Cart> carts = [];
+                      for (int index = 0; index < _cartList.length; index++) {
+                        CartModel cart = _cartList[index];
+                        List<int> _addOnIdList = [];
+                        List<int> _addOnQtyList = [];
+                        cart.addOnIds.forEach((addOn) {
+                          _addOnIdList.add(addOn.id);
+                          _addOnQtyList.add(addOn.quantity);
+                        });
+                        carts.add(Cart(
+                          cart.isCampaign ? null : cart.product.id, cart.isCampaign ? cart.product.id : null,
+                          cart.discountedPrice.toString(), '', cart.variation,
+                          cart.quantity, _addOnIdList, cart.addOns, _addOnQtyList,
+                        ));
+                      }
+                      AddressModel _address = Get.find<LocationController>().getUserAddress();
+                      orderController.placeOrder(PlaceOrderBody(
+                        cart: carts, couponDiscountAmount: Get.find<CouponController>().discount, distance: orderController.distance,
+                        couponDiscountTitle: Get.find<CouponController>().discount > 0 ? Get.find<CouponController>().coupon.title : null,
+                        scheduleAt: !restController.restaurant.scheduleOrder ? null : (orderController.selectedDateSlot == 0
+                            && orderController.selectedTimeSlot == 0) ? null : DateConverter.dateToDateAndTime(_scheduleDate),
+                        orderAmount: _total, orderNote: _noteController.text, orderType: orderController.orderType,
+                        paymentMethod: _isCashOnDeliveryActive ? orderController.paymentMethodIndex == 0 ? 'cash_on_delivery'
+                            : 'digital_payment' : 'digital_payment',
+                        couponCode: (Get.find<CouponController>().discount > 0 || (Get.find<CouponController>().coupon != null
+                            && Get.find<CouponController>().freeDelivery)) ? Get.find<CouponController>().coupon.code : null,
+                        restaurantId: _cartList[0].product.restaurantId,
+                        address: _address.address, latitude: _address.latitude, longitude: _address.longitude, addressType: _address.addressType,
+                        contactPersonName: _address.contactPersonName ?? '${Get.find<UserController>().userInfoModel.fName} '
+                            '${Get.find<UserController>().userInfoModel.lName}',
+                        contactPersonNumber: _address.contactPersonNumber ?? Get.find<UserController>().userInfoModel.phone,
+                        discountAmount: _discount, taxAmount: _tax,
+                      ), _callback);
+                    }
+                  }):CustomButton(radius:10,buttonText: 'confirm'.tr, onPressed: () {
                     bool _isAvailable = true;
                     DateTime _scheduleDate = DateTime.now();
                     if(orderController.timeSlots == null || orderController.timeSlots.length == 0) {
@@ -558,6 +627,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     }
                   }) : Center(child: CircularProgressIndicator()),
                 ),
+                SizedBox(height: 15,),
 
               ],
             ) : Center(child: CircularProgressIndicator());
@@ -574,7 +644,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       }
       Get.find<OrderController>().stopLoader();
       if(_isCashOnDeliveryActive && Get.find<OrderController>().paymentMethodIndex == 0) {
-        Get.offNamed(RouteHelper.getOrderSuccessRoute(orderID, 'success'));
+        Get.dialog(OrderSuccessfulScreen(orderID: 'success', status: 1,));
+        //Get.offNamed(RouteHelper.getOrderSuccessRoute(orderID, 'success'));
       }else {
        if(GetPlatform.isWeb) {
          Get.back();

@@ -12,7 +12,8 @@ class CustomButton extends StatelessWidget {
   final double fontSize;
   final double radius;
   final IconData icon;
-  CustomButton({this.onPressed, @required this.buttonText, this.transparent = false, this.margin, this.width, this.height,
+  final bool webAuth;
+  CustomButton({this.onPressed, @required this.buttonText, this.transparent = false, this.margin, this.width, this.height,this.webAuth=false,
     this.fontSize, this.radius = 5, this.icon});
 
   @override
@@ -38,7 +39,7 @@ class CustomButton extends StatelessWidget {
             child: Icon(icon, color: transparent ? Theme.of(context).primaryColor : Theme.of(context).cardColor),
           ) : SizedBox(),
           Text(buttonText ??'', textAlign: TextAlign.center, style: robotoBold.copyWith(
-            color: transparent ? Theme.of(context).primaryColor : Theme.of(context).cardColor,
+            color: !webAuth?transparent ? Theme.of(context).primaryColor : Theme.of(context).cardColor:Colors.black,
             fontSize: fontSize != null ? fontSize : Dimensions.fontSizeLarge,
           )),
         ]),

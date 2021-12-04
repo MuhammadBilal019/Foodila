@@ -27,17 +27,12 @@ class PaymentButton extends StatelessWidget {
             ),
             child: ListTile(
               leading: Image.asset(
-                icon, width: 30, height: 30,
+                icon, width: 25, height: 25,color: Get.isDarkMode?Colors.white:Colors.black,
                 //color: _selected ? Theme.of(context).primaryColor : Theme.of(context).disabledColor,
               ),
               title: Text(
                 title,
-                style: muliRegular.copyWith(fontSize: Dimensions.fontSizeSmall),
-              ),
-              subtitle: Text(
-                subtitle,
-                style: muliRegular.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
-                maxLines: 1, overflow: TextOverflow.ellipsis,
+                style: muliRegular.copyWith(fontSize: Dimensions.fontSizeDefault),
               ),
               trailing: _selected ? Icon(Icons.check_circle, color: Theme.of(context).primaryColor) : null,
             ),

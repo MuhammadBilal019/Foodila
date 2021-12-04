@@ -13,8 +13,8 @@ class CustomStepper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color _color = isActive ? Theme.of(context).primaryColor : Theme.of(context).disabledColor;
-    Color _right = rightActive ? Theme.of(context).primaryColor : Theme.of(context).disabledColor;
+    Color _color = Colors.black;
+    Color _right = rightActive ? Theme.of(context).primaryColor : Colors.black87;
 
     return Expanded(
       child: Row(children: [
@@ -50,7 +50,7 @@ class CustomStepper extends StatelessWidget {
           ) : SizedBox()),
           Padding(
             padding: EdgeInsets.symmetric(vertical: isActive ? 0 : 5),
-            child: Icon(isActive ? Icons.circle : Icons.circle_outlined, color: _color, size: isActive ? 15 : 15),
+            child: Icon(isActive ? Icons.circle : Icons.circle_outlined, color: Theme.of(context).primaryColor, size: isActive ? 15 : 15),
           ),
           Expanded(child: haveRightBar ? Column(
             children: [
@@ -84,10 +84,11 @@ class CustomStepper extends StatelessWidget {
             ],
           ) : SizedBox()),
         ]),
+        SizedBox(width: 10,),
 
         Text(
           title, overflow: TextOverflow.ellipsis, textAlign: TextAlign.center,
-          style: muliBold.copyWith(color: _color, fontSize: Dimensions.fontSizeExtraSmall),
+          style: isActive?muliBold.copyWith(color: _color, fontSize: Dimensions.fontSizeSmall):muliRegular.copyWith(color: _color, fontSize: Dimensions.fontSizeSmall),
         ),
 
       ]),

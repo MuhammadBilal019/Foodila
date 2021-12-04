@@ -10,6 +10,8 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:get/get.dart';
 
+import 'order_successful_screen.dart';
+
 class PaymentScreen extends StatefulWidget {
   final OrderModel orderModel;
   PaymentScreen({@required this.orderModel});
@@ -25,6 +27,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
   bool _isLoading = true;
   final Completer<WebViewController> _controller = Completer<WebViewController>();
   WebViewController controllerGlobal;
+  bool _isComplete=false;
 
   @override
   void initState() {
@@ -39,12 +42,13 @@ class _PaymentScreenState extends State<PaymentScreen> {
     return WillPopScope(
       onWillPop: () => _exitApp(context),
       child: Scaffold(
-        backgroundColor: Theme.of(context).primaryColor,
+        backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
         appBar: CustomAppBar(title: 'payment'.tr, onBackPressed: () => _exitApp(context)),
         body: Center(
           child: Container(
+            color: Get.isDarkMode?Colors.black:Colors.white,
             width: Dimensions.WEB_MAX_WIDTH,
-            child: Stack(
+            child: _isComplete?SizedBox():Stack(
               children: [
                 WebView(
                   javascriptMode: JavascriptMode.unrestricted,
@@ -72,7 +76,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 ),
                 _isLoading ? Center(
                   child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation<Color>(Theme.of(context).primaryColor)),
-                ) : SizedBox.shrink(),
+                ) : SizedBox(),
               ],
             ),
           ),
@@ -90,9 +94,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
         _canRedirect = false;
       }
       if (_isSuccess) {
-        Get.offNamed(RouteHelper.getOrderSuccessRoute(widget.orderModel.id.toString(), 'success'));
+        setState(() {
+          _isComplete=true;
+        });
+        Get.dialog(OrderSuccessfulScreen(orderID: 'success', status: 1,),barrierDismissible: false);
+        //Get.offNamed(RouteHelper.getOrderSuccessRoute(widget.orderModel.id.toString(), 'success'));
       } else if (_isFailed || _isCancel) {
-        Get.offNamed(RouteHelper.getOrderSuccessRoute(widget.orderModel.id.toString(), 'fail'));
+        setState(() {
+          _isComplete=true;
+        });
+        Get.dialog(OrderSuccessfulScreen(orderID: 'fail', status: 0,),barrierDismissible: false);
+        //Get.offNamed(RouteHelper.getOrderSuccessRoute(widget.orderModel.id.toString(), 'fail'));
       }
     }
   }

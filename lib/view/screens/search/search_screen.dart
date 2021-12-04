@@ -64,6 +64,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   onSubmit: (text) => _actionSearch(searchController, true),
                 )),
                 CustomButton(
+                  fontSize: Dimensions.fontSizeDefault,
                   onPressed: () => searchController.isSearchMode ? Get.back() : searchController.setSearchMode(true),
                   buttonText: 'cancel'.tr,
                   transparent: true,

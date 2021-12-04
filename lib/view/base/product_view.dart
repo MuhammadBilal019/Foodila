@@ -43,9 +43,9 @@ class ProductView extends StatelessWidget {
       key: UniqueKey(),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
-        mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_LARGE : 0.01,
-        childAspectRatio: ResponsiveHelper.isWeb() ? isRestaurant?5:isFavorite?1:5 : isRestaurant?1.5:3,
-        crossAxisCount: ResponsiveHelper.isWeb() ? isRestaurant? isFavorite?2:1:isFavorite?5:2 : 1,
+        mainAxisSpacing: GetPlatform.isDesktop ?10:0.01,
+        childAspectRatio: GetPlatform.isDesktop ? isRestaurant?5:isFavorite?MediaQuery.of(context).size.width >=900?0.9:3:5 : isRestaurant?1.5:isFavorite?3:3.2,
+        crossAxisCount: GetPlatform.isDesktop ? isRestaurant? isFavorite?MediaQuery.of(context).size.width >=900?2: 1:1:isFavorite?MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH?5:MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH-300?5:MediaQuery.of(context).size.width <=Dimensions.WEB_MAX_WIDTH-350?3:2:2: 1,
       ),
       physics: isScrollable ? BouncingScrollPhysics() : NeverScrollableScrollPhysics(),
       shrinkWrap: isScrollable ? false : true,

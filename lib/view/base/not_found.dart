@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 
 class NotFound extends StatelessWidget {
   @override
@@ -10,7 +11,7 @@ class NotFound extends StatelessWidget {
         duration: Duration(seconds: 2),
         tween: Tween<double>(begin: 12.0,end: 30.0),
         builder: (BuildContext context, dynamic value, Widget child){
-              return Text('Page Not Found',style: TextStyle(fontWeight: FontWeight.bold,fontSize: value));
+              return Text('page_not_found'.tr,style: TextStyle(fontWeight: FontWeight.bold,fontSize: value));
         },
 
         ),
