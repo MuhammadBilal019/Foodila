@@ -41,7 +41,7 @@ class NotificationScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
        // backgroundColor: ResponsiveHelper.isWeb()?null:Colors.white,
-       appBar: ResponsiveHelper.isWeb() ? WebMenuBar() :AppBar(
+       appBar: GetPlatform.isDesktop ? WebMenuBar() :AppBar(
         elevation: 0,
         title: Text('notifications'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 17),),
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),

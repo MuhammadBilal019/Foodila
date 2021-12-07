@@ -6,6 +6,7 @@ import 'package:efood_multivendor/util/app_constants.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/view/base/custom_app_bar.dart';
 import 'package:efood_multivendor/view/screens/checkout/widget/payment_failed_dialog.dart';
+import 'package:efood_multivendor/view/screens/dashboard/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:get/get.dart';
@@ -38,13 +39,17 @@ class _PaymentScreenState extends State<PaymentScreen> {
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () => _exitApp(context),
-      child: Scaffold(
-        backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
-        appBar: CustomAppBar(title: 'payment'.tr, onBackPressed: () => _exitApp(context)),
-        body: Center(
+    return Scaffold(
+      backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
+      appBar: CustomAppBar(title: 'payment'.tr, onBackPressed: () => _exitApp(context)),
+      body: WillPopScope(
+        onWillPop: () async{
+          Navigator.of(context).pop();
+          return  await Get.to(DashboardScreen(pageIndex: 0));
+        },
+        child: Center(
           child: Container(
             color: Get.isDarkMode?Colors.black:Colors.white,
             width: Dimensions.WEB_MAX_WIDTH,

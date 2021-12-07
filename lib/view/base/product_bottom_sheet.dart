@@ -199,7 +199,7 @@ class ProductBottomSheet extends StatelessWidget {
                               },
                               child: Icon(
                                 wishList.wishProductIdList.contains(product.id) ? Icons.favorite : Icons.favorite_border,
-                                color: wishList.wishProductIdList.contains(product.id) ? ResponsiveHelper.isWeb()?Colors.red:Colors.amber
+                                color: wishList.wishProductIdList.contains(product.id) ? GetPlatform.isDesktop?Colors.red:Colors.amber
                                     : Theme.of(context).disabledColor,
                               ),
                             );

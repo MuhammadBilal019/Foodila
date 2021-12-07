@@ -25,7 +25,7 @@ class CategoryScreen extends StatelessWidget {
             physics: NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: ResponsiveHelper.isDesktop(context) ? 6 : ResponsiveHelper.isTab(context) ? 4 : 3,
+              crossAxisCount: GetPlatform.isDesktop ? 6 : ResponsiveHelper.isTab(context) ? 4 : 3,
               childAspectRatio: (1/1),
               mainAxisSpacing: Dimensions.PADDING_SIZE_SMALL,
               crossAxisSpacing: Dimensions.PADDING_SIZE_SMALL,

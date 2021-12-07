@@ -25,6 +25,7 @@ import 'package:efood_multivendor/view/screens/home/web/web_category_view.dart';
 import 'package:efood_multivendor/view/screens/home/web/web_campaign_view.dart';
 import 'package:efood_multivendor/view/screens/home/web/web_popular_restaurant_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/category_view.dart';
+import 'package:efood_multivendor/view/screens/home/widget/item_campaign_view.dart';
 import 'package:efood_multivendor/view/screens/home/widget/restaurant_view.dart';
 import 'package:efood_multivendor/view/screens/search/widget/custom_check_box.dart';
 import 'package:efood_multivendor/view/screens/search/widget/filter_widget.dart';
@@ -142,7 +143,7 @@ class WebHomeScreen extends StatelessWidget {
 
 
         SliverToBoxAdapter(
-          child: Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child: Center(child: SizedBox(width: double.infinity, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
             GetBuilder<CategoryController>(builder: (categoryController) {
               return categoryController.categoryList == null ? CategoryView(categoryController: categoryController)
@@ -154,8 +155,26 @@ class WebHomeScreen extends StatelessWidget {
 
 
 
+
           ]))),
         ),
+        SliverToBoxAdapter(
+          child: Center(child: SizedBox(width: double.infinity, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+
+            GetBuilder<CampaignController>(builder: (campaignController) {
+              return campaignController.itemCampaignList == null ? ItemCampaignView(campaignController: campaignController)
+                  : campaignController.itemCampaignList.length == 0 ? SizedBox() : ItemCampaignView(campaignController: campaignController);
+            }),
+            SizedBox(width: Dimensions.PADDING_SIZE_LARGE),
+
+
+
+
+
+
+          ]))),
+        ),
+
         SliverToBoxAdapter(
           child: Center(child: Container(
             height: 50, width: Dimensions.WEB_MAX_WIDTH/3,
@@ -327,7 +346,7 @@ class _SearchScreenState extends State<SearchScreen> {
               SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
               (_isLoggedIn && searchController.suggestedFoodList != null) ? searchController.suggestedFoodList.length > 0 ?  GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: ResponsiveHelper.isMobile(context) ? 1 : 4, childAspectRatio: (1/ 0.2),
+                  crossAxisCount: GetPlatform.isMobile ? 1 : 4, childAspectRatio: (1/ 0.2),
                   mainAxisSpacing: Dimensions.PADDING_SIZE_SMALL, crossAxisSpacing: Dimensions.PADDING_SIZE_SMALL,
                 ),
                 physics: NeverScrollableScrollPhysics(),
@@ -336,7 +355,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemBuilder: (context, index) {
                   return InkWell(
                     onTap: () {
-                      ResponsiveHelper.isMobile(context) ? Get.bottomSheet(
+                      GetPlatform.isMobile ? Get.bottomSheet(
                         ProductBottomSheet(product: searchController.suggestedFoodList[index]),
                         backgroundColor: Colors.transparent, isScrollControlled: true,
                       ) : Get.dialog(

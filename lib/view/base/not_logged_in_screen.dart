@@ -39,7 +39,7 @@ class NotLoggedInScreen extends StatelessWidget {
           SizedBox(
             width: 200,
             child: CustomButton(buttonText: 'login_to_continue'.tr, height: 40, onPressed: () {
-              Get.toNamed(RouteHelper.getSignInRoute(RouteHelper.main));
+              GetPlatform.isDesktop?Get.dialog(WebAuthDialog()):Get.toNamed(RouteHelper.getSignInRoute('checkout'));
              // Get.dialog(SignInScreen());
             }),
           ),

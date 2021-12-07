@@ -69,7 +69,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
           }
         },
         child: Scaffold(
-          appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : AppBar(
+          appBar: GetPlatform.isDesktop ? WebMenuBar() : AppBar(
             title: catController.isSearching ? TextField(
               autofocus: true,
               textInputAction: TextInputAction.search,

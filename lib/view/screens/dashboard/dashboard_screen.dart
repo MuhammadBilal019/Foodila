@@ -84,7 +84,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        floatingActionButton: ResponsiveHelper.isWeb() ? null : Container(
+        floatingActionButton: GetPlatform.isDesktop ? null : Container(
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             //color: Colors.white,

@@ -41,7 +41,7 @@ class _CartScreenState extends State<CartScreen> {
 
     return Scaffold(
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
-      appBar: ResponsiveHelper.isWeb() ? WebMenuBar() :AppBar(
+      appBar: GetPlatform.isDesktop ? WebMenuBar() :AppBar(
         elevation: 0,
         foregroundColor: Colors.white,
         shadowColor: Colors.white,
@@ -85,7 +85,7 @@ class _CartScreenState extends State<CartScreen> {
 
           return cartController.cartList.length > 0 ? Column(
             children: [
-              ResponsiveHelper.isWeb()? Container(
+              GetPlatform.isDesktop? Container(
                   height: 100,
                   color: Theme.of(context).primaryColor,
                   child: Center(
@@ -103,11 +103,11 @@ class _CartScreenState extends State<CartScreen> {
                         child: Column(children: [
 
                           // Cart Product for web
-                          ResponsiveHelper.isWeb()?GridView.builder(
+                          GetPlatform.isDesktop?GridView.builder(
                             key: UniqueKey(),
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
-                              mainAxisSpacing: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_LARGE : 0.01,
+                              mainAxisSpacing: GetPlatform.isDesktop ? Dimensions.PADDING_SIZE_LARGE : 0.01,
                               childAspectRatio: GetPlatform.isDesktop ? 3.6 : 4,
                               crossAxisCount: 3,
                             ),
@@ -196,8 +196,8 @@ class _CartScreenState extends State<CartScreen> {
               SizedBox(height: 5,),
               Container(
                 width: MediaQuery.of(context).size.width*0.8,
-                padding: ResponsiveHelper.isWeb()?EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL):EdgeInsets.symmetric(vertical:Dimensions.PADDING_SIZE_SMALL),
-                child: ResponsiveHelper.isWeb()?CustomButton(width:300,radius:15,buttonText: 'proceed_to_checkout'.tr, onPressed: () {
+                padding: GetPlatform.isDesktop?EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL):EdgeInsets.symmetric(vertical:Dimensions.PADDING_SIZE_SMALL),
+                child: GetPlatform.isDesktop?CustomButton(width:300,radius:15,buttonText: 'proceed_to_checkout'.tr, onPressed: () {
                   if(!cartController.cartList.first.product.scheduleOrder && _availableList.contains(false)) {
                     showCustomSnackBar('one_or_more_product_unavailable'.tr);
                   } else {

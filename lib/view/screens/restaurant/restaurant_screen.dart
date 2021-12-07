@@ -31,7 +31,7 @@ class RestaurantScreen extends StatelessWidget {
     Get.find<RestaurantController>().getRestaurantProductList(restaurant.id.toString());
 
     return Scaffold(
-      appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
+      appBar: GetPlatform.isDesktop ? WebMenuBar() : null,
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       body: GetBuilder<RestaurantController>(builder: (restController) {
         return GetBuilder<CategoryController>(builder: (categoryController) {
@@ -104,7 +104,7 @@ class RestaurantScreen extends StatelessWidget {
                 padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                 color: Theme.of(context).cardColor,
                 child: Column(children: [
-                  ResponsiveHelper.isDesktop(context) ? SizedBox() : RestaurantDescriptionView(restaurant: _restaurant),
+                  GetPlatform.isDesktop ? SizedBox() : RestaurantDescriptionView(restaurant: _restaurant),
                   _restaurant.discount != null ? Container(
                     width: context.width,
                     margin: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
@@ -164,7 +164,7 @@ class RestaurantScreen extends StatelessWidget {
                             color: Theme.of(context).backgroundColor,
                           ),
                           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-                            SizedBox(height: ResponsiveHelper.isDesktop(context) ? 0 : 2),
+                            SizedBox(height: GetPlatform.isDesktop ? 0 : 2),
                             Text(
                               _categoryProducts[index].category.name,
                               style: index == restController.categoryIndex
@@ -192,7 +192,7 @@ class RestaurantScreen extends StatelessWidget {
                   inRestaurantPage: true,
                   padding: EdgeInsets.symmetric(
                     horizontal: Dimensions.PADDING_SIZE_SMALL,
-                    vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_SMALL : 0,
+                    vertical: GetPlatform.isDesktop ? Dimensions.PADDING_SIZE_SMALL : 0,
                   ),
                 ),
               ))),

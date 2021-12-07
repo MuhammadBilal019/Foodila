@@ -120,7 +120,7 @@ class BottomButton extends StatelessWidget {
       ),
       SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-      ResponsiveHelper.isWeb()?SizedBox():TextButton(
+      TextButton(
         style: TextButton.styleFrom(
           shape: RoundedRectangleBorder(
             side: BorderSide(width: 2, color: Theme.of(context).primaryColor),
@@ -132,7 +132,7 @@ class BottomButton extends StatelessWidget {
         onPressed: () => Get.toNamed(RouteHelper.getPickMapRoute(
           route == null ? fromSignUp ? RouteHelper.signUp : RouteHelper.accessLocation : route, route != null,
         )),
-        child: Row(mainAxisAlignment: ResponsiveHelper.isWeb()?MainAxisAlignment.center:MainAxisAlignment.start, children: [
+        child: Row(mainAxisAlignment: GetPlatform.isDesktop?MainAxisAlignment.center:MainAxisAlignment.start, children: [
           Padding(
             padding: EdgeInsets.only(left: 40,right: 40),
             child: Image.asset(Images.map_icon,width:20,color: Theme.of(context).primaryColor,),

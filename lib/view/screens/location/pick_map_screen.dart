@@ -51,7 +51,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
+      appBar: GetPlatform.isDesktop ? WebMenuBar() : null,
       body: SafeArea(child: Center(child: SizedBox(
         width: Dimensions.WEB_MAX_WIDTH,
         child: GetBuilder<LocationController>(builder: (locationController) {
@@ -101,7 +101,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
                     SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                     Expanded(
                       child: Text(
-                        "Search locations",
+                        "search_location".tr,
                         style: muliRegular.copyWith(fontSize: Dimensions.fontSizeLarge,color: Theme.of(context).disabledColor), maxLines: 1, overflow: TextOverflow.ellipsis,
                       ),
                     ),
@@ -130,7 +130,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
                   children: [
                     SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-                    Text("Address comes here",style: muliExtraBold.copyWith(color: Colors.black),),
+                    Text("address_come_here".tr,style: muliExtraBold.copyWith(color: Colors.black),),
                     SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                     Padding(
                       padding: EdgeInsets.only(
@@ -139,7 +139,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
                       ),
                       child: CustomButton(
                         radius: 10,
-                        buttonText: locationController.inZone ? widget.fromAddAddress ? 'OK'.tr : 'pick_location'.tr
+                        buttonText: locationController.inZone ? widget.fromAddAddress ? 'ok'.tr : 'pick_location'.tr
                             : 'service_not_available_in_this_area'.tr,
                         onPressed: (locationController.buttonDisabled || locationController.loading) ? null : () {
                           if(locationController.pickPosition.latitude != 0 && locationController.pickPlaceMark.name != null) {
@@ -177,7 +177,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
                           Image.asset(Images.save_location,width: 18,),
                           SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
 
-                          Text("Use saved address",style: muliRegular.copyWith(color: Theme.of(context).primaryColor),),
+                          Text("use_saved_address".tr,style: muliRegular.copyWith(color: Theme.of(context).primaryColor),),
                         ],
                       ),
                     ),

@@ -46,7 +46,7 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       drawer: MyDrawer(),
-      appBar: ResponsiveHelper.isWeb() ? WebMenuBar() : AppBar(
+      appBar: GetPlatform.isDesktop ? WebMenuBar() : AppBar(
         // backwardsCompatibility: false,
         // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Theme.of(context).primaryColor),
         iconTheme: IconThemeData(color: Theme.of(context).backgroundColor),
@@ -70,7 +70,7 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       body: GetBuilder<UserController>(builder: (userController) {
         return (_isLoggedIn && userController.userInfoModel == null) ? Center(child: CircularProgressIndicator()) :
-        ResponsiveHelper.isWeb()?
+        GetPlatform.isDesktop?
         Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,

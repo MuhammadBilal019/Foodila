@@ -16,7 +16,7 @@ class LocationSearchDialog extends StatelessWidget {
     final TextEditingController _controller = TextEditingController();
 
     return Container(
-      margin: EdgeInsets.only(top: ResponsiveHelper.isWeb() ? 80 : 0),
+      margin: EdgeInsets.only(top: GetPlatform.isDesktop ? 80 : 0),
       padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
       alignment: Alignment.topCenter,
       child: Material(

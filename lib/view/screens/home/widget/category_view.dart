@@ -41,7 +41,7 @@ class CategoryView extends StatelessWidget {
                           categoryController.categoryList[index].id, categoryController.categoryList[index].name,
                         )),
                         child: SizedBox(
-                          width: 220,
+                          width: 200,
                           child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [

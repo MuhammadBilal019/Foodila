@@ -23,8 +23,8 @@ class OrderSuccessfulScreen extends StatelessWidget {
         Get.dialog(PaymentFailedDialog(orderID: orderID), barrierDismissible: false);
       });
     }
-    return ResponsiveHelper.isWeb()?Scaffold(
-      appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
+    return GetPlatform.isDesktop?Scaffold(
+      appBar: GetPlatform.isDesktop ? WebMenuBar() : null,
       body: Center(child: Container(width: Dimensions.WEB_MAX_WIDTH, child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
 
         Image.asset(status == 1 ? Images.checked : Images.warning, width: 100, height: 100),

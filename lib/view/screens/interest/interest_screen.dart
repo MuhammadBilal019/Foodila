@@ -17,7 +17,7 @@ class InterestScreen extends StatelessWidget {
     Get.find<CategoryController>().getCategoryList(true);
 
     return Scaffold(
-      appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
+      appBar: GetPlatform.isDesktop ? WebMenuBar() : null,
       body: SafeArea(
         child: GetBuilder<CategoryController>(builder: (categoryController) {
           return categoryController.categoryList != null ? categoryController.categoryList.length > 0 ? Center(
@@ -38,7 +38,7 @@ class InterestScreen extends StatelessWidget {
                     physics: BouncingScrollPhysics(),
                     itemCount: categoryController.categoryList.length,
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: ResponsiveHelper.isDesktop(context) ? 4 : ResponsiveHelper.isTab(context) ? 3 : 2,
+                      crossAxisCount: GetPlatform.isDesktop ? 4 : ResponsiveHelper.isTab(context) ? 3 : 2,
                       childAspectRatio: (1/0.35),
                     ),
                     itemBuilder: (context, index) {

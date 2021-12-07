@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // ],
       ),
       // backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
-      backgroundColor: ResponsiveHelper.isMobile(context) ||  ResponsiveHelper.isWeb()  ? Theme.of(context).cardColor : Colors.white,
+      backgroundColor: ResponsiveHelper.isMobile(context) ||  GetPlatform.isDesktop  ? Theme.of(context).cardColor : Colors.white,
       body: SafeArea(
         child: RefreshIndicator(
           onRefresh: () async {

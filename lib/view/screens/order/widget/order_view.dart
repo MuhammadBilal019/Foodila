@@ -22,7 +22,7 @@ class OrderView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
-      body: ResponsiveHelper.isWeb()?GetBuilder<OrderController>(builder: (orderController) {
+      body: GetPlatform.isDesktop?GetBuilder<OrderController>(builder: (orderController) {
         List<OrderModel> orderList;
         if(orderController.runningOrderList != null) {
           orderList = isRunning ? orderController.runningOrderList.reversed.toList() : orderController.historyOrderList.reversed.toList();
@@ -33,7 +33,7 @@ class OrderView extends StatelessWidget {
             await orderController.getOrderList();
           },
           child: Scrollbar(child: SingleChildScrollView(
-            physics: AlwaysScrollableScrollPhysics(),
+            physics: GetPlatform.isDesktop?NeverScrollableScrollPhysics():AlwaysScrollableScrollPhysics(),
             child: Center(child: SizedBox(
               width: MediaQuery.of(context).size.width*0.9,
               child: GridView.builder(
@@ -41,8 +41,8 @@ class OrderView extends StatelessWidget {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
                   //mainAxisSpacing:  Dimensions.PADDING_SIZE_LARGE,
-                  childAspectRatio: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3.6: MediaQuery.of(context).size.width>=650?3:4.3:3.6,
-                  crossAxisCount: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3: MediaQuery.of(context).size.width>=650?2:1:3,
+                  childAspectRatio: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3.4:MediaQuery.of(context).size.width>=750?3.2: MediaQuery.of(context).size.width>=650?3:4.3:3.6,
+                  crossAxisCount: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3: MediaQuery.of(context).size.width>=750?2:1:3,
                 ),
                 physics: NeverScrollableScrollPhysics(),
                 shrinkWrap: true,
@@ -52,6 +52,7 @@ class OrderView extends StatelessWidget {
                   return Column(
                     children: [
                       InkWell(
+                        borderRadius: BorderRadius.circular(10),
                         onTap: () {
                           Get.toNamed(
                             RouteHelper.getOrderDetailsRoute(orderList[index].id),
@@ -59,8 +60,8 @@ class OrderView extends StatelessWidget {
                           );
                         },
                         child: Container(
-                          padding: ResponsiveHelper.isDesktop(context) ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL) : EdgeInsets.all(10),
-                          margin: ResponsiveHelper.isDesktop(context) ? EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_SMALL) : null,
+                          padding: GetPlatform.isDesktop ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL) : EdgeInsets.all(10),
+                          margin: GetPlatform.isDesktop ? EdgeInsets.all(2) : null,
                           decoration: BoxDecoration(
                             color: Theme.of(context).backgroundColor, borderRadius: BorderRadius.circular(10),
                             //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)],
@@ -92,8 +93,8 @@ class OrderView extends StatelessWidget {
                                     DateConverter.dateTimeStringToDateTime(orderList[index].createdAt),
                                     style: muliRegular.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeSmall),
                                   ),
-                                  ResponsiveHelper.isWeb()?SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL):SizedBox(),
-                                  ResponsiveHelper.isWeb()?Row(
+                                  GetPlatform.isDesktop?SizedBox(height: Dimensions.PADDING_SIZE_EXTRA_SMALL):SizedBox(),
+                                  GetPlatform.isDesktop?Row(
                                     children: [
                                       Text(
                                         'restaurant'.tr,
@@ -111,7 +112,7 @@ class OrderView extends StatelessWidget {
                                     padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_LARGE, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
-                                      color: ResponsiveHelper.isWeb()?isRunning?Colors.red:Theme.of(context).primaryColor:Theme.of(context).primaryColor,
+                                      color: GetPlatform.isDesktop?isRunning?Colors.red:Theme.of(context).primaryColor:Theme.of(context).primaryColor,
                                     ),
                                     child: Text(orderList[index].orderStatus.tr, style: robotoMedium.copyWith(
                                       fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).cardColor,
@@ -128,15 +129,15 @@ class OrderView extends StatelessWidget {
                                   child: Container(
                                     padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL, vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                     decoration: BoxDecoration(
-                                      color: ResponsiveHelper.isWeb()?Theme.of(context).backgroundColor:Theme.of(context).primaryColor,
+                                      color: GetPlatform.isDesktop?Theme.of(context).backgroundColor:Theme.of(context).primaryColor,
                                       borderRadius: BorderRadius.circular(8),
                                       //border: Border.all(width: 1, color: Theme.of(context).primaryColor),
                                     ),
                                     child: Column(children: [
-                                      Image.asset(Images.trace, height: 30, width: 30,color: ResponsiveHelper.isWeb()?Theme.of(context).primaryColor:Colors.white,),
+                                      Image.asset(Images.trace, height: 30, width: 30,color: GetPlatform.isDesktop?Theme.of(context).primaryColor:Colors.white,),
                                       SizedBox(width: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                                       Text('track'.tr, style: muliRegular.copyWith(
-                                        fontSize: Dimensions.fontSizeExtraSmall, color: ResponsiveHelper.isWeb()?Colors.black:Theme.of(context).cardColor,
+                                        fontSize: Dimensions.fontSizeExtraSmall, color: GetPlatform.isDesktop?Colors.black:Theme.of(context).cardColor,
                                       )),
                                     ]),
                                   ),
@@ -157,9 +158,9 @@ class OrderView extends StatelessWidget {
 
                             ]),
 
-                            (index == orderList.length-1 || ResponsiveHelper.isDesktop(context)) ? SizedBox() : Padding(
+                            (index == orderList.length-1 || GetPlatform.isDesktop) ? SizedBox() : Padding(
                               padding: EdgeInsets.only(left: 70),
-                              child: ResponsiveHelper.isDesktop(context)?Divider(
+                              child: GetPlatform.isDesktop?Divider(
                                 color: Theme.of(context).disabledColor, height: Dimensions.PADDING_SIZE_LARGE,
                               ):null,
                             ),
@@ -207,8 +208,8 @@ class OrderView extends StatelessWidget {
                           );
                         },
                         child: Container(
-                          padding: ResponsiveHelper.isDesktop(context) ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL) : EdgeInsets.all(10),
-                          margin: ResponsiveHelper.isDesktop(context) ? EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_SMALL) : null,
+                          padding: GetPlatform.isDesktop ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL) : EdgeInsets.all(10),
+                          margin: GetPlatform.isDesktop ? EdgeInsets.only(bottom: Dimensions.PADDING_SIZE_SMALL) : null,
                           decoration: BoxDecoration(
                             color: Theme.of(context).backgroundColor, borderRadius: BorderRadius.circular(10),
                             //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 700 : 300], blurRadius: 5, spreadRadius: 1)],
@@ -290,9 +291,9 @@ class OrderView extends StatelessWidget {
 
                             ]),
 
-                            (index == orderList.length-1 || ResponsiveHelper.isDesktop(context)) ? SizedBox() : Padding(
+                            (index == orderList.length-1 || GetPlatform.isDesktop) ? SizedBox() : Padding(
                               padding: EdgeInsets.only(left: 70),
-                              child: ResponsiveHelper.isDesktop(context)?Divider(
+                              child: GetPlatform.isDesktop?Divider(
                                 color: Colors.white, height: Dimensions.PADDING_SIZE_LARGE,
                               ):null,
                             ),

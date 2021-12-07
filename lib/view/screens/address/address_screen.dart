@@ -45,7 +45,7 @@ class _AddressScreenState extends State<AddressScreen> {
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
       // backgroundColor: ResponsiveHelper.isWeb()?null:Colors.white,
       drawer: MyDrawer(),
-      appBar: ResponsiveHelper.isDesktop(context)?CustomAppBar(title: 'my_address'.tr):_isLoggedIn?
+      appBar: GetPlatform.isDesktop?CustomAppBar(title: 'my_address'.tr):_isLoggedIn?
       AppBar(
         elevation: 0,
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
@@ -53,7 +53,7 @@ class _AddressScreenState extends State<AddressScreen> {
         title: Text('my_address'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 17),textAlign: TextAlign.center,),
         centerTitle: true,
       ):null,
-      floatingActionButtonLocation: ResponsiveHelper.isDesktop(context) ? FloatingActionButtonLocation.centerFloat : null,
+      floatingActionButtonLocation: GetPlatform.isDesktop ? FloatingActionButtonLocation.centerFloat : null,
       body: _isLoggedIn ? GetBuilder<LocationController>(builder: (locationController) {
         return locationController.addressList != null ? locationController.addressList.length > 0 ? RefreshIndicator(
           onRefresh: () async {

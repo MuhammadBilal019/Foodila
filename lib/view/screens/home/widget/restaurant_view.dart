@@ -31,8 +31,8 @@ class RestaurantView extends StatelessWidget {
         ProductView(
           isRestaurant: true, products: null, restaurants: restController.restaurantList,
           padding: EdgeInsets.symmetric(
-            horizontal: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0,
-            vertical: ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0,
+            horizontal: GetPlatform.isDesktop ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0,
+            vertical: GetPlatform.isDesktop ? Dimensions.PADDING_SIZE_EXTRA_SMALL : 0,
           ),
         ),
 

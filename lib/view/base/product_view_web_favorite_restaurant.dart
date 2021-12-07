@@ -8,7 +8,7 @@ import 'package:efood_multivendor/view/base/product_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductView extends StatelessWidget {
+class WebFavoriteRestaurantView extends StatelessWidget {
   final List<Product> products;
   final List<Restaurant> restaurants;
   final bool isRestaurant;
@@ -19,7 +19,7 @@ class ProductView extends StatelessWidget {
   final bool isCampaign;
   final bool inRestaurantPage;
   final bool isFavorite;
-  ProductView({@required this.restaurants, @required this.products, @required this.isRestaurant, this.isScrollable = false,
+  WebFavoriteRestaurantView({@required this.restaurants, @required this.products, @required this.isRestaurant, this.isScrollable = false,
     this.shimmerLength = 20, this.padding = const EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL), this.noDataText,
     this.isCampaign = false, this.inRestaurantPage = false, this.isFavorite=false});
 
@@ -44,8 +44,8 @@ class ProductView extends StatelessWidget {
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
         mainAxisSpacing: GetPlatform.isDesktop ?10:0.01,
-        childAspectRatio: GetPlatform.isDesktop ? isRestaurant?isFavorite?5:5:isFavorite?MediaQuery.of(context).size.width >=900?0.9:1:5.5 : isRestaurant?1.5:isFavorite?3:3.2,
-        crossAxisCount: GetPlatform.isDesktop ? isRestaurant? isFavorite?MediaQuery.of(context).size.width >=900?2: 1:1:isFavorite?MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH?5:MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH-200?4:MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH-500?3:MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH-700?2:1:MediaQuery.of(context).size.width >=900?2:1: 1,
+        childAspectRatio: GetPlatform.isDesktop ? isRestaurant?isFavorite?5:5:isFavorite?MediaQuery.of(context).size.width >=900?0.9:3:5 : isRestaurant?1.5:isFavorite?3:3.2,
+        crossAxisCount: GetPlatform.isDesktop ? isRestaurant? isFavorite?MediaQuery.of(context).size.width >=900?2: 1:1:isFavorite?MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH?5:MediaQuery.of(context).size.width >=Dimensions.WEB_MAX_WIDTH-300?5:MediaQuery.of(context).size.width <=Dimensions.WEB_MAX_WIDTH-350?3:2:MediaQuery.of(context).size.width >=900?2:1: 1,
       ),
       physics: isScrollable ? BouncingScrollPhysics() : NeverScrollableScrollPhysics(),
       shrinkWrap: isScrollable ? false : true,

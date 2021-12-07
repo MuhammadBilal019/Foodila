@@ -493,7 +493,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   width: MediaQuery.of(context).size.width*0.8,
                   alignment: Alignment.center,
                   padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-                  child: !orderController.isLoading ? ResponsiveHelper.isWeb()?CustomButton(width:300,radius:10,buttonText: 'Confirm'.tr, onPressed: () {
+                  child: !orderController.isLoading ? GetPlatform.isDesktop?CustomButton(width:300,radius:15,buttonText: 'Confirm'.tr, onPressed: () {
                     bool _isAvailable = true;
                     DateTime _scheduleDate = DateTime.now();
                     if(orderController.timeSlots == null || orderController.timeSlots.length == 0) {

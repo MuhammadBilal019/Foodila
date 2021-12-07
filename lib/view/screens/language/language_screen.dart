@@ -22,7 +22,7 @@ class ChooseLanguageScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Get.isDarkMode ?Colors.black : Colors.white,
       drawer: MyDrawer(),
-      appBar: ResponsiveHelper.isDesktop(context) ? CustomAppBar(title: 'language'.tr, isBackButtonExist: true) :fromMenu?
+      appBar: GetPlatform.isDesktop ? CustomAppBar(title: 'language'.tr, isBackButtonExist: true) :fromMenu?
       AppBar(
         elevation: 0,
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
@@ -50,7 +50,7 @@ class ChooseLanguageScreen extends StatelessWidget {
 
                       GridView.builder(
                         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: ResponsiveHelper.isDesktop(context) ? 4 : ResponsiveHelper.isTab(context) ? 3 : 1,
+                          crossAxisCount: GetPlatform.isDesktop ? 4 : ResponsiveHelper.isTab(context) ? 3 : 1,
                           childAspectRatio: (6/1.25),
                           mainAxisSpacing: 10
                         ),

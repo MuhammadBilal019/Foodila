@@ -41,23 +41,83 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
     // ));
     return Scaffold(
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
-      appBar: ResponsiveHelper.isWeb() ? WebMenuBar() :null,
+      appBar: GetPlatform.isDesktop ? WebMenuBar() :null,
       body: _isLoggedIn ? GetBuilder<OrderController>(
         builder: (orderController) {
-          return Column(children: [
+          return GetPlatform.isDesktop?
+          SingleChildScrollView(
+            child: Container(
+              //color: Colors.red,
+              height: 2000,
+              child: Column(
+                  children: [
+                Stack(
+                  children: [
+                    Container(
+                        width:MediaQuery.of(context).size.width,
+                        height:300,
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(Images.order_background,),
+                          ),
+                        ),
+                        //child: CustomImage(image: Images.order_background,fit: BoxFit.cover,)
+                    ),
+                    Positioned(
+                      top: 140,left: MediaQuery.of(context).size.width*0.45,
+                        child: Center(child: Text('orders'.tr.toUpperCase(),style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 30),))
+                    )
+                  ],
+                ),
+                SizedBox(height: 30,),
+                Center(
+                  child: Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width*0.3,
+                    color: Theme.of(context).cardColor,
+                    child: TabBar(
+                      controller: _tabController,
+                      indicatorColor: Theme.of(context).primaryColor,
+                      indicatorWeight: 3,
+                      labelColor: Colors.black,
+                      unselectedLabelColor: Theme.of(context).disabledColor,
+                      unselectedLabelStyle: muliExtraBold.copyWith(color: Theme.of(context).disabledColor, fontSize: Dimensions.fontSizeDefault),
+                      labelStyle: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeDefault, color: Colors.black),
+                      tabs: [
+                        Tab(text: 'on_comming'.tr,),
+                        Tab(text: 'history'.tr),
+                      ],
+                    ),
+                  ),
+                ),
+
+                Expanded(
+                    child: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    OrderView(isRunning: true),
+                    OrderView(isRunning: false),
+                  ],
+                )),
+
+              ]),
+            ),
+          ):
+          Column(children: [
 
 
-            ResponsiveHelper.isWeb()?SizedBox():SizedBox(height: 60,),
-            ResponsiveHelper.isWeb()?SizedBox():Text('my_order'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
+            GetPlatform.isDesktop?SizedBox():SizedBox(height: 60,),
+            GetPlatform.isDesktop?SizedBox():Text('my_order'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
 
-            ResponsiveHelper.isWeb()?Stack(
+            GetPlatform.isDesktop?Stack(
               children: [
                 Container(
                     width:MediaQuery.of(context).size.width,
                     height:300,child: CustomImage(image: Images.order_background,fit: BoxFit.cover,)
                 ),
                 Positioned(
-                  top: 140,left: MediaQuery.of(context).size.width*0.45,
+                    top: 140,left: MediaQuery.of(context).size.width*0.45,
                     child: Center(child: Text('orders'.tr.toUpperCase(),style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 30),))
                 )
               ],
@@ -65,7 +125,7 @@ class _OrderScreenState extends State<OrderScreen> with TickerProviderStateMixin
 
 
             SizedBox(height: 30,),
-            ResponsiveHelper.isWeb()?Center(
+            GetPlatform.isDesktop?Center(
               child: Container(
                 height: 50,
                 width: MediaQuery.of(context).size.width*0.3,

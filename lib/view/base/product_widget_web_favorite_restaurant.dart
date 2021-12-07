@@ -22,7 +22,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class ProductWidget extends StatelessWidget {
+class WebFavoriteRestaurantWidget extends StatelessWidget {
   final Product product;
   final Restaurant restaurant;
   final bool isRestaurant;
@@ -32,7 +32,7 @@ class ProductWidget extends StatelessWidget {
   final bool isCampaign;
   final bool isFavorite;
 
-  ProductWidget(
+  WebFavoriteRestaurantWidget(
       {@required this.product,
       @required this.isRestaurant,
       @required this.restaurant,
@@ -321,8 +321,7 @@ class ProductWidget extends StatelessWidget {
                                                       width: 5,
                                                     )
                                                   : SizedBox(),
-                                              Container(
-                                                width: 400,
+                                              Expanded(
                                                 child: Text(
                                                   isRestaurant
                                                       ? restaurant.address
@@ -840,8 +839,8 @@ class ProductWidget extends StatelessWidget {
                                               image:
                                                   '${isCampaign ? _baseUrls.campaignImageUrl : isRestaurant ? _baseUrls.restaurantImageUrl : _baseUrls.productImageUrl}'
                                                   '/${isRestaurant ? restaurant.logo : product.image}',
-                                              height: _desktop ? 90 : 70,
-                                              width: _desktop ? 90 : 70,
+                                              height: _desktop ? 120 : 70,
+                                              width: _desktop ? 120 : 70,
                                               fit: BoxFit.cover,
                                             ),
                                           ),
@@ -1063,7 +1062,7 @@ class ProductWidget extends StatelessWidget {
                       :
                       //Food view
                       Container(
-                          height: 90,
+                          height: 85,
                           padding: GetPlatform.isDesktop
                               ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL)
                               : EdgeInsets.only(
@@ -1105,8 +1104,8 @@ class ProductWidget extends StatelessWidget {
                                           image:
                                               '${isCampaign ? _baseUrls.campaignImageUrl : isRestaurant ? _baseUrls.restaurantImageUrl : _baseUrls.productImageUrl}'
                                               '/${isRestaurant ? restaurant.logo : product.image}',
-                                          height: _desktop ? 65 : 70,
-                                          width: _desktop ? 65 : 70,
+                                          height: _desktop ? 80 : 70,
+                                          width: _desktop ? 80 : 70,
                                           fit: BoxFit.cover,
                                         ),
                                       ),
@@ -1204,7 +1203,11 @@ class ProductWidget extends StatelessWidget {
                                                   )
                                                 : SizedBox(),
                                             SizedBox(
-                                                height: 2),
+                                                height: (!isRestaurant &&
+                                                        _desktop)
+                                                    ? Dimensions
+                                                        .PADDING_SIZE_EXTRA_SMALL
+                                                    : 2),
                                             isRestaurant
                                                 ? RatingBar(
                                                     rating: isRestaurant

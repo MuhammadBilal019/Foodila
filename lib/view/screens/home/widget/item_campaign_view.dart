@@ -33,7 +33,7 @@ class ItemCampaignView extends StatelessWidget {
         ),
 
         SizedBox(
-          height: 150,
+          height: 180,
           child: campaignController.itemCampaignList != null ? ListView.builder(
             controller: _scrollController,
             physics: BouncingScrollPhysics(),
@@ -61,8 +61,8 @@ class ItemCampaignView extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    height: 150,
-                    width: 130,
+                    height: 170,
+                    width: 195,
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,
                       borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
@@ -79,7 +79,7 @@ class ItemCampaignView extends StatelessWidget {
                           child: CustomImage(
                             image: '${Get.find<SplashController>().configModel.baseUrls.campaignImageUrl}'
                                 '/${campaignController.itemCampaignList[index].image}',
-                            height: 90, width: 130, fit: BoxFit.cover,
+                            height: 120, width: 195, fit: BoxFit.cover,
                           ),
                         ),
                         DiscountTag(
@@ -98,14 +98,14 @@ class ItemCampaignView extends StatelessWidget {
                           child: Column(crossAxisAlignment: CrossAxisAlignment.start, mainAxisAlignment: MainAxisAlignment.center, children: [
                             Text(
                               campaignController.itemCampaignList[index].name,
-                              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                              style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault),
                               maxLines: 1, overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 2),
 
                             Text(
                               campaignController.itemCampaignList[index].restaurantName,
-                              style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).disabledColor),
+                              style: muliExtraBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
                               maxLines: 1, overflow: TextOverflow.ellipsis,
                             ),
                             SizedBox(height: 2),
@@ -115,13 +115,13 @@ class ItemCampaignView extends StatelessWidget {
                                 Expanded(
                                   child: Text(
                                     PriceConverter.convertPrice(campaignController.itemCampaignList[index].price, asFixed: 1),
-                                    style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeSmall),
+                                    style: muliBold.copyWith(fontSize: Dimensions.fontSizeDefault),
                                   ),
                                 ),
                                 Icon(Icons.star, color: Theme.of(context).primaryColor, size: 12),
                                 Text(
                                   campaignController.itemCampaignList[index].avgRating.toStringAsFixed(1),
-                                  style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeExtraSmall, color: Theme.of(context).primaryColor),
+                                  style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).primaryColor),
                                 ),
                               ],
                             ),

@@ -22,7 +22,7 @@ class OnBoardingScreen extends StatelessWidget {
     Get.find<OnBoardingController>().getOnBoardingList();
 
     return Scaffold(
-      appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
+      appBar: GetPlatform.isDesktop ? WebMenuBar() : null,
       body: GetBuilder<OnBoardingController>(
         builder: (onBoardingController) => onBoardingController.onBoardingList.length > 0 ? SafeArea(
           child: Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Column(children: [

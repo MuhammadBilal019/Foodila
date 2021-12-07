@@ -22,7 +22,7 @@ class AddressWidget extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: EdgeInsets.all(ResponsiveHelper.isDesktop(context) ? Dimensions.PADDING_SIZE_DEFAULT
+          padding: EdgeInsets.all(GetPlatform.isDesktop ? Dimensions.PADDING_SIZE_DEFAULT
               : Dimensions.PADDING_SIZE_SMALL),
           decoration: BoxDecoration(
             color: fromCheckout ? Theme.of(context).backgroundColor : Theme.of(context).disabledColor.withOpacity(0.2),
@@ -33,7 +33,7 @@ class AddressWidget extends StatelessWidget {
           child: Row(children: [
             SizedBox(width: 10,),
             Image.asset(address.addressType=="home"?Images.home:address.addressType=="office"?Images.office:Images.other,
-                  width: ResponsiveHelper.isDesktop(context) ? 50 : fromCheckout?25:30, color:Get.isDarkMode? Colors.white: Colors.black),
+                  width: GetPlatform.isDesktop ? 50 : fromCheckout?25:30, color:Get.isDarkMode? Colors.white: Colors.black),
             SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -50,7 +50,7 @@ class AddressWidget extends StatelessWidget {
               ]),
             ),
             fromAddress ? IconButton(
-              icon: Icon(Icons.delete, color: Colors.red, size: ResponsiveHelper.isDesktop(context) ? 35 : 25),
+              icon: Icon(Icons.delete, color: Colors.red, size: GetPlatform.isDesktop ? 35 : 25),
               onPressed: onRemovePressed,
             ) : SizedBox(),
           ]),

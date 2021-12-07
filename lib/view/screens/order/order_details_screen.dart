@@ -66,7 +66,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
-      appBar: ResponsiveHelper.isWeb()?CustomAppBar(title: 'order_details'.tr,):AppBar(
+      appBar: GetPlatform.isDesktop?CustomAppBar(title: 'order_details'.tr,):AppBar(
         elevation: 0,
         title: Text('order_details'.tr,style: muliExtraBold.copyWith(color: Theme.of(context).primaryColor,fontSize: 18),),
         iconTheme: IconThemeData(color: Theme.of(context).primaryColor),
@@ -318,7 +318,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
 
               Container(
                 height: 60,
-                padding: ResponsiveHelper.isWeb()?EdgeInsets.all(20):EdgeInsets.symmetric(vertical: 20,horizontal: 17),
+                padding: GetPlatform.isDesktop?EdgeInsets.all(20):EdgeInsets.symmetric(vertical: 20,horizontal: 17),
                 decoration: BoxDecoration(
                   color: Theme.of(context).backgroundColor,
                   borderRadius: BorderRadiusDirectional.circular(10),
@@ -345,7 +345,15 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: CustomButton(
+                      child: GetPlatform.isDesktop?CustomButton(
+                        width: 300,
+                        radius: 10,
+                        buttonText: 'track_order'.tr,
+                        margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
+                        onPressed: () {
+                          Get.toNamed(RouteHelper.getOrderTrackingRoute(_order.id));
+                        },
+                      ):CustomButton(
                         radius: 10,
                         buttonText: 'track_order'.tr,
                         margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
@@ -355,7 +363,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                       ),
                     ) : SizedBox(),
                     _order.orderStatus == 'pending' ? Container(
-                        width: MediaQuery.of(context).size.width*0.85,
+                        width: GetPlatform.isDesktop?300:MediaQuery.of(context).size.width*0.85,
                         child: Padding(
                       padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                       child: TextButton(

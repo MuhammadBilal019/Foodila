@@ -19,9 +19,9 @@ class SupportScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
        backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
-     // backgroundColor: ResponsiveHelper.isWeb()?null:Colors.white,
+     // backgroundColor: GetPlatform.isDesktop?null:Colors.white,
       drawer: MyDrawer(),
-      appBar: ResponsiveHelper.isWeb()?WebMenuBar():AppBar(
+      appBar: GetPlatform.isDesktop?WebMenuBar():AppBar(
         // backwardsCompatibility: false,
         // systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Colors.white),
         elevation: 0,
@@ -34,7 +34,7 @@ class SupportScreen extends StatelessWidget {
         //padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
         physics: BouncingScrollPhysics(),
         child: Center(child:
-        ResponsiveHelper.isWeb()?
+        GetPlatform.isDesktop?
         SizedBox(width: Dimensions.WEB_MAX_WIDTH, child:
         Column(children: [
           //SizedBox(height: Dimensions.PADDING_SIZE_SMALL),

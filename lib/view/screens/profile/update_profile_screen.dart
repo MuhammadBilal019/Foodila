@@ -54,7 +54,7 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:Get.isDarkMode ? Colors.black : Colors.white,
-      appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() :
+      appBar: GetPlatform.isDesktop ? WebMenuBar() :
       AppBar(
         backwardsCompatibility: false,
         systemOverlayStyle: SystemUiOverlayStyle(statusBarColor: Theme.of(context).primaryColor),

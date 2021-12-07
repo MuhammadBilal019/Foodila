@@ -129,7 +129,7 @@ class RestaurantDescriptionView extends StatelessWidget {
             },
             child: Icon(
               _isWished ? Icons.favorite : Icons.favorite_border,
-              color: _isWished ? ResponsiveHelper.isWeb()?Colors.red:Colors.amber : Theme.of(context).disabledColor,
+              color: _isWished ? GetPlatform.isDesktop?Colors.red:Colors.amber : Theme.of(context).disabledColor,
             ),
           );
         }),
