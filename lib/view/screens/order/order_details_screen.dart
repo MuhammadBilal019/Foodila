@@ -181,7 +181,56 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ]),
               ),
 
-              Center(
+              GetPlatform.isDesktop?Center(
+                child: Container(
+                  alignment: Alignment.center,
+                  width: MediaQuery.of(context).size.width*0.2,
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Theme.of(context).cardColor,
+                            borderRadius: BorderRadiusDirectional.circular(10),
+                            //border: Border.all(width: 1,color: Theme.of(context).disabledColor),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              ClipRRect(
+                                  borderRadius: BorderRadius.circular(5),
+                                  child: CustomImage(
+                                    image: '${Get.find<SplashController>().configModel.baseUrls.restaurantImageUrl}/${_order.restaurant.logo}',
+                                    height: 50, width: 60, fit: BoxFit.cover,
+                                  )),
+                              /*Text(
+                            _order.restaurant.name, maxLines: 1, overflow: TextOverflow.ellipsis,
+                            style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall),
+                          ),*/
+                            ],
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+
+                          Image.asset(Images.save_location,width: 15,color: Theme.of(context).disabledColor),
+                          //Icon(Icons.location_on),
+                          SizedBox(width: 7,),
+                          Expanded(
+                            child: Text(
+                              _order.restaurant.address, maxLines: 1, overflow: TextOverflow.ellipsis,
+                              style: muliBold.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
+                            ),
+                          ),
+                        ],),
+                      ]),
+                ),
+              ):Center(
                 child: Container(
                   alignment: Alignment.center,
                   width: MediaQuery.of(context).size.width*0.5,

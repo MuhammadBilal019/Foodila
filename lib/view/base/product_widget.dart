@@ -322,7 +322,7 @@ class ProductWidget extends StatelessWidget {
                                                     )
                                                   : SizedBox(),
                                               Container(
-                                                width: 400,
+                                                width: 250,
                                                 child: Text(
                                                   isRestaurant
                                                       ? restaurant.address
