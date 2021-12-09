@@ -52,7 +52,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: Center(
           child: Container(
             color: Get.isDarkMode?Colors.black:Colors.white,
-            width: Dimensions.WEB_MAX_WIDTH,
+            width: MediaQuery.of(context).size.width*0.9,
             child: _isComplete?SizedBox():Stack(
               children: [
                 WebView(

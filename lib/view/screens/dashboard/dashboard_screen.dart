@@ -121,8 +121,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
             //clipBehavior: Clip.antiAlias,
             //shape: CircularNotchedRectangle(),
             child: Padding(
-              padding: EdgeInsets.all(Dimensions.PADDING_SIZE_EXTRA_SMALL),
+              padding: EdgeInsets.all(0),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                 BottomNavItem(title:'home'.tr,iconData: Images.home, isSelected: _pageIndex == 0, onTap: () => _setPage(0)),
                 BottomNavItem(title:'favourite'.tr,iconData: Images.favorite, isSelected: _pageIndex == 1, onTap: () => _setPage(1)),

@@ -25,7 +25,7 @@ class OrderSuccessfulScreen extends StatelessWidget {
     }
     return GetPlatform.isDesktop?Scaffold(
       appBar: GetPlatform.isDesktop ? WebMenuBar() : null,
-      body: Center(child: Container(width: Dimensions.WEB_MAX_WIDTH, child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+      body: Center(child: Container(width: 300, child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
 
         Image.asset(status == 1 ? Images.checked : Images.warning, width: 100, height: 100),
         SizedBox(height: Dimensions.PADDING_SIZE_LARGE),
@@ -48,7 +48,7 @@ class OrderSuccessfulScreen extends StatelessWidget {
 
         Padding(
           padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-          child: CustomButton(radius:15,buttonText: 'search_more_food'.tr, onPressed: () => Get.offAllNamed(RouteHelper.getInitialRoute())),
+          child: CustomButton(width:300,radius:10,buttonText: 'search_more_food'.tr, onPressed: () => Get.offAllNamed(RouteHelper.getInitialRoute())),
         ),
       ]))),
     ):Dialog(child: Container(

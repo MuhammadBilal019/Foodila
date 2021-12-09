@@ -69,25 +69,28 @@ class WebHomeScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GetBuilder<LocationController>(builder: (locationController) {
-                      return Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            locationController.getUserAddress().addressType == 'home' ? Icons.home_filled
-                                : locationController.getUserAddress().addressType == 'office' ? Icons.work : Icons.location_on,
-                            size: 25, color: Theme.of(context).cardColor,
-                          ),
-                          SizedBox(width: 10),
-                          Flexible(
-                            child: Text(
-                              locationController.getUserAddress().address,
-                              style: muliRegular.copyWith(
-                                color: Theme.of(context).cardColor, fontSize: Dimensions.fontSizeDefault,
-                              ),
-                              maxLines: 1, overflow: TextOverflow.ellipsis,
+                      return InkWell(
+                        onTap: () => Get.toNamed(RouteHelper.getAccessLocationRoute('home')),
+                        child: Row(crossAxisAlignment: CrossAxisAlignment.center, mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              locationController.getUserAddress().addressType == 'home' ? Icons.home_filled
+                                  : locationController.getUserAddress().addressType == 'office' ? Icons.work : Icons.location_on,
+                              size: 25, color: Theme.of(context).cardColor,
                             ),
-                          ),
-                          //Icon(Icons.arrow_drop_down, color: Theme.of(context).textTheme.bodyText1.color),
-                        ],
+                            SizedBox(width: 10),
+                            Flexible(
+                              child: Text(
+                                locationController.getUserAddress().address,
+                                style: muliRegular.copyWith(
+                                  color: Theme.of(context).cardColor, fontSize: Dimensions.fontSizeDefault,
+                                ),
+                                maxLines: 1, overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            //Icon(Icons.arrow_drop_down, color: Theme.of(context).textTheme.bodyText1.color),
+                          ],
+                        ),
                       );
                     }),
                     SizedBox(height: 20,),
@@ -177,7 +180,7 @@ class WebHomeScreen extends StatelessWidget {
 
         SliverToBoxAdapter(
           child: Center(child: Container(
-            height: 50, width: Dimensions.WEB_MAX_WIDTH/3,
+            height: 50, width: Dimensions.WEB_MAX_WIDTH/2,
             //color: Theme.of(context).backgroundColor,
             padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_SMALL,right: Dimensions.PADDING_SIZE_SMALL,top: Dimensions.PADDING_SIZE_SMALL),
             child: InkWell(

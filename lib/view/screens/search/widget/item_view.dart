@@ -13,7 +13,7 @@ class ItemView extends StatelessWidget {
     return Scaffold(
       body: GetBuilder<SearchController>(builder: (searchController) {
         return SingleChildScrollView(
-          child: Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: ProductView(
+          child: Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.9, child: ProductView(
             isRestaurant: isRestaurant, products: searchController.searchProductList, restaurants: searchController.searchRestList,
           ))),
         );

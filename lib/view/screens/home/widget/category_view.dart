@@ -37,6 +37,9 @@ class CategoryView extends StatelessWidget {
                     return Padding(
                       padding: EdgeInsets.symmetric(horizontal: 1),
                       child: InkWell(
+                        hoverColor: Get.isDarkMode?Colors.black:Colors.white,
+                        highlightColor: Get.isDarkMode?Colors.black:Colors.white,
+                        focusColor: Get.isDarkMode?Colors.black:Colors.white,
                         onTap: () => Get.toNamed(RouteHelper.getCategoryProductRoute(
                           categoryController.categoryList[index].id, categoryController.categoryList[index].name,
                         )),

@@ -107,8 +107,8 @@ class _CartScreenState extends State<CartScreen> {
                             key: UniqueKey(),
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
-                              mainAxisSpacing: GetPlatform.isDesktop ? Dimensions.PADDING_SIZE_LARGE : 0.01,
-                              childAspectRatio: GetPlatform.isDesktop ? 3.6 : 4,
+                              mainAxisSpacing: GetPlatform.isDesktop ? 0 : 0.01,
+                              childAspectRatio: GetPlatform.isDesktop ? 4.5 : 4,
                               crossAxisCount: 3,
                             ),
                             physics: NeverScrollableScrollPhysics(),
@@ -122,7 +122,7 @@ class _CartScreenState extends State<CartScreen> {
                           ):
                           //Cart product for mobile
                           ListView.builder(
-                            physics: NeverScrollableScrollPhysics(),
+                            physics: AlwaysScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemCount: cartController.cartList.length,
                             itemBuilder: (context, index) {
@@ -133,6 +133,56 @@ class _CartScreenState extends State<CartScreen> {
                           ),
 
 
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width*0.81,
+                            child: Column(
+                              children: [
+                                SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+
+                                // Total
+                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                  Text('item_price'.tr, style: muliBold),
+                                  Text(PriceConverter.convertPrice(_itemPrice), style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
+                                ]),
+                                SizedBox(height: 10),
+
+                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                  Text('extra'.tr, style: muliBold),
+                                  Text('${PriceConverter.convertPrice(_addOns)}', style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
+                                ]),
+                                SizedBox(height: 10),
+
+                                Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                  Text('delivery'.tr, style: muliBold),
+                                  Text('free'.tr, style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
+                                ]),
+                                SizedBox(height: 20,),
+
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width*0.9,
+                            child: Column(
+                              children: [
+                                SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
+
+                                // Total
+                                Container(
+                                  height: 60,
+                                  padding: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).backgroundColor,
+                                    borderRadius: BorderRadiusDirectional.circular(10),
+                                  ),
+                                  child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                                    Text('total'.tr, style: muliExtraBold.copyWith(fontSize: 18)),
+                                    Text(PriceConverter.convertPrice(_subTotal), style: muliExtraBold.copyWith(fontSize: 18)),
+                                  ]),
+                                ),
+                              ],
+                            ),
+                          ),
 
 
 
@@ -142,62 +192,13 @@ class _CartScreenState extends State<CartScreen> {
                   ),
                 ),
               ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width*0.81,
-                child: Column(
-                  children: [
-                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
 
-                    // Total
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Text('item_price'.tr, style: muliBold),
-                      Text(PriceConverter.convertPrice(_itemPrice), style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
-                    ]),
-                    SizedBox(height: 10),
-
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Text('extra'.tr, style: muliBold),
-                      Text('${PriceConverter.convertPrice(_addOns)}', style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
-                    ]),
-                    SizedBox(height: 10),
-
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Text('delivery'.tr, style: muliBold),
-                      Text('free'.tr, style: muliBold.copyWith(color:Theme.of(context).primaryColor)),
-                    ]),
-                    SizedBox(height: 20,),
-
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width*0.9,
-                child: Column(
-                  children: [
-                    SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
-
-                    // Total
-                    Container(
-                      height: 60,
-                      padding: EdgeInsets.symmetric(vertical: 20,horizontal: 15),
-                      decoration: BoxDecoration(
-                        color: Theme.of(context).backgroundColor,
-                        borderRadius: BorderRadiusDirectional.circular(10),
-                      ),
-                      child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                        Text('total'.tr, style: muliExtraBold.copyWith(fontSize: 18)),
-                        Text(PriceConverter.convertPrice(_subTotal), style: muliExtraBold.copyWith(fontSize: 18)),
-                      ]),
-                    ),
-                  ],
-                ),
-              ),
 
               SizedBox(height: 5,),
               Container(
                 width: MediaQuery.of(context).size.width*0.8,
                 padding: GetPlatform.isDesktop?EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL):EdgeInsets.symmetric(vertical:Dimensions.PADDING_SIZE_SMALL),
-                child: GetPlatform.isDesktop?CustomButton(width:300,radius:15,buttonText: 'proceed_to_checkout'.tr, onPressed: () {
+                child: GetPlatform.isDesktop?CustomButton(width:300,radius:10,buttonText: 'proceed_to_checkout'.tr, onPressed: () {
                   if(!cartController.cartList.first.product.scheduleOrder && _availableList.contains(false)) {
                     showCustomSnackBar('one_or_more_product_unavailable'.tr);
                   } else {

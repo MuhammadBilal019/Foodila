@@ -1063,7 +1063,7 @@ class ProductWidget extends StatelessWidget {
                       :
                       //Food view
                       Container(
-                          height: 90,
+                          height: GetPlatform.isDesktop?110:90,
                           padding: GetPlatform.isDesktop
                               ? EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL)
                               : EdgeInsets.only(

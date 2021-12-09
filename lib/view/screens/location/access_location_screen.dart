@@ -127,6 +127,7 @@ class BottomButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
           minimumSize: Size(Dimensions.WEB_MAX_WIDTH, 50),
+          maximumSize: Size(Dimensions.WEB_MAX_WIDTH, 50),
           padding: EdgeInsets.zero,
         ),
         onPressed: () => Get.toNamed(RouteHelper.getPickMapRoute(

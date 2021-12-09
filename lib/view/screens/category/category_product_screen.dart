@@ -69,6 +69,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
           }
         },
         child: Scaffold(
+          backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
           appBar: GetPlatform.isDesktop ? WebMenuBar() : AppBar(
             title: catController.isSearching ? TextField(
               autofocus: true,
@@ -104,7 +105,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
             ],
           ),
           body: Scrollbar(child: SingleChildScrollView(controller: scrollController, child: Center(child: SizedBox(
-            width: Dimensions.WEB_MAX_WIDTH,
+            width: MediaQuery.of(context).size.width*0.9,
             child: Column(children: [
 
               Center(child: Container(
@@ -116,7 +117,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
                     decoration: BoxDecoration(
-                      color: Theme.of(context).disabledColor.withOpacity(0.2),
+                      color: Theme.of(context).disabledColor.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(Dimensions.RADIUS_DEFAULT),
                       //boxShadow: [BoxShadow(color: Colors.grey[Get.isDarkMode ? 800 : 200], spreadRadius: 1, blurRadius: 5)],
                     ),
@@ -140,7 +141,7 @@ class _CategoryProductScreenState extends State<CategoryProductScreen> {
               )),
 
               (catController.subCategoryList != null && !catController.isSearching) ? Center(child: Container(
-                height: 50, width: Dimensions.WEB_MAX_WIDTH, color: Theme.of(context).cardColor,
+                height: 50, width: MediaQuery.of(context).size.width*0.9, color: Theme.of(context).cardColor,
                 padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_EXTRA_SMALL),
                 child:ListView.builder(
                   scrollDirection: Axis.horizontal,

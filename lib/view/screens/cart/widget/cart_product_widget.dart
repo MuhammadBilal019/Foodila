@@ -88,6 +88,7 @@ class CartProductWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                 ),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
 
                     Row(children: [
@@ -97,7 +98,7 @@ class CartProductWidget extends StatelessWidget {
                             borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL),
                             child: CustomImage(
                               image: '${Get.find<SplashController>().configModel.baseUrls.productImageUrl}/${cart.product.image}',
-                              height: 65, width: 70, fit: BoxFit.cover,
+                              height: GetPlatform.isDesktop?80:65, width: GetPlatform.isDesktop?80:70, fit: BoxFit.cover,
                             ),
                           ),
                           isAvailable ?

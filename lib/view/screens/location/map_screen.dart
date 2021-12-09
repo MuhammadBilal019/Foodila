@@ -41,7 +41,7 @@ class _MapScreenState extends State<MapScreen> {
           width: Dimensions.WEB_MAX_WIDTH,
           child: Stack(children: [
             GoogleMap(
-              initialCameraPosition: CameraPosition(target: _latLng, zoom: 17),
+              initialCameraPosition: CameraPosition(target: _latLng, zoom: 13),
               zoomGesturesEnabled: true,
               myLocationButtonEnabled: false,
               zoomControlsEnabled: false,
@@ -112,7 +112,7 @@ class _MapScreenState extends State<MapScreen> {
 
   void _setMarker() async {
     Uint8List destinationImageData = await convertAssetToUnit8List(
-      widget.fromRestaurant ? Images.restaurant_marker : Images.pick_marker, width: 120,
+      widget.fromRestaurant ? Images.restaurant_marker : Images.pick_marker, width: 40,
     );
 
     _markers = Set.of([]);

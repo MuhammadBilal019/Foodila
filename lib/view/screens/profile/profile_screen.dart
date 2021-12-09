@@ -594,7 +594,7 @@ class _AddresScreenState extends State<AddresScreen> {
                         fromAddAddress: true, fromSignUp: false, googleMapController: locationController.mapController,
                         route: null, canRoute: false,
                       ));*/
-              Get.bottomSheet(AddAddresScreen());
+              Get.dialog(AddAddresScreen());
               //Get.toNamed(RouteHelper.getAddAddressRoute());
               //Get.bottomSheet(AddAddresScreen());
             } ,
@@ -806,7 +806,7 @@ class _AddAddresScreenState extends State<AddAddresScreen> {
               Expanded(child: Scrollbar(child: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
-                child: Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                child: Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.9, child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
                   Container(
                     height: MediaQuery.of(context).size.height*0.9,
@@ -879,7 +879,7 @@ class _AddAddresScreenState extends State<AddAddresScreen> {
                   SizedBox(height: Dimensions.PADDING_SIZE_SMALL),
                   Container(
                     height: 400,
-                    width: MediaQuery.of(context).size.width/2.5,
+                    width: MediaQuery.of(context).size.width/3,
                     padding: EdgeInsets.only(left: 80),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

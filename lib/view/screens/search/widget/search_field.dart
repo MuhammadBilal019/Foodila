@@ -20,7 +20,7 @@ class SearchField extends StatelessWidget {
         hintText: hint,
         hintStyle: robotoRegular.copyWith(fontSize: Dimensions.fontSizeSmall, color: Theme.of(context).disabledColor),
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(Dimensions.RADIUS_SMALL), borderSide: BorderSide.none),
-        filled: true, fillColor: Theme.of(context).cardColor,
+        filled: true, fillColor: Theme.of(context).disabledColor.withOpacity(0.1),
         isDense: true,
         suffixIcon: IconButton(
           onPressed: iconPressed,

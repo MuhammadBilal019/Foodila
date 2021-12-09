@@ -33,7 +33,7 @@ class ItemCampaignView extends StatelessWidget {
         ),
 
         SizedBox(
-          height: 180,
+          height: 200,
           child: campaignController.itemCampaignList != null ? ListView.builder(
             controller: _scrollController,
             physics: BouncingScrollPhysics(),
@@ -61,7 +61,7 @@ class ItemCampaignView extends StatelessWidget {
                     );
                   },
                   child: Container(
-                    height: 170,
+                    height: 180,
                     width: 195,
                     decoration: BoxDecoration(
                       color: Theme.of(context).cardColor,

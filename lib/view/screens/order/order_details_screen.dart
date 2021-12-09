@@ -436,7 +436,7 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
                 ),
               ) : Center(
                 child: Container(
-                  width: Dimensions.WEB_MAX_WIDTH,
+                  width: 300,
                   height: 50,
                   margin: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
                   alignment: Alignment.center,
@@ -480,6 +480,8 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
               width: Dimensions.WEB_MAX_WIDTH,
               padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
               child: CustomButton(
+                radius: 10,
+                width: 300,
                 buttonText: 'switch_to_cash_on_delivery'.tr,
                 onPressed: () {
                   Get.dialog(ConfirmationDialog(

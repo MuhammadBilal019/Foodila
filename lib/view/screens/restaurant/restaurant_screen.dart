@@ -50,8 +50,10 @@ class RestaurantScreen extends StatelessWidget {
             _categorySelectedIds.add(0);
             restController.restaurantProducts.forEach((restProd) {
               if(!_categorySelectedIds.contains(int.parse(restProd.categoryIds[0].id))) {
+                print("1-----------------Text-----------------");
                 _categorySelectedIds.add(int.parse(restProd.categoryIds[0].id));
                 _categoryProducts.add(CategoryProduct(
+
                   categoryController.categoryList[_categoryIds.indexOf(int.parse(restProd.categoryIds[0].id))],
                   [restProd],
                 ));
@@ -61,8 +63,10 @@ class RestaurantScreen extends StatelessWidget {
               }
             });
           }
+          print("2-----------------Text-----------------");
 
           return (restController.restaurant != null && restController.restaurant.name != null && categoryController.categoryList != null) ? CustomScrollView(
+
             slivers: [
 
               SliverAppBar(
@@ -148,6 +152,7 @@ class RestaurantScreen extends StatelessWidget {
                     padding: EdgeInsets.only(left: Dimensions.PADDING_SIZE_SMALL),
                     physics: BouncingScrollPhysics(),
                     itemBuilder: (context, index) {
+                      //print(_categoryProducts.length);
                       return InkWell(
                         onTap: () => restController.setCategoryIndex(index),
                         child: Container(

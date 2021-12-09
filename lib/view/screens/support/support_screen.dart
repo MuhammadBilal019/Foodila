@@ -44,7 +44,7 @@ class SupportScreen extends StatelessWidget {
               height: 100,
               color: Theme.of(context).primaryColor,
               child: Center(
-                child: Text('contact_us',style: muliExtraBold.copyWith(fontSize: 30),),
+                child: Text('contact_us'.tr.toUpperCase(),style: muliExtraBold.copyWith(fontSize: 30),),
               )
           ),
 

@@ -47,6 +47,7 @@ class _SearchScreenState extends State<SearchScreen> {
         }
       },
       child: Scaffold(
+        backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
         appBar: ResponsiveHelper.isDesktop(context) ? WebMenuBar() : null,
         body: SafeArea(child: Padding(
           padding: EdgeInsets.symmetric(vertical: Dimensions.PADDING_SIZE_SMALL),
@@ -54,7 +55,7 @@ class _SearchScreenState extends State<SearchScreen> {
             _searchController.text = searchController.searchText;
             return Column(children: [
 
-              Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Row(children: [
+              Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.9, child: Row(children: [
                 SizedBox(width: Dimensions.PADDING_SIZE_SMALL),
                 Expanded(child: SearchField(
                   controller: _searchController,
@@ -75,7 +76,7 @@ class _SearchScreenState extends State<SearchScreen> {
               Expanded(child: searchController.isSearchMode ? SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
                 padding: EdgeInsets.symmetric(horizontal: Dimensions.PADDING_SIZE_SMALL),
-                child: Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                child: Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.9, child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
 
                   searchController.historyList.length > 0 ? Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
                     Text('history'.tr, style: robotoMedium.copyWith(fontSize: Dimensions.fontSizeLarge)),

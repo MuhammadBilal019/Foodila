@@ -41,7 +41,7 @@ class OrderView extends StatelessWidget {
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisSpacing: Dimensions.PADDING_SIZE_LARGE,
                   //mainAxisSpacing:  Dimensions.PADDING_SIZE_LARGE,
-                  childAspectRatio: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3.4:MediaQuery.of(context).size.width>=750?3.2: MediaQuery.of(context).size.width>=650?3:4.3:3.6,
+                  childAspectRatio: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?4:MediaQuery.of(context).size.width>=750?3.2: MediaQuery.of(context).size.width>=650?3:4.3:3.6,
                   crossAxisCount: GetPlatform.isDesktop?MediaQuery.of(context).size.width >=1170?3: MediaQuery.of(context).size.width>=750?2:1:3,
                 ),
                 physics: NeverScrollableScrollPhysics(),

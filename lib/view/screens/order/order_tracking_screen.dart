@@ -10,6 +10,7 @@ import 'package:efood_multivendor/data/model/response/restaurant_model.dart';
 import 'package:efood_multivendor/util/dimensions.dart';
 import 'package:efood_multivendor/util/images.dart';
 import 'package:efood_multivendor/view/base/custom_app_bar.dart';
+import 'package:efood_multivendor/view/base/web_menu_bar.dart';
 import 'package:efood_multivendor/view/screens/order/widget/track_details_view.dart';
 import 'package:efood_multivendor/view/screens/order/widget/tracking_stepper_widget.dart';
 import 'package:flutter/material.dart';
@@ -54,7 +55,8 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //appBar: CustomAppBar(title: 'order_tracking'.tr),
+      backgroundColor: Get.isDarkMode?Colors.black:Colors.white,
+      appBar: GetPlatform.isDesktop?WebMenuBar():null,
       body: GetBuilder<OrderController>(builder: (orderController) {
         OrderModel _track;
         if(orderController.trackModel != null) {
@@ -73,7 +75,7 @@ class _OrderTrackingScreenState extends State<OrderTrackingScreen> {
           }*/
         }
 
-        return _track != null ? Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Stack(children: [
+        return _track != null ? Center(child: SizedBox(width: MediaQuery.of(context).size.width, child: Stack(children: [
 
           GoogleMap(
             initialCameraPosition: CameraPosition(target: LatLng(

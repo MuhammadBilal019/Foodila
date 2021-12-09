@@ -53,7 +53,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
     return Scaffold(
       appBar: GetPlatform.isDesktop ? WebMenuBar() : null,
       body: SafeArea(child: Center(child: SizedBox(
-        width: Dimensions.WEB_MAX_WIDTH,
+        width: MediaQuery.of(context).size.width,
         child: GetBuilder<LocationController>(builder: (locationController) {
           /*print('--------------${'${locationController.pickPlaceMark.name ?? ''} '
               '${locationController.pickPlaceMark.locality ?? ''} '
@@ -65,7 +65,7 @@ class _PickMapScreenState extends State<PickMapScreen> {
               initialCameraPosition: CameraPosition(
                 target: widget.fromAddAddress ? LatLng(locationController.position.latitude, locationController.position.longitude)
                     : _initialPosition,
-                zoom: 17,
+                zoom: 13,
               ),
               onMapCreated: (GoogleMapController mapController) {
                 _mapController = mapController;

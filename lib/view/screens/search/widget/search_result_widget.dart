@@ -41,7 +41,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> with TickerProv
             _length = searchController.searchProductList.length;
           }
         }
-        return _isNull ? SizedBox() : Center(child: SizedBox(width: Dimensions.WEB_MAX_WIDTH, child: Padding(
+        return _isNull ? SizedBox() : Center(child: SizedBox(width: MediaQuery.of(context).size.width*0.9, child: Padding(
           padding: EdgeInsets.all(Dimensions.PADDING_SIZE_SMALL),
           child: Row(children: [
             Text(
@@ -58,7 +58,7 @@ class _SearchResultWidgetState extends State<SearchResultWidget> with TickerProv
       }),
 
       Center(child: Container(
-        width: Dimensions.WEB_MAX_WIDTH,
+        width: MediaQuery.of(context).size.width*0.9,
         color: Theme.of(context).cardColor,
         child: TabBar(
           controller: _tabController,
